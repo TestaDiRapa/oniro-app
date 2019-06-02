@@ -29,3 +29,12 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+e2e/
+node_modules/
+angular.json
+ionic.config.json
+package.json
+package-lock.json
+tsconfig.json
+tslint.json
