@@ -1,9 +1,97 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <ion-grid>
+      <ion-row>
+        <ion-col text-center>
+          <ion-text style="font-size: 50px">ONIRO</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">Nome</ion-label>
+              <ion-input ngModel name="nome" required #nameCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!nameCtrl.valid && nameCtrl.touched" lines="none">
+              <ion-label>
+                Campo obbligatorio
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Cognome</ion-label>
+              <ion-input ngModel name="cognome" required #surnameCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!surnameCtrl.valid && surnameCtrl.touched" lines="none">
+              <ion-label>
+                Campo obbligatorio
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Età</ion-label>
+              <ion-input type="number" ngModel name="eta" required #etaCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!etaCtrl.valid && etaCtrl.touched" lines="none">
+              <ion-label>
+                Inserire età corretta
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">E-mail</ion-label>
+              <ion-input type="email" ngModel name="email" required email #emailCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!emailCtrl.valid && nameCtrl.touched" lines="none">
+              <ion-label>
+                Inserire indirizzo e-mail corretto
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
 
+      <ion-row>
+        <ion-col>
+          <ion-list>
+            <ion-item lines="none">
+              <ion-label>Medico</ion-label>
+            </ion-item>
+
+            <ion-radio-group name="r-grp">
+              <ion-item lines="none">
+                <ion-label>Si</ion-label>
+                <ion-radio slot="start" value="si"></ion-radio>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label>No</ion-label>
+                <ion-radio slot="start" value="no"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+
+            <ion-item>
+              <ion-label>ID Albo</ion-label>
+              <ion-input type="number" ngModel name="idAlbo" required #idAlboCtrl="ngModel" [disabled]="true">
+              </ion-input>
+            </ion-item>
+            <ion-item *ngIf="!idAlboCtrl.valid && idAlboCtrl.touched" lines="none">
+              <ion-label>
+                Inserire un ID corretto
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" type="submit" (click)="onRegister(f)" [disabled]="!f.valid">
+            <ion-icon name="person-add" slot="end"></ion-icon>
+            Register
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>
