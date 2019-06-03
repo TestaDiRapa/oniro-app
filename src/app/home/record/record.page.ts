@@ -1,8 +1,10 @@
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
 import { Component, OnInit } from '@angular/core';
-import { BluetoothService } from 'src/app/services/bluetooth.service';
+import { BluetoothService } from 'src/app/services/bluetooth/bluetooth.service';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { SelectDeviceComponent } from './select-device/select-device.component';
 
 @Component({
   selector: 'app-record',
@@ -17,18 +19,23 @@ export class RecordPage implements OnInit {
   constructor(
     private bluetooth: BluetoothSerial,
     private bluetoothService: BluetoothService,
+    private modal: ModalController,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.deviceSelection();
+    /*
     this.bluetoothService.isEnabled().then(
       success => {
-        this.isConnected = 'Active';
+        if(!this.bluetoothService.device) {
+          this.deviceSelection();
+        }
       },
       error => {
         this.bluetooth.enable().then(
           success => {
-            this.message = "Enabled";
+
           },
           error => {
             this.router.navigateByUrl('/home');
@@ -36,7 +43,7 @@ export class RecordPage implements OnInit {
         )
       }
     )
-    /*
+    
     this.bluetooth.connect('00:18:E4:40:00:06')
       .subscribe(
         success => {
@@ -58,6 +65,12 @@ export class RecordPage implements OnInit {
         }
       );
       */
+  }
+
+  private deviceSelection() {
+    this.modal.create({component: SelectDeviceComponent}).then(modal => {
+      modal.present();
+    })
   }
 
 }
