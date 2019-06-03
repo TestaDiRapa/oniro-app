@@ -2,6 +2,7 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
 import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-record',
@@ -15,7 +16,8 @@ export class RecordPage implements OnInit {
 
   constructor(
     private bluetooth: BluetoothSerial,
-    private bluetoothService: BluetoothService
+    private bluetoothService: BluetoothService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -29,7 +31,7 @@ export class RecordPage implements OnInit {
             this.message = "Enabled";
           },
           error => {
-            this.message = "Not enabled";
+            this.router.navigateByUrl('/home');
           }
         )
       }
