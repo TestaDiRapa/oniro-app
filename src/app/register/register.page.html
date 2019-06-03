@@ -62,18 +62,18 @@
             <ion-radio-group name="r-grp">
               <ion-item lines="none">
                 <ion-label>Si</ion-label>
-                <ion-radio slot="start" value="si"></ion-radio>
+                <ion-radio slot="start" value="si" (click)="onDisabled(false)" ></ion-radio>
               </ion-item>
 
               <ion-item lines="none">
                 <ion-label>No</ion-label>
-                <ion-radio slot="start" value="no"></ion-radio>
+                <ion-radio slot="start" value="no" (click)="onDisabled(true)"></ion-radio>
               </ion-item>
             </ion-radio-group>
 
             <ion-item>
               <ion-label>ID Albo</ion-label>
-              <ion-input type="number" ngModel name="idAlbo" required #idAlboCtrl="ngModel" [disabled]="true">
+              <ion-input type="number" ngModel name="idAlbo" required #idAlboCtrl="ngModel" [disabled]="isDisabled">
               </ion-input>
             </ion-item>
             <ion-item *ngIf="!idAlboCtrl.valid && idAlboCtrl.touched" lines="none">

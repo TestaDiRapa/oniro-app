@@ -1,7 +1,7 @@
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
 import { Component, OnInit } from '@angular/core';
-import { BluetoothService } from 'src/app/services/bluetooth.service';
+import { BluetoothService } from '../../services/bluetooth/bluetooth.service';
 import { Router } from '@angular/router';
 
 @Component({

@@ -9,22 +9,32 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
   result = '';
+  public isDisabled = true;
+
 
   constructor(private router: Router) { }
+
 
   ngOnInit() {
   }
 
-  onSubmit(form: NgForm){
+  onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
     }
-    //to do
+    // to do
   }
 
-  onRegister(form: NgForm){
+  onRegister(form: NgForm) {
     console.log(form);
     this.router.navigateByUrl('/home');
   }
+
+  onDisabled(bool: boolean){
+    this.isDisabled=bool;
+  }
+
+
+
 
 }
