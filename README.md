@@ -9,10 +9,9 @@ Let's start throwing blood
 4. copy all the files from the blank project to the repo folder
 5. start working :weary:
 
-## Platform/Plugin
+## Platforms/Plugins
 After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova platform add android`<br>
 `ionic cordova paltform add ios`<br>
 `ionic cordova plugin add cordova-plugin-bluetooth-serial`<br>
 `npm install @ionic-native/bluetooth-serial`<br>
-`
