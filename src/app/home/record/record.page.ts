@@ -27,7 +27,7 @@ export class RecordPage implements OnInit {
   ngOnInit() {
     this.bluetoothService.isEnabled().then(
       success => {
-        if(!this.bluetoothService.device) {
+        if (!this.bluetoothService.device) {
           this.deviceSelection();
         }
       },
@@ -42,7 +42,7 @@ export class RecordPage implements OnInit {
         )
       }
     )
-    
+
     /*
     this.bluetooth.connect('00:18:E4:40:00:06')
       .subscribe(
@@ -68,14 +68,30 @@ export class RecordPage implements OnInit {
   }
 
   private deviceSelection() {
-    this.modal.create({component: SelectDevicePage}).then(modal => {
+    this.modal.create({ component: SelectDevicePage }).then(modal => {
       modal.onDidDismiss().then(modalData => {
-        this.alertCtrl.create({
-          header: 'Data',
-          message: modalData.data.name + ' ' + modalData.data.address,
-        }).then(alertEl => {
-          alertEl.present();
-        })
+        if (!modalData.hasOwnProperty('address')) {
+          this.alertCtrl.create({
+            header: 'Error',
+            message: 'No device selected!',
+            buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                  this.router.navigate['/home'];
+                }
+              }
+            ]
+          }).then(alertEl => {
+            alertEl.present();
+          })
+        } else {
+          let name = 'Oniro device';
+          if(modalData.hasOwnProperty('name')) {
+            name = modalData.data.name;
+          }
+        }
+
       })
       modal.present();
     })

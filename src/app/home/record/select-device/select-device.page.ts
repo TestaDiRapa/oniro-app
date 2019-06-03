@@ -68,4 +68,8 @@ export class SelectDevicePage implements OnInit {
     this.modalCtrl.dismiss(data);
   }
 
+  onCancel() {
+    this.modalCtrl.dismiss();
+  }
+
 }

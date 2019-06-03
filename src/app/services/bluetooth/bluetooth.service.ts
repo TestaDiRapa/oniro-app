@@ -18,5 +18,9 @@ export class BluetoothService {
     return this.bluetoothDevice;
   }
 
+  addDevice(name: string, address: string) {
+    
+  }
+
   
 }
