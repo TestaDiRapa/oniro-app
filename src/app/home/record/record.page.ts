@@ -3,8 +3,8 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from 'src/app/services/bluetooth/bluetooth.service';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
-import { SelectDeviceComponent } from './select-device/select-device.component';
+import { ModalController, AlertController } from '@ionic/angular';
+import { SelectDevicePage } from './select-device/select-device.page';
 
 @Component({
   selector: 'app-record',
@@ -17,6 +17,7 @@ export class RecordPage implements OnInit {
   i = 0;
 
   constructor(
+    private alertCtrl: AlertController,
     private bluetooth: BluetoothSerial,
     private bluetoothService: BluetoothService,
     private modal: ModalController,
@@ -24,8 +25,6 @@ export class RecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.deviceSelection();
-    /*
     this.bluetoothService.isEnabled().then(
       success => {
         if(!this.bluetoothService.device) {
@@ -44,6 +43,7 @@ export class RecordPage implements OnInit {
       }
     )
     
+    /*
     this.bluetooth.connect('00:18:E4:40:00:06')
       .subscribe(
         success => {
@@ -68,7 +68,15 @@ export class RecordPage implements OnInit {
   }
 
   private deviceSelection() {
-    this.modal.create({component: SelectDeviceComponent}).then(modal => {
+    this.modal.create({component: SelectDevicePage}).then(modal => {
+      modal.onDidDismiss().then(modalData => {
+        this.alertCtrl.create({
+          header: 'Data',
+          message: modalData.data.name + ' ' + modalData.data.address,
+        }).then(alertEl => {
+          alertEl.present();
+        })
+      })
       modal.present();
     })
   }

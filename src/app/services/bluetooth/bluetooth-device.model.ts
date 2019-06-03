@@ -1,4 +1,8 @@
 export class BluetoothDevice {
-    public mac: string;
-    public uuid: string;
+
+    constructor(
+        public name: string,
+        public address: string
+    ) { }
+
 }
