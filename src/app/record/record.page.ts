@@ -1,6 +1,7 @@
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
 import { Component, OnInit } from '@angular/core';
+import { BluetoothService } from '../services/bluetooth.service';
 
 @Component({
   selector: 'app-record',
@@ -13,10 +14,27 @@ export class RecordPage implements OnInit {
   i = 0;
 
   constructor(
-    private bluetooth: BluetoothSerial
+    private bluetooth: BluetoothSerial,
+    private bluetoothService: BluetoothService
   ) { }
 
   ngOnInit() {
+    this.bluetoothService.isEnabled().then(
+      success => {
+        this.isConnected = 'Active';
+      },
+      error => {
+        this.bluetooth.enable().then(
+          success => {
+            this.message = "Enabled";
+          },
+          error => {
+            this.message = "Not enabled";
+          }
+        )
+      }
+    )
+    /*
     this.bluetooth.connect('00:18:E4:40:00:06')
       .subscribe(
         success => {
@@ -37,6 +55,7 @@ export class RecordPage implements OnInit {
           this.isConnected = error;
         }
       );
+      */
   }
 
 }
