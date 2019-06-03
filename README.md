@@ -12,7 +12,7 @@ Let's start throwing blood
 ## Platform/Plugin
 After cloning the project, add the following plugins and platforms:<br>
 `
-ionic cordova platform add android<br>
+ionic cordova platform add android\n
 ionic cordova paltform add ios
 ionic cordova plugin add cordova-plugin-bluetooth-serial
 npm install @ionic-native/bluetooth-serial
