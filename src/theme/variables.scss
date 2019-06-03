@@ -74,4 +74,18 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /** background of the entire app**/
+  --ion-background-color: #ecd504;
+  --ion-font-family: "Helvetica Neue", "Roboto", sans-serif;
+  --ion-text-color: rgb(0,0,0);
+
+  /** Set the text of the entire app **/
+  --ion-font-family: "Broadway", serif;
+
+  ion-button{
+    --background: #000000;
+    --color: white;
+  }
+
 }
