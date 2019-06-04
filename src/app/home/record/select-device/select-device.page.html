@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Associate the device</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()"><ion-icon name="close"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-text>
+    <h1>Loading...</h1>
+  </ion-text>
+  <ion-list *ngIf="isLoaded">
+    <ion-item *ngFor="let device of devices" (click)="onItemSelected(device.name, device.address)">
+      <ion-label>
+        <h5>{{ device.name }}</h5>
+        <p>{{ device.address }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
