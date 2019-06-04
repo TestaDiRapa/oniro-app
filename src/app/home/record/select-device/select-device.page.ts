@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { AlertController, ModalController } from '@ionic/angular';
-import { BluetoothDevice } from 'src/app/services/bluetooth/bluetooth-device.model';
 
 @Component({
   selector: 'app-select-device',
@@ -25,13 +24,13 @@ export class SelectDevicePage implements OnInit {
         for (const result of results) {
           if (result.hasOwnProperty('name') && result.hasOwnProperty('address')) {
             this.devices.push({
-              'name': result.name,
-              'address': result.address
+              name: result.name,
+              address: result.address
             });
           } else if (result.hasOwnProperty('name') && result.hasOwnProperty('uuid')) {
             this.devices.push({
-              'name': result.name,
-              'address': result.uuid
+              name: result.name,
+              address: result.uuid
             });
           }
         }
@@ -57,14 +56,14 @@ export class SelectDevicePage implements OnInit {
             alertEl.present();
           });
       }
-    )
+    );
   }
 
   onItemSelected(name: string, address: string) {
     const data = {
-      name: name,
-      address: address
-    }
+      name,
+      address
+    };
     this.modalCtrl.dismiss(data);
   }
 
