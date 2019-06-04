@@ -87,12 +87,25 @@ export class RecordPage implements OnInit {
         }
       })
       .then(data => {
-        this.alertCtrl.create({
-          header: 'boh',
-          message: data.name + ' ' + data.address,
-        }).then(alertEl => {
-          alertEl.present();
-        });
+        this.bluetooth.connect(data.address).subscribe(
+          success => {
+
+          },
+          error => {
+            this.alertCtrl.create({
+              header: 'Error',
+              message: 'Cannot communicate with the device, try again later!',
+              buttons: [
+                {
+                  text: 'Ok',
+                  handler: () => {
+                    this.router.navigate(['/home']);
+                  }
+                }
+              ]
+            });
+          }
+        );
       });
   }
 
