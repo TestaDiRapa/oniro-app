@@ -15,3 +15,5 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova platform add ios`<br>
 `ionic cordova plugin add cordova-plugin-bluetooth-serial`<br>
 `npm install @ionic-native/bluetooth-serial`<br>
+`ionic cordova plugin add cordova-sqlite-storage`<br>
+`npm install --save @ionic/storage`<br>
