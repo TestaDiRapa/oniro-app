@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SegmentChangeEventDetail } from '@ionic/core';
 
 @Component({
   selector: 'app-register',
@@ -8,12 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
-  result = '';
-  public isDisabled = true;
-
+  public isUser = true;
 
   constructor(private router: Router) { }
-
 
   ngOnInit() {
   }
@@ -25,16 +23,16 @@ export class RegisterPage implements OnInit {
     // to do
   }
 
-  onRegister(form: NgForm) {
-    console.log(form);
+  onRegister() {
     this.router.navigateByUrl('/home');
   }
 
-  onDisabled(bool: boolean){
-    this.isDisabled=bool;
+  onChange(event: CustomEvent<SegmentChangeEventDetail>) {
+    if (event.detail.value === 'user') {
+      this.isUser = true;
+    } else {
+      this.isUser = false;
+    }
   }
-
-
-
 
 }

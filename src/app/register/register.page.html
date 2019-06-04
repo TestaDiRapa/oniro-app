@@ -1,14 +1,21 @@
-<ion-header>
+<ion-header no-border>
+  <ion-toolbar text-center>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="authentication"></ion-back-button>
+    </ion-buttons>
+    <ion-text style="font-size: 50px">ONIRO</ion-text>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-segment (ionChange)="onChange($event)" (ionChange)="ngOnInit()">
+    <ion-segment-button value="doc">Dottore</ion-segment-button>
+    <ion-segment-button value="user" checked>Paziente</ion-segment-button>
+  </ion-segment>
+
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <ion-grid>
-      <ion-row>
-        <ion-col text-center>
-          <ion-text style="font-size: 50px">ONIRO</ion-text>
-        </ion-col>
-      </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-list>
@@ -16,77 +23,74 @@
               <ion-label position="floating">Nome</ion-label>
               <ion-input ngModel name="nome" required #nameCtrl="ngModel"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!nameCtrl.valid && nameCtrl.touched" lines="none">
-              <ion-label class="valid-label">
-                Campo obbligatorio
-              </ion-label>
-            </ion-item>
             <ion-item>
               <ion-label position="floating">Cognome</ion-label>
               <ion-input ngModel name="cognome" required #surnameCtrl="ngModel"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!surnameCtrl.valid && surnameCtrl.touched" lines="none">
-              <ion-label class="valid-label">
-                Campo obbligatorio
-              </ion-label>
+            <ion-item>
+              <ion-label position="floating">Username</ion-label>
+              <ion-input ngModel name="username" required #usernameCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label position="floating">Età</ion-label>
-              <ion-input type="number" ngModel name="eta" required #etaCtrl="ngModel"></ion-input>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input ngModel type="password" name="password" required placeholder="Minimo 8 caratteri" minlength="8"
+                #pswCtrl="ngModel"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!etaCtrl.valid && etaCtrl.touched" lines="none">
-              <ion-label class="valid-label">
-                Inserire età corretta
-              </ion-label>
+            <ion-item>
+              <ion-label position="floating">Telefono</ion-label>
+              <ion-input ngModel type="tel" name="telefono" required #phoneCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">E-mail</ion-label>
               <ion-input type="email" ngModel name="email" required email #emailCtrl="ngModel"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!emailCtrl.valid && nameCtrl.touched" lines="none">
-              <ion-label class="valid-label">
-                Inserire indirizzo e-mail corretto
-              </ion-label>
+            <ion-item *ngIf="isUser">
+              <ion-label position="floating">Età</ion-label>
+              <ion-input ngModel type="number" name="eta" required #etaCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="isUser">
+              <ion-label position="floating">CF</ion-label>
+              <ion-input ngModel name="cf" required #cfCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!isUser">
+              <ion-label position="floating">ID Albo</ion-label>
+              <ion-input ngModel type="number" name="idalbo" required #idalboCtrl="ngModel"></ion-input>
             </ion-item>
           </ion-list>
         </ion-col>
       </ion-row>
-
-      <ion-row>
+      <ion-row *ngIf=!isUser>
         <ion-col size-sm="6" offset-sm="3">
-          <ion-list>
-            <ion-item lines="none">
-              <ion-label>Medico</ion-label>
-            </ion-item>
-
-            <ion-radio-group name="r-grp">
-              <ion-item lines="none">
-                <ion-label>Si</ion-label>
-                <ion-radio slot="start" value="si" (click)="onDisabled(false)" ></ion-radio>
-              </ion-item>
-
-              <ion-item lines="none">
-                <ion-label>No</ion-label>
-                <ion-radio slot="start" value="no" (click)="onDisabled(true)"></ion-radio>
-              </ion-item>
-            </ion-radio-group>
-
-            <ion-item>
-              <ion-label>ID Albo</ion-label>
-              <ion-input type="number" ngModel name="idAlbo" required #idAlboCtrl="ngModel" [disabled]="isDisabled">
-              </ion-input>
-            </ion-item>
-            <ion-item *ngIf="!idAlboCtrl.valid && idAlboCtrl.touched && !isDisabled" lines="none">
-              <ion-label class="valid-label">
-                Inserire un ID corretto
-              </ion-label>
-            </ion-item>
-          </ion-list>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Indirizzo Studio</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item>
+                  <ion-label position="floating">Via</ion-label>
+                  <ion-input ngModel name="via" required #viaCtrl="ngModel"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Civico</ion-label>
+                  <ion-input ngModel type="number" name="civico" required #civicoCtrl="ngModel"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Città</ion-label>
+                  <ion-input ngModel name="citta" required #cittaCtrl="ngModel"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Provincia</ion-label>
+                  <ion-input ngModel name="provincia" required #provinciaCtrl="ngModel"></ion-input>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
-          <ion-button expand="block" type="submit" (click)="onRegister(f)" [disabled]="!f.valid">
+          <ion-button expand="block" type="submit" (click)="onRegister()" [disabled]="!f.valid">
             <ion-icon name="person-add" slot="end"></ion-icon>
             Register
           </ion-button>

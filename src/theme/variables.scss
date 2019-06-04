@@ -4,7 +4,7 @@
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #ecd504;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -78,16 +78,17 @@
   /** background of the entire app**/
   --ion-background-color: #ecd504;
   --ion-font-family: "Helvetica Neue", "Roboto", sans-serif;
-  --ion-text-color: rgb(0,0,0);
+  --ion-text-color: rgb(0, 0, 0);
 
   /** Set the text of the entire app **/
   --ion-font-family: "Broadway", serif;
 
-  ion-button{
+  ion-button {
     --background: #000000;
     --color: white;
   }
- ion-avatar{ 
-  --border-radius: 100px;
- }
+
+  ion-avatar {
+    --border-radius: 100px;
+  }
 }
