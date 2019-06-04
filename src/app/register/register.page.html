@@ -17,7 +17,7 @@
               <ion-input ngModel name="nome" required #nameCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!nameCtrl.valid && nameCtrl.touched" lines="none">
-              <ion-label>
+              <ion-label class="valid-label">
                 Campo obbligatorio
               </ion-label>
             </ion-item>
@@ -26,7 +26,7 @@
               <ion-input ngModel name="cognome" required #surnameCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!surnameCtrl.valid && surnameCtrl.touched" lines="none">
-              <ion-label>
+              <ion-label class="valid-label">
                 Campo obbligatorio
               </ion-label>
             </ion-item>
@@ -35,7 +35,7 @@
               <ion-input type="number" ngModel name="eta" required #etaCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!etaCtrl.valid && etaCtrl.touched" lines="none">
-              <ion-label>
+              <ion-label class="valid-label">
                 Inserire età corretta
               </ion-label>
             </ion-item>
@@ -44,7 +44,7 @@
               <ion-input type="email" ngModel name="email" required email #emailCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!emailCtrl.valid && nameCtrl.touched" lines="none">
-              <ion-label>
+              <ion-label class="valid-label">
                 Inserire indirizzo e-mail corretto
               </ion-label>
             </ion-item>
@@ -53,7 +53,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col>
+        <ion-col size-sm="6" offset-sm="3">
           <ion-list>
             <ion-item lines="none">
               <ion-label>Medico</ion-label>
@@ -77,7 +77,7 @@
               </ion-input>
             </ion-item>
             <ion-item *ngIf="!idAlboCtrl.valid && idAlboCtrl.touched" lines="none">
-              <ion-label>
+              <ion-label class="valid-label">
                 Inserire un ID corretto
               </ion-label>
             </ion-item>
@@ -85,7 +85,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col size-sm="6" offset-sm="3">
           <ion-button expand="block" type="submit" (click)="onRegister(f)" [disabled]="!f.valid">
             <ion-icon name="person-add" slot="end"></ion-icon>
             Register

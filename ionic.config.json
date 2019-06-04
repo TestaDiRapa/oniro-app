@@ -1,0 +1,7 @@
+{
+  "name": "Oniro",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
