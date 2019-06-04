@@ -76,7 +76,7 @@
               <ion-input type="number" ngModel name="idAlbo" required #idAlboCtrl="ngModel" [disabled]="isDisabled">
               </ion-input>
             </ion-item>
-            <ion-item *ngIf="!idAlboCtrl.valid && idAlboCtrl.touched" lines="none">
+            <ion-item *ngIf="!idAlboCtrl.valid && idAlboCtrl.touched && !isDisabled" lines="none">
               <ion-label class="valid-label">
                 Inserire un ID corretto
               </ion-label>
