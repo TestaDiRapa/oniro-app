@@ -8,13 +8,11 @@
 </ion-header>
 
 <ion-content>
-
-  <ion-segment (ionChange)="onChange($event)" (ionChange)="ngOnInit()">
-    <ion-segment-button value="doc">Dottore</ion-segment-button>
-    <ion-segment-button value="user" checked>Paziente</ion-segment-button>
-  </ion-segment>
-
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <ion-segment (ionChange)="onChange($event, f)" (ionChange)="ngOnInit()">
+          <ion-segment-button value="doc">Dottore</ion-segment-button>
+          <ion-segment-button value="user" checked>Paziente</ion-segment-button>
+        </ion-segment>
     <ion-grid>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">

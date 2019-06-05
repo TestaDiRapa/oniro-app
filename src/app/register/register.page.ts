@@ -27,11 +27,13 @@ export class RegisterPage implements OnInit {
     this.router.navigateByUrl('/home');
   }
 
-  onChange(event: CustomEvent<SegmentChangeEventDetail>) {
+  onChange(event: CustomEvent<SegmentChangeEventDetail>, form: NgForm) {
     if (event.detail.value === 'user') {
       this.isUser = true;
+      form.reset();
     } else {
       this.isUser = false;
+      form.reset();
     }
   }
 
