@@ -10,7 +10,9 @@
 ion-button{
     height: 45px;
     font-size: 25px;
-    //margin-top: 80px;
-    //margin-left: 25%;
-    //margin-right: 25%;
+}
+
+ion-segment{
+    --background-checked: black;
+    --color: black;
 }

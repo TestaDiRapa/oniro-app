@@ -23,7 +23,8 @@ export class RegisterPage implements OnInit {
     // to do
   }
 
-  onRegister() {
+  onRegister(form: NgForm) {
+    form.reset();
     this.router.navigateByUrl('/home');
   }
 
