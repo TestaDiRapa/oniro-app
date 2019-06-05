@@ -16,6 +16,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private router: Router,
     private menu: MenuController
+
   ) {
     this.initializeApp();
   }
@@ -30,6 +31,6 @@ export class AppComponent {
   onLogout() {
         this.router.navigateByUrl('/authentication');
         this.menu.enable(false);
-
   }
+
 }
