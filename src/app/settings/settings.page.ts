@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PazienteService } from '../services/pazienteService.service';
+import { Paziente } from '../register/paziente.model';
 
 @Component({
   selector: 'app-settings',
@@ -6,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  constructor() {}
+  private paziente:Paziente;
+  constructor(private pazienteService:PazienteService) {}
 
   ngOnInit() {
-
+this.paziente = this.pazienteService.getPaziente();
   }
 
 }
