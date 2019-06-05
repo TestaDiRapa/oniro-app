@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Paziente } from '../paziente';
 
 @Component({
   selector: 'app-settings',
@@ -7,10 +6,7 @@ import { Paziente } from '../paziente';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  private paziente: Paziente;
-  constructor(
-    
-  ) { }
+  constructor() {}
 
   ngOnInit() {
 

@@ -10,7 +10,7 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-   isUser = true;
+  isUser = true;
   private username: string;
   private password: string;
 
@@ -45,21 +45,20 @@ export class LoginPage implements OnInit {
     this.auth.login(this.username, this.password, true).subscribe(res => {
       console.log(res);
       if (res.status === 'ok') {
-          console.log(res.access_token);
-          this.onLogin(form);
-     } else {
-         console.log(res.message);
-     }
+        console.log(res.access_token);
+        this.onLogin(form);
+      } else {
+        console.log(res.message);
+      }
 
- });
+    });
 
   }
 
   // the event on login event of the ion-button Login
   onLogin(form: NgForm) {
-
- form.reset();
- this.router.navigateByUrl('/home');
-}
+    form.reset();
+    this.router.navigateByUrl('/home');
+  }
 
 }
