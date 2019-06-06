@@ -63,7 +63,8 @@ export class RegisterPage implements OnInit {
             this.presentAlert(resData.message);
           }
         });
-        this.userService.setUser(this.medico );
+
+        this.userService.setUser(this.medico);
       }
     } else {
       this.presentAlert('Form non valido. Riprova');

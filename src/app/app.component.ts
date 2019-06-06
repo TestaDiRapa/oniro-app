@@ -13,7 +13,7 @@ import { Medico } from './register/medico.model';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  private user: Paziente | Medico;
+  private user: Paziente | Medico = false;
 
   constructor(
     private platform: Platform,
@@ -31,7 +31,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-    this.user = this.userService.getUser();
+    console.log(this.user);
   }
 
   onLogout() {
