@@ -28,7 +28,7 @@ export class HomePage implements OnInit {
 
     const hour = date.getHours().toString();
     const minute = date.getMinutes().toString();
-    this.currentTime = hour + ': ' + minute;
+    this.currentTime = hour + ' : ' + minute;
   }
 
 
