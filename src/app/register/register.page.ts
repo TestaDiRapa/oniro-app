@@ -18,9 +18,9 @@ export class RegisterPage implements OnInit {
   private paziente: Paziente;
   private medico: Medico;
 
-  constructor(private router: Router, 
-    private auth: AuthenticationService, 
-    private alertCtrl: AlertController,
+  constructor(private router: Router,
+              private auth: AuthenticationService,
+              private alertCtrl: AlertController,
               private userService: UserService
     ) { }
 
@@ -60,9 +60,10 @@ export class RegisterPage implements OnInit {
             this.presentAlert('Registrazione effettuata con successo!');
             this.router.navigateByUrl('/home');
           } else {
-            this.presentAlert(resData.status);
+            this.presentAlert(resData.message);
           }
         });
+
         this.userService.setUser(this.medico);
       }
     } else {

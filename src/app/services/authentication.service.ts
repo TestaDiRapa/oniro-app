@@ -10,7 +10,8 @@ export interface Response {
 }
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    isAuthenticated = true;  //da mettere a false
+    isAuthenticated = false;
+    accessToken: string;
 
     constructor(private http: HttpClient) { }
 
@@ -19,11 +20,14 @@ export class AuthenticationService {
         let path = 'http://45.76.47.94:8080/login/';
         if (isUser) {
             path += 'user';
+            params = params.append('cf', username);
+            params = params.append('password', password);
         } else {
-            path += 'doc';
+            path += 'doctor';
+            params = params.append('id', username);
+            params = params.append('password', password);
         }
-        params = params.append('cf', username);
-        params = params.append('password', password);
+
         return this.http.get<Response>(path, { params });
     }
 
@@ -39,6 +43,14 @@ export class AuthenticationService {
 
     getAuthentication() {
         return this.isAuthenticated;
+    }
+
+    getToken() {
+        return this.accessToken;
+    }
+
+    setToken(token: string) {
+        this.accessToken = token;
     }
 
 }
