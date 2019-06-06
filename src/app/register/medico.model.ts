@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class Medico {
     constructor(
-        private name: string,
-        private surname: string,
+        public name: string,
+        public surname: string,
         private password: string,
         private phone: string,
         private email: string,
