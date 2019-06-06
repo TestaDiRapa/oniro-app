@@ -5,7 +5,7 @@
       </ion-menu-button>
     </ion-buttons>
     <ion-title>
-      <ion-text color="danger">
+      <ion-text>
         <ion-label>ONIRO</ion-label>
       </ion-text>
     </ion-title>
@@ -34,19 +34,24 @@
               <ion-list>
                 <ion-item>
                   <ion-icon name="pizza"></ion-icon>
-                  <ion-label>Cena</ion-label>
+                  <ion-label margin>Cena</ion-label>
                 </ion-item>
                 <ion-item>
                     <ion-icon name="beer"></ion-icon>
-                    <ion-label>Alchool</ion-label>
+                    <ion-label margin (click)="openModal('drink')">Alchool</ion-label>
                   </ion-item>
                   <ion-item>
                     <ion-icon name="cafe"></ion-icon>
-                    <ion-label>Caffe</ion-label>
+                    <ion-label margin (click)="openModal('coffee')">Caffe</ion-label>
                   </ion-item>
               </ion-list>
             </ion-card-content>
           </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+            <ion-button expand="block">START MONITORING</ion-button>
         </ion-col>
       </ion-row>
 

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { HomePage } from './home.page';
       }
     ])
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, AddAbitudiniComponent],
+  entryComponents: [AddAbitudiniComponent]
 })
 export class HomePageModule {}

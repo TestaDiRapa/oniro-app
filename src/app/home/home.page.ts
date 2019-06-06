@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { UserService } from '../services/userService.service';
 import { Medico } from '../register/medico.model';
+import { ModalController } from '@ionic/angular';
+import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +13,9 @@ import { Medico } from '../register/medico.model';
 export class HomePage implements OnInit {
   public currentDate = '';
   public currentTime = '';
+  private bevanda: string;
 
-  constructor() {
+  constructor(private modalCtrl: ModalController) {
   }
 
   ngOnInit() {
@@ -29,6 +32,14 @@ export class HomePage implements OnInit {
     const hour = date.getHours().toString();
     const minute = date.getMinutes().toString();
     this.currentTime = hour + ' : ' + minute;
+  }
+
+  openModal(bevanda: string){
+    this.bevanda = bevanda;
+    this.modalCtrl.create({component: AddAbitudiniComponent}).then(modalEl => {
+      modalEl.present();
+    });
+
   }
 
 
