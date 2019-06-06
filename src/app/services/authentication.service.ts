@@ -11,6 +11,7 @@ export interface Response {
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     isAuthenticated = false;
+    accessToken: string;
 
     constructor(private http: HttpClient) { }
 
@@ -42,6 +43,14 @@ export class AuthenticationService {
 
     getAuthentication() {
         return this.isAuthenticated;
+    }
+
+    getToken() {
+        return this.accessToken;
+    }
+
+    setToken(token: string) {
+        this.accessToken = token;
     }
 
 }

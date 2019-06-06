@@ -48,12 +48,11 @@ export class LoginPage implements OnInit {
     this.password = form.value.password;
     // booleano da impostare a this.isUser
     this.auth.login(this.username, this.password, this.isUser).subscribe(res => {
-      console.log(res);
       if (res.status === 'ok') {
         const token = res.access_token;
+        this.auth.setToken(token);
 // tslint:disable-next-line: max-line-length
         this.http.get<any>('http://45.76.47.94:8080/me', {headers: new HttpHeaders( {Authorization: 'Bearer ' + token  })}).subscribe(resu => {
-          console.log(resu);
           if (this.isUser) {
 // tslint:disable-next-line: no-string-literal
           this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
@@ -65,8 +64,6 @@ export class LoginPage implements OnInit {
 // tslint:disable-next-line: no-string-literal
            resu.message['phone'], resu.message['email'], resu.message['_id'], resu.message['address']));
         }
-          console.log(this.user.getUser());
-
           this.auth.isAuthenticated = true;
           this.router.navigateByUrl('/home');
       });
