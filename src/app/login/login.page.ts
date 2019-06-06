@@ -6,6 +6,8 @@ import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/userService.service';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
+import { HttpClient,  HttpHeaders } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,7 @@ export class LoginPage implements OnInit {
   private username: string;
   private password: string;
 
-  constructor(private router: Router, private auth: AuthenticationService, private user: UserService) { }
+  constructor(private router: Router, private auth: AuthenticationService, private user: UserService, private http: HttpClient) { }
 
   ngOnInit() {
   }
@@ -45,24 +47,29 @@ export class LoginPage implements OnInit {
     }
     this.password = form.value.password;
     // booleano da impostare a this.isUser
-    this.auth.login(this.username, this.password, true).subscribe(res => {
+    this.auth.login(this.username, this.password, this.isUser).subscribe(res => {
       console.log(res);
       if (res.status === 'ok') {
+        const token = res.access_token;
+// tslint:disable-next-line: max-line-length
+        this.http.get<any>('http://45.76.47.94:8080/me', {headers: new HttpHeaders( {Authorization: 'Bearer ' + token  })}).subscribe(resu => {
+          console.log(resu);
         if (this.isUser) {
 // tslint:disable-next-line: no-string-literal
-          this.user.setUser(new Paziente(res.message['name'], res.message['surname'], null,
+          this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
-          res.message['phone_server'], res.message['email'], res.message['_id'], res.message['age']));
+          resu.message['phone_server'], resu.message['email'], resu.message['_id'], resu.message['age']));
         } else {
 // tslint:disable-next-line: no-string-literal
-          this.user.setUser(new Medico(res.message['name'], res.message['surname'], null,
+          this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
-           res.message['phone'], res.message['email'], res.message['_id'], res.message['address']));
+           resu.message['phone'], resu.message['email'], resu.message['_id'], resu.message['address']));
         }
         console.log(this.user.getUser());
+
         this.auth.isAuthenticated = true;
         this.router.navigateByUrl('/home');
-
+      });
 
       } else {
         console.log(res.message);
