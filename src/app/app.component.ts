@@ -13,7 +13,7 @@ import { Medico } from './register/medico.model';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  private user: Paziente | Medico = false;
+  private user: Paziente | Medico;
 
   constructor(
     private platform: Platform,
