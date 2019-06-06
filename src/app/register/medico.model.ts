@@ -8,7 +8,7 @@ export class Medico {
         private password: string,
         private phone: string,
         private email: string,
-        private idAlbo: string,
-        private address: string,
+        private id: string,
+        private address: string
     ) {}
 }

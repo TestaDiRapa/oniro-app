@@ -13,6 +13,7 @@ export class LoginPage implements OnInit {
   isUser = true;
   private username: string;
   private password: string;
+  private goOn = false;
 
   constructor(private router: Router, private auth: AuthenticationService) { }
 
@@ -41,12 +42,12 @@ export class LoginPage implements OnInit {
       this.username = form.value.albo;
     }
     this.password = form.value.password;
-
+    //booleano da impostare a this.isUser
     this.auth.login(this.username, this.password, true).subscribe(res => {
       console.log(res);
       if (res.status === 'ok') {
         console.log(res.access_token);
-        this.onLogin(form);
+        this.goOn = true;
       } else {
         console.log(res.message);
       }
@@ -57,8 +58,9 @@ export class LoginPage implements OnInit {
 
   // the event on login event of the ion-button Login
   onLogin(form: NgForm) {
-    form.reset();
-    this.router.navigateByUrl('/home');
+    if(this.goOn) {
+      this.router.navigateByUrl('/home');
+    }
   }
 
 }
