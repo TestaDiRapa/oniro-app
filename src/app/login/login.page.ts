@@ -54,7 +54,7 @@ export class LoginPage implements OnInit {
 // tslint:disable-next-line: max-line-length
         this.http.get<any>('http://45.76.47.94:8080/me', {headers: new HttpHeaders( {Authorization: 'Bearer ' + token  })}).subscribe(resu => {
           console.log(resu);
-        if (this.isUser) {
+          if (this.isUser) {
 // tslint:disable-next-line: no-string-literal
           this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
@@ -65,10 +65,10 @@ export class LoginPage implements OnInit {
 // tslint:disable-next-line: no-string-literal
            resu.message['phone'], resu.message['email'], resu.message['_id'], resu.message['address']));
         }
-        console.log(this.user.getUser());
+          console.log(this.user.getUser());
 
-        this.auth.isAuthenticated = true;
-        this.router.navigateByUrl('/home');
+          this.auth.isAuthenticated = true;
+          this.router.navigateByUrl('/home');
       });
 
       } else {
