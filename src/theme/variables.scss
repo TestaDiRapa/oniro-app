@@ -77,15 +77,20 @@
 
   /** background of the entire app**/
   --ion-background-color: #ecd504;
-  --ion-font-family: "Helvetica Neue", "Roboto", sans-serif;
   --ion-text-color: rgb(0, 0, 0);
 
   /** Set the text of the entire app **/
-  --ion-font-family: "Broadway", serif;
+  --ion-font-family: "Roboto", serif;
 
   ion-button {
     --background: #000000;
     --color: white;
+  }
+
+  ion-alert{
+    --background: #15165f;
+    --ion-text-color: white;
+    //--ion-font-family: "Comic Sans";
   }
 
 }
