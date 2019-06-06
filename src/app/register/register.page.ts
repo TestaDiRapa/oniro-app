@@ -24,7 +24,6 @@ export class RegisterPage implements OnInit {
 
   presentAlert(mex: string) {
     const alert = this.alertCtrl.create({
-      //message: 'Submit Form',
       subHeader: mex,
       buttons: ['Ok']
     }).then(alert => alert.present());
