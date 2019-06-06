@@ -15,6 +15,7 @@ export class HomePage implements OnInit {
   public currentDate = '';
   public currentTime = '';
   private bevanda: string;
+  private isCena: boolean;
   private caffe = new Bevanda('', 0);
   private drink = new Bevanda('', 0);
 
@@ -35,6 +36,10 @@ export class HomePage implements OnInit {
     const hour = date.getHours().toString();
     const minute = date.getMinutes().toString();
     this.currentTime = hour + ' : ' + minute;
+  }
+
+  onToggleChange(togValue: boolean) {
+    this.isCena = togValue;
   }
 
   openModal(selectedBevanda: string) {
