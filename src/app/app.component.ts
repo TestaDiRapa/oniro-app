@@ -38,5 +38,19 @@ export class AppComponent {
         this.router.navigateByUrl('/authentication');
         this.menu.enable(false);
   }
-
+  onClickSettings() {
+    this.router.navigateByUrl('/home/settings');
+  }
+  onClickDiary() {
+    this.router.navigateByUrl('/home/diary');
+  }
+  onClickMaps() {
+    this.router.navigateByUrl('/home/gmaps');
+  }
+  onClickInfo() {
+    this.router.navigateByUrl('/home/info');
+  }
+  onClickContacts() {
+    this.router.navigateByUrl('/home/contacts');
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-diary',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DiaryPage implements OnInit {
 
-  constructor() { }
+  constructor(private menuCtrl: MenuController) { }
 
   ngOnInit() {
+    this.menuCtrl.toggle();
   }
 
 }

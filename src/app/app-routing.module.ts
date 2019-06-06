@@ -10,11 +10,11 @@ const routes: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
   { path: 'home/record', loadChildren: './home/record/record.module#RecordPageModule', canLoad: [AuthGuard]},
-  { path: 'home/settings', loadChildren: './settings/settings.module#SettingsPageModule', canLoad: [AuthGuard]},
+  { path: 'home/settings', loadChildren: './home/settings/settings.module#SettingsPageModule', canLoad: [AuthGuard]},
   { path: 'home/contacts', loadChildren: './home/contacts/contacts.module#ContactsPageModule', canLoad: [AuthGuard]},
-  //{ path: 'home/diary', loadChildren: './home/diary.module#DiaryPageModule', canLoad: [AuthGuard]},
-  { path: 'home/gmaps', loadChildren: './gmaps/gmaps.module#GmapsPageModule', canLoad: [AuthGuard]},
-  { path: 'home/info', loadChildren: './info/info.module#InfoPageModule', canLoad: [AuthGuard]}
+  { path: 'home/diary', loadChildren: 'src/app/home/diary/diary.module#DiaryPageModule', canLoad: [AuthGuard]},
+  { path: 'home/gmaps', loadChildren: 'src/app/home/gmaps/gmaps.module#GmapsPageModule', canLoad: [AuthGuard]},
+  { path: 'home/info', loadChildren: 'src/app/home/info/info.module#InfoPageModule', canLoad: [AuthGuard]}
 ];
 
 @NgModule({
