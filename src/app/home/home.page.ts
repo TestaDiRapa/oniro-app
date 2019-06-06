@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
-import { PazienteService } from '../services/pazienteService.service';
+import { UserService } from '../services/userService.service';
+import { Medico } from '../register/medico.model';
 
 @Component({
   selector: 'app-home',
@@ -8,13 +9,13 @@ import { PazienteService } from '../services/pazienteService.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-paziente: Paziente;
+user: Paziente | Medico;
 
   constructor(
-    public pazienteService:PazienteService
+    public userService:UserService
   ) {}
 
   ngOnInit() {
-    this.paziente = this.pazienteService.getPaziente();
+    this.user = this.userService.getUser();
   }
 }

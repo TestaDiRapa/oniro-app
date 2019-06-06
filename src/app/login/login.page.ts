@@ -46,7 +46,7 @@ export class LoginPage implements OnInit {
     this.auth.login(this.username, this.password, true).subscribe(res => {
       console.log(res);
       if (res.status === 'ok') {
-        console.log(res.access_token);
+        this.auth.isAuthenticated = true;
         this.router.navigateByUrl('/home');
 
       } else {

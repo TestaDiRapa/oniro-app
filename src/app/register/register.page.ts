@@ -6,6 +6,7 @@ import { Paziente } from './paziente.model';
 import { AuthenticationService } from '../services/authentication.service';
 import { Medico } from './medico.model';
 import { AlertController } from '@ionic/angular';
+import { UserService } from '../services/userService.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,11 @@ export class RegisterPage implements OnInit {
   private paziente: Paziente;
   private medico: Medico;
 
-  constructor(private router: Router, private auth: AuthenticationService, private alertCtrl: AlertController) { }
+  constructor(private router: Router, 
+    private auth: AuthenticationService, 
+    private alertCtrl: AlertController,
+              private userService: UserService
+    ) { }
 
   ngOnInit() {
   }
@@ -39,11 +44,13 @@ export class RegisterPage implements OnInit {
         this.auth.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
+            this.auth.isAuthenticated = true;
             this.router.navigateByUrl('/home');
           } else {
             this.presentAlert(resData.status);
           }
         });
+        this.userService.setUser(this.paziente);
       } else {
         const address = form.value.via + ' ' + form.value.civico.toString() + ' ' + form.value.citta + ' ' + form.value.provincia;
         this.medico = new Medico(form.value.nome, form.value.cognome,
@@ -57,6 +64,7 @@ export class RegisterPage implements OnInit {
             this.presentAlert(resData.status);
           }
         });
+        this.userService.setUser(this.medico);
       }
     } else {
       this.presentAlert('Form non valido. Riprova');
