@@ -9,6 +9,7 @@ export interface ResponseGet {
 }
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+    private isAuthenticated = false;
 
     constructor(private http: HttpClient) { }
 
@@ -23,8 +24,11 @@ export class AuthenticationService {
         }
         params = params.append('cf', username);
         params = params.append('password', password);
+        this.isAuthenticated = true;
         return this.http.get<ResponseGet>(path, { params });
-
+    }
+    getAuthentication() {
+        return this.isAuthenticated;
     }
 
 }
