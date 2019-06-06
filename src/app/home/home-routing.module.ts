@@ -24,7 +24,11 @@ const routes: Routes = [
                 ]
             },
         ]
-    }
+    },  { path: 'diary', loadChildren: './diary/diary.module#DiaryPageModule' },
+  { path: 'info', loadChildren: './info/info.module#InfoPageModule' },
+  { path: 'contacts', loadChildren: './contacts/contacts.module#ContactsPageModule' },
+  { path: 'gmaps', loadChildren: './gmaps/gmaps.module#GmapsPageModule' }
+
 ];
 
 @NgModule({

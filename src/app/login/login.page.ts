@@ -49,10 +49,14 @@ export class LoginPage implements OnInit {
       console.log(res);
       if (res.status === 'ok') {
         if (this.isUser) {
-          this.user.setUser(new Paziente(res.message['name'], res.message['surname'], null ,
-           res.message['phone_server'], res.message['email'], res.message['_id'], res.message['age']));
+// tslint:disable-next-line: no-string-literal
+          this.user.setUser(new Paziente(res.message['name'], res.message['surname'], null,
+// tslint:disable-next-line: no-string-literal
+          res.message['phone_server'], res.message['email'], res.message['_id'], res.message['age']));
         } else {
+// tslint:disable-next-line: no-string-literal
           this.user.setUser(new Medico(res.message['name'], res.message['surname'], null,
+// tslint:disable-next-line: no-string-literal
            res.message['phone'], res.message['email'], res.message['_id'], res.message['address']));
         }
         console.log(this.user.getUser());

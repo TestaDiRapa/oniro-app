@@ -19,8 +19,9 @@ export class UserService {
     return this.user;
   }
 
-  setUser(user: Paziente | Medico){
+  setUser(user: Paziente | Medico) {
       this.user = user;
-    }
-    
+      return;
+      }
+
 }
