@@ -6,11 +6,11 @@ import { Paziente } from '../register/paziente.model';
 })
 export class PazienteService {
 
-  private paziente = new Paziente('Alessandro','Montefusco','123456789','123','a@m','mnt','24');
-  
+  private paziente = new Paziente('Alessandro', 'Montefusco', '123456789', '123', 'a@m', 'mnt', '24');
+
   constructor() { }
 
-  getPaziente(){
+  getPaziente() {
     return this.paziente;
   }
 }

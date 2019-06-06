@@ -28,14 +28,14 @@ export class AuthenticationService {
         return this.http.get<ResponseGet>(path, { params });
     }
 
-    register(user: Medico | Paziente, isUser: boolean){
+    register(user: Medico | Paziente, isUser: boolean) {
         let path = 'http://45.76.47.94:8080/register/';
         if (isUser) {
             path += 'user';
         } else {
             path += 'doctor';
         }
-        return this.http.put<ResponseGet>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})})
+        return this.http.put<ResponseGet>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})});
     }
 
     getAuthentication() {

@@ -10,9 +10,9 @@ import { MenuController } from '@ionic/angular';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  private paziente:Paziente;
-  constructor(private pazienteService:PazienteService,
-    private menuCtrl:MenuController
+  public paziente: Paziente;
+  constructor(private pazienteService: PazienteService,
+              private menuCtrl: MenuController
     ) {}
 
   ngOnInit() {
