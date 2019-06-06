@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'authentication', loadChildren: './authentication/authentication.module#AuthenticationPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
-  { path: 'home/settings', loadChildren: './settings/settings.module#SettingsPageModule', canLoad:[AuthGuard]}
+  { path: 'home/settings', loadChildren: './settings/settings.module#SettingsPageModule', canLoad:[AuthGuard]},
+    
 ];
 
 @NgModule({

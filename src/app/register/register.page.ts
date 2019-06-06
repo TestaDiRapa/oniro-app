@@ -49,7 +49,7 @@ export class RegisterPage implements OnInit {
             this.presentAlert(resData.status);
           }
         });
-        this.userService.setUser(this.paziente, 'register');
+        this.userService.setUser(this.paziente);
       } else {
         const address = form.value.via + ' ' + form.value.civico.toString() + ' ' + form.value.citta + ' ' + form.value.provincia;
         this.medico = new Medico(form.value.nome, form.value.cognome,
@@ -63,7 +63,7 @@ export class RegisterPage implements OnInit {
             this.presentAlert(resData.status);
           }
         });
-        this.userService.setUser(this.medico, 'register');
+        this.userService.setUser(this.medico);
       }
     } else {
       this.presentAlert('Form non valido. Riprova');

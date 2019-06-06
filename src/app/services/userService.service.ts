@@ -19,14 +19,8 @@ export class UserService {
     return this.user;
   }
 
-  setUser(user: Paziente | Medico, type: 'login'| 'register'){
-    if(type  === 'register') {
+  setUser(user: Paziente | Medico){
       this.user = user;
-      return;
     }
-    let path = 'http://45.76.47.94:8080/me/';
-      // da implementare la get /me e ottenere le informazioni;
-    //this.user = this.http.get<Response>()
-  }
-
+    
 }
