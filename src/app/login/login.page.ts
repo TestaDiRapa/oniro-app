@@ -42,25 +42,19 @@ export class LoginPage implements OnInit {
       this.username = form.value.albo;
     }
     this.password = form.value.password;
-    //booleano da impostare a this.isUser
+    // booleano da impostare a this.isUser
     this.auth.login(this.username, this.password, true).subscribe(res => {
       console.log(res);
       if (res.status === 'ok') {
         console.log(res.access_token);
-        this.goOn = true;
+        this.router.navigateByUrl('/home');
+
       } else {
         console.log(res.message);
       }
 
     });
 
-  }
-
-  // the event on login event of the ion-button Login
-  onLogin(form: NgForm) {
-    if(this.goOn) {
-      this.router.navigateByUrl('/home');
-    }
   }
 
 }

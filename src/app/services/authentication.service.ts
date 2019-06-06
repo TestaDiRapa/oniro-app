@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 
-export interface ResponseGet {
+export interface Response {
     status: string;
     access_token: string;
     message: string;
@@ -25,17 +25,17 @@ export class AuthenticationService {
         params = params.append('cf', username);
         params = params.append('password', password);
         this.isAuthenticated = true;
-        return this.http.get<ResponseGet>(path, { params });
+        return this.http.get<Response>(path, { params });
     }
 
-    register(user: Medico | Paziente, isUser: boolean){
+    register(user: Medico | Paziente, isUser: boolean) {
         let path = 'http://45.76.47.94:8080/register/';
         if (isUser) {
             path += 'user';
         } else {
             path += 'doctor';
         }
-        return this.http.put<ResponseGet>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})})
+        return this.http.put<Response>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})});
     }
 
     getAuthentication() {

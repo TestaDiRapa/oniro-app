@@ -26,6 +26,7 @@ export class RegisterPage implements OnInit {
     const alert = this.alertCtrl.create({
       subHeader: mex,
       buttons: ['Ok']
+// tslint:disable-next-line: no-shadowed-variable
     }).then(alert => alert.present());
   }
 
