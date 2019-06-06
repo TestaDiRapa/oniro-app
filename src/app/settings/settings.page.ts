@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PazienteService } from '../services/pazienteService.service';
 import { Paziente } from '../register/paziente.model';
+import { ActivatedRoute } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -9,10 +11,13 @@ import { Paziente } from '../register/paziente.model';
 })
 export class SettingsPage implements OnInit {
   private paziente:Paziente;
-  constructor(private pazienteService:PazienteService) {}
+  constructor(private pazienteService:PazienteService,
+    private menuCtrl:MenuController
+    ) {}
 
   ngOnInit() {
-this.paziente = this.pazienteService.getPaziente();
+  this.paziente = this.pazienteService.getPaziente();
+  this.menuCtrl.toggle();
   }
 
 }

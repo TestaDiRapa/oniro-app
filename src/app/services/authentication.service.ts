@@ -10,6 +10,7 @@ export interface ResponseGet {
 }
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+    private isAuthenticated = false;
 
     constructor(private http: HttpClient) { }
 
@@ -23,20 +24,22 @@ export class AuthenticationService {
         }
         params = params.append('cf', username);
         params = params.append('password', password);
+        this.isAuthenticated = true;
         return this.http.get<ResponseGet>(path, { params });
     }
 
     register(user: Medico | Paziente, isUser: boolean){
-        console.log("sono nel servizio auth di register");
         let path = 'http://45.76.47.94:8080/register/';
         if (isUser) {
-            console.log("STO REGISTRANDO UN USER");
             path += 'user';
         } else {
             path += 'doctor';
-            console.log("STO REGISTRANDO UN DOTTORE");
         }
         return this.http.put<ResponseGet>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})})
+    }
+
+    getAuthentication() {
+        return this.isAuthenticated;
     }
 
 }
