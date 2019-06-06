@@ -1,8 +1,13 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
+  <ion-toolbar color="light">
+    <ion-title style="font-weight: bold">
       Aggiungi {{ bevanda }}
     </ion-title>
+    <ion-buttons slot="primary">
+        <ion-button (click)="onCloseModal()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +15,21 @@
   <ion-grid>
     <ion-row>
       <ion-col size-md="6" offset-md="3">
-        <ion-label>QUALCOSA</ion-label>
+        <ion-list>
+          <ion-item lines="none">
+            <ion-label style="font-weight: bold">Quanti {{ bevanda }} hai bevuto oggi?</ion-label>
+          </ion-item>
+          <ion-item>
+              <ion-label margin (click)="onSubmitModal()">{{ bevanda }} totali:</ion-label>
+              <ion-input ngModel type="number" name="tot" required #totCtrl="ngModel"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-md="6" offset-md="3">
+          <ion-icon name="checkbox-outline" slot="end"></ion-icon>        
+          <ion-button expand="block" fill="clear" (click)="onSubmitModal(totCtrl.value)" [disabled]="!totCtrl.valid">Confirm</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

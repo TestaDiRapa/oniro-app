@@ -4,6 +4,7 @@ import { UserService } from '../services/userService.service';
 import { Medico } from '../register/medico.model';
 import { ModalController } from '@ionic/angular';
 import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
+import { Bevanda } from './add-abitudini/bevanda.model';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ export class HomePage implements OnInit {
   public currentDate = '';
   public currentTime = '';
   private bevanda: string;
+  private caffe = new Bevanda('', 0);
+  private drink = new Bevanda('', 0);
 
   constructor(private modalCtrl: ModalController) {
   }
@@ -34,12 +37,23 @@ export class HomePage implements OnInit {
     this.currentTime = hour + ' : ' + minute;
   }
 
-  openModal(bevanda: string){
-    this.bevanda = bevanda;
-    this.modalCtrl.create({component: AddAbitudiniComponent}).then(modalEl => {
+  openModal(selectedBevanda: string) {
+    this.bevanda = selectedBevanda;
+    this.modalCtrl.create({
+      component: AddAbitudiniComponent,
+      componentProps: {bevanda: this.bevanda}
+    }).then(modalEl => {
       modalEl.present();
+      return modalEl.onDidDismiss();
+    }).then(resData => {
+      if(selectedBevanda === 'drink'){
+      this.drink.setTipo(selectedBevanda);
+      this.drink.setTotale(resData.data);
+    } else {
+      this.caffe.setTipo(selectedBevanda);
+      this.drink.setTotale(resData.data);
+    }
     });
-
   }
 
 
