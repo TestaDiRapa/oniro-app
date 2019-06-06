@@ -1,15 +1,32 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons>
+      <ion-menu-button menu="paziente">
+      </ion-menu-button>
+    </ion-buttons>
     <ion-title>
-      <ion-buttons>
-        <ion-menu-button menu="paziente">
-        </ion-menu-button>
-      </ion-buttons>
-      Home {{ user.name}}
+      <ion-text color="danger">
+        <ion-label>ONIRO</ion-label>
+      </ion-text>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center>
+        <ion-label>{{ currentTime }}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <ion-label>{{ currentDate | date }}</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
 
 </ion-content>

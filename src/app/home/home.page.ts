@@ -9,13 +9,28 @@ import { Medico } from '../register/medico.model';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-user: Paziente | Medico;
+  public currentDate = '';
+  public currentTime = '';
 
-  constructor(
-    public userService:UserService
-  ) {}
+  constructor() {
+  }
 
   ngOnInit() {
-    this.user = this.userService.getUser();
+    this.formatDate();
   }
+
+  formatDate() {
+    const date = new Date();
+    const year = date.getFullYear().toString();
+    const day = date.getDay().toString();
+    const month = date.getMonth().toString();
+    this.currentDate = month + ' ' + day + ', ' + year;
+
+    const hour = date.getHours().toString();
+    const minute = date.getMinutes().toString();
+    this.currentTime = hour + ': ' + minute;
+  }
+
+
+
 }

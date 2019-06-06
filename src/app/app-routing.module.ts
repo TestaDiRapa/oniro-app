@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'authentication', loadChildren: './authentication/authentication.module#AuthenticationPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
-  { path: 'home/record', loadChildren: './record/record.module#RecordPageModule', canLoad: [AuthGuard]},
+  //{ path: 'home/record', loadChildren: './record/record.module#RecordPageModule', canLoad: [AuthGuard]},
   { path: 'home/settings', loadChildren: './settings/settings.module#SettingsPageModule', canLoad: [AuthGuard]},
   { path: 'home/contacts', loadChildren: './contacts/contacts.module#ContactsPageModule', canLoad: [AuthGuard]},
   { path: 'home/diary', loadChildren: './diary/diary.module#DiaryPageModule', canLoad: [AuthGuard]},
