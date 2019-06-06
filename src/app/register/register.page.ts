@@ -30,8 +30,7 @@ export class RegisterPage implements OnInit {
   presentAlert(mex: string) {
     const alert = this.alertCtrl.create({
       subHeader: mex,
-      buttons: ['Ok']
-// tslint:disable-next-line: no-shadowed-variable
+      buttons: [{ cssClass: 'ion-alert', text: 'OK'}],
     }).then(alert => alert.present());
   }
 
@@ -59,7 +58,7 @@ export class RegisterPage implements OnInit {
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
-            this.router.navigateByUrl('home');
+            this.router.navigateByUrl('/home');
           } else {
             this.presentAlert(resData.status);
           }
