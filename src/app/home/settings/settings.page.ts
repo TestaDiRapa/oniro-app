@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/userService.service';
-import { Paziente } from '../register/paziente.model';
-import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../services/userService.service';
+import { Paziente } from '../../register/paziente.model';
 import { MenuController } from '@ionic/angular';
-import { Medico } from '../register/medico.model';
+import { Medico } from '../../register/medico.model';
 
 @Component({
   selector: 'app-settings',
