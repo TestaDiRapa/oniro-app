@@ -16,27 +16,25 @@
             <ion-list>
               <ion-item lines="none">
                   <ion-icon name="settings" slot="start" ></ion-icon>
-                  <ion-label routerLink="home/settings" routerDirection="forward">Impostazioni</ion-label>
+                  <ion-label [routerLink]="['home/settings']"routerDirection="forward">Impostazioni</ion-label>
                 </ion-item>
               <ion-item lines="none">
                   <ion-icon name="book" slot="start"></ion-icon>
-                  <ion-label>Diario</ion-label>
+                  <ion-label [routerLink]="['home/diary']">Diario</ion-label>
                 </ion-item>
               <ion-item lines="none">
                   <ion-icon name="search" slot="start"></ion-icon>
-                <ion-label>Cerca Medico</ion-label>
+                <ion-label [routerLink]="['home/gmaps']">Cerca Medico</ion-label>
               </ion-item>
               <ion-item lines="none">
                   <ion-icon name="contacts" slot="start"></ion-icon>
-                <ion-label>Contatti</ion-label>
+                <ion-label [routerLink]="['home/contacts']">Contatti</ion-label>
               </ion-item>
               <ion-item lines="none"><ion-icon name="information-circle-outline" slot="start"></ion-icon>
-                <ion-label>Info</ion-label></ion-item>
+                <ion-label [routerLink]="['home/info']">Info</ion-label></ion-item>
               <ion-item lines="none">
-                  <ion-button type="submit" (click)="onLogout()">
                   <ion-icon name="exit"slot="start"></ion-icon>
                   <ion-label>Logout</ion-label>
-                </ion-button>
                 </ion-item>
             </ion-list>
           </ion-content>

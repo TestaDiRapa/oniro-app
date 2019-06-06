@@ -10,10 +10,11 @@ export class ContactsPage implements OnInit {
   public contacts: any;
 
   constructor(private user: UserService) {
-    this.getContact();
+    
   }
 
   ngOnInit() {
+    this.getContact();
   }
 
   getContact() {
