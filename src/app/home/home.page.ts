@@ -14,7 +14,6 @@ import { Abitudini } from './add-abitudini/abitudini.model';
 })
 export class HomePage implements OnInit, OnDestroy {
   public currentDate = '';
-  public currentTime = '';
   public isValid = false;
   private bevanda: string;
   private isCena = false;
@@ -28,7 +27,8 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.formatDate();
   }
-  ngOnDestroy(){
+
+  ngOnDestroy() {
     console.log('onDestroy');
   }
 
@@ -46,9 +46,6 @@ export class HomePage implements OnInit, OnDestroy {
     const day = date.getDay().toString();
     const month = date.getMonth().toString();
     this.currentDate = month + ' ' + day + ', ' + year;
-    const hour = date.getHours().toString();
-    const minute = date.getMinutes().toString();
-    this.currentTime = hour + ' : ' + minute;
   }
 
   onToggleCena(togValue: boolean) {
@@ -73,7 +70,7 @@ export class HomePage implements OnInit, OnDestroy {
       this.drink.setTotale(resData.data);
     } else {
       this.caffe.setTipo(selectedBevanda);
-      this.drink.setTotale(resData.data);
+      this.caffe.setTotale(resData.data);
     }
     });
   }
