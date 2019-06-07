@@ -7,6 +7,8 @@ import { MenuController } from '@ionic/angular';
   templateUrl: './contacts.page.html',
   styleUrls: ['./contacts.page.scss'],
 })
+
+
 export class ContactsPage implements OnInit {
   public contacts: any;
 
@@ -22,7 +24,14 @@ export class ContactsPage implements OnInit {
 
   getContact() {
     this.user.getMyDoctor().subscribe(res => {
+      this.contacts = res.message;
+      console.log(this.contacts);
     });
+  }
+
+  contactClick(id: string, phone: string) {
+      alert('This is the event: \n name: ' + id + '\n phone:  ' + phone );
+
   }
 
 }
