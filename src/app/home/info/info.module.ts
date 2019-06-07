@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { InfoPage } from './info.page';
+import { InfoModalComponent } from './info-modal/info-modal.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [InfoPage]
+  declarations: [InfoPage, InfoModalComponent],
+  entryComponents: [InfoModalComponent]
 })
 export class InfoPageModule {}

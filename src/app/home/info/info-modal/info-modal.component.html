@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-title style="font-weight: bold">
+      {{ info }}
+    </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onCloseModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row style="text-align: justify" *ngIf="info === 'Why Oniro?'">
+      <ion-col>
+        <ion-text style="font-weight: normal; font-style: normal"> L'applicazione consente il monitoraggio 
+          del sonno del paziente grazie al sistema embedded realizzato. <br/>Il sistema è in grado di rilevare 
+          la saturazione di ossigeno nel sangue, i movimenti del paziente e i movimenti del diaframma.<br/> 
+          I dati sono inviati all'app tramite connessione Bluetooth. Grazie al sistema complessivo è 
+          possibile rilevare eventuali fenomeni di apnea durante la notte, che possono essere inviati 
+          al medico associato.
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row style="text-align: justify" *ngIf="info !== 'Why Oniro?'">
+      <ion-col>
+        <ion-text style="font-weight: normal; font-style: normal"> L'applicazione cè stata sviluppata da 
+          un gruppo di 4 persone:
+        </ion-text>
+        <ion-list>
+          <ion-item> La Femina Antonio
+            <ion-thumbnail slot="start">
+              <img src="assets/image/panda-login.jpg" > 
+            </ion-thumbnail>
+          </ion-item>
+          <ion-item> Montefusco Alessandro
+              <ion-thumbnail slot="start">
+                <img src="assets/image/alex.jpg" > 
+              </ion-thumbnail>
+            </ion-item>
+            <ion-item> Nappi Antonio
+                <ion-thumbnail slot="start">
+                  <img src="assets/image/panda-login.jpg" > 
+                </ion-thumbnail>
+              </ion-item>
+              <ion-item> Vincenzo Pierro
+                  <ion-thumbnail slot="start">
+                    <img src="assets/image/panda-login.jpg" > 
+                  </ion-thumbnail>
+                </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

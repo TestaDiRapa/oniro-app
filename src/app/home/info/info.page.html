@@ -5,9 +5,23 @@
     </ion-buttons>
     <ion-text color="light" style="font-size: 25px">Informazioni</ion-text>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-list>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-icon name="share-alt"></ion-icon>
+            <ion-label (click)="openModal('Why Oniro?')">Why Oniro</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="share-alt"></ion-icon>
+            <ion-label (click)="openModal('Sviluppatori')">Sviluppatori</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-list>
+  </ion-grid>
 </ion-content>
