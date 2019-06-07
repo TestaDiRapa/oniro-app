@@ -28,7 +28,6 @@ export class UserService {
 
   getMyDoctor() {
     const path = 'http://45.76.47.94:8080/user/my_doctors';
-    console.log(this.auth.getToken());
     return this.http.get<Response>(path, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.auth.getToken()  })});
   }
 

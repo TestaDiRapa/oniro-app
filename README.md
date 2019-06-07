@@ -20,3 +20,9 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova plugin add cordova-plugin-geolocation`<br>
 `npm install --save @ionic-native/geolocation`<br>
 
+
+
+##Bug da fixare
+Quando si aggiorna la pagina, i dati dell'user vengono persi
+Quando si fa il logout misticamente la pagina dell'homepage dopo il login si rompe
+

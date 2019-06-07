@@ -22,7 +22,6 @@ export class ContactsPage implements OnInit {
 
   getContact() {
     this.user.getMyDoctor().subscribe(res => {
-      console.log(res);
     });
   }
 
