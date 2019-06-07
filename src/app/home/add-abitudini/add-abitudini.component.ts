@@ -18,7 +18,7 @@ export class AddAbitudiniComponent implements OnInit {
     this.modalCtrl.dismiss(null, 'close');
   }
 
-  onSubmitModal(total: number){
+  onSubmitModal(total: number) {
     this.modalCtrl.dismiss(total, 'confirm');
   }
 
