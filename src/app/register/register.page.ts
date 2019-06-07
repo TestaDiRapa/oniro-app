@@ -18,11 +18,12 @@ export class RegisterPage implements OnInit {
   private paziente: Paziente;
   private medico: Medico;
 
-  constructor(private router: Router,
-              private auth: AuthenticationService,
-              private alertCtrl: AlertController,
-              private userService: UserService
-    ) { }
+  constructor(
+    private router: Router,
+    private auth: AuthenticationService,
+    private alertCtrl: AlertController,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
   }
@@ -30,7 +31,7 @@ export class RegisterPage implements OnInit {
   presentAlert(mex: string) {
     const alert = this.alertCtrl.create({
       subHeader: mex,
-      buttons: [{ cssClass: 'ion-alert', text: 'OK'}],
+      buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
     }).then(alert => alert.present());
   }
 
@@ -38,8 +39,8 @@ export class RegisterPage implements OnInit {
     if (form.valid) {
       if (this.isUser) {
         this.paziente = new Paziente(form.value.nome, form.value.cognome,
-                                    form.value.password, form.value.telefono,
-                                    form.value.email, form.value.cf, form.value.eta.toString());
+          form.value.password, form.value.telefono,
+          form.value.email, form.value.cf, form.value.eta.toString());
         this.auth.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
@@ -53,8 +54,8 @@ export class RegisterPage implements OnInit {
       } else {
         const address = form.value.via + ' ' + form.value.civico.toString() + ' ' + form.value.citta + ' ' + form.value.provincia;
         this.medico = new Medico(form.value.nome, form.value.cognome,
-                                form.value.password, form.value.telefono,
-                                form.value.email, form.value.idalbo, address);
+          form.value.password, form.value.telefono,
+          form.value.email, form.value.idalbo, address);
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
