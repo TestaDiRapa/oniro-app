@@ -4,11 +4,12 @@ export class Bevanda {
         private totale: number
     ) {}
 
-    setTipo(tipo: string){
+    setTipo(tipo: string) {
         this.tipo = tipo;
     }
 
-    setTotale(tot: number){
+    setTotale(tot: number) {
         this.totale = tot;
     }
+
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
+import { HomePage } from '../home.page';
+import { NavigationCancel } from '@angular/router';
 
 @Component({
   selector: 'app-info',

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -12,7 +12,7 @@ import { Medico } from './register/medico.model';
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   private user: Paziente | Medico;
 
   constructor(
@@ -52,5 +52,8 @@ export class AppComponent {
   }
   onClickContacts() {
     this.router.navigateByUrl('/home/contacts');
+  }
+  ngOnDestroy(){
+    console.log(this,'onDestroy');
   }
 }
