@@ -15,9 +15,10 @@ import { Abitudini } from './add-abitudini/abitudini.model';
 export class HomePage implements OnInit {
   public currentDate = '';
   public currentTime = '';
+  public isValid = false;
   private bevanda: string;
-  private isCena: boolean;
-  private isSport: boolean;
+  private isCena = false;
+  private isSport = false;
   private caffe = new Bevanda('', 0);
   private drink = new Bevanda('', 0);
 
