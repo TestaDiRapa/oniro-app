@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 
-export interface Response {
+export interface Respons {
     status: string;
     access_token: string;
     message: string;
 }
+
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     isAuthenticated = true;
@@ -28,7 +29,7 @@ export class AuthenticationService {
             params = params.append('password', password);
         }
 
-        return this.http.get<Response>(path, { params });
+        return this.http.get<Respons>(path, { params });
     }
 
     register(user: Medico | Paziente, isUser: boolean) {
@@ -38,7 +39,7 @@ export class AuthenticationService {
         } else {
             path += 'doctor';
         }
-        return this.http.put<Response>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})});
+        return this.http.put<Respons>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})});
     }
 
     getAuthentication() {
