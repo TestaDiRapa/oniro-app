@@ -6,6 +6,7 @@ export class Abitudini {
         private caffe: Bevanda,
         private drink: Bevanda,
         private isSport: boolean,
-        private isCena: boolean
+        private isCena: boolean,
     ) {}
+
 }

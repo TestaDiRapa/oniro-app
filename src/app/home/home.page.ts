@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   private caffe = new Bevanda('', 0);
   private drink = new Bevanda('', 0);
 
-  constructor(private modalCtrl: ModalController) {
+  constructor(private modalCtrl: ModalController, private user: UserService) {
   }
 
   ngOnInit() {
@@ -76,6 +76,9 @@ export class HomePage implements OnInit {
 
   onStartMonitoring() {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
+    this.user.putMyHabits(abitudine).subscribe(res => {
+      console.log(res);
+    });
   }
 
 
