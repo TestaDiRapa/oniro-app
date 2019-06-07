@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 
-export interface Respons {
+export interface Response {
     status: string;
     access_token: string;
     message: string;
@@ -12,6 +12,7 @@ export interface Respons {
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     isAuthenticated = true;
+    private isUser: boolean;
     private accessToken: string ;
 
     constructor(private http: HttpClient) { }
@@ -19,6 +20,7 @@ export class AuthenticationService {
     login(username: string, password: string, isUser: boolean) {
         let params = new HttpParams();
         let path = 'http://45.76.47.94:8080/login/';
+        this.isUser = isUser;
         if (isUser) {
             path += 'user';
             params = params.append('cf', username);
@@ -28,8 +30,7 @@ export class AuthenticationService {
             params = params.append('id', username);
             params = params.append('password', password);
         }
-
-        return this.http.get<Respons>(path, { params });
+        return this.http.get<Response>(path, { params });
     }
 
     register(user: Medico | Paziente, isUser: boolean) {
@@ -39,7 +40,8 @@ export class AuthenticationService {
         } else {
             path += 'doctor';
         }
-        return this.http.put<Respons>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})});
+        this.isUser = isUser;
+        return this.http.put<Response>(path, user, {headers: new HttpHeaders({'Content-Type' : 'application/json'})});
     }
 
     getAuthentication() {
@@ -54,4 +56,10 @@ export class AuthenticationService {
         this.accessToken = token;
     }
 
+    getUserType() {
+        return this.isUser;
+    }
+
+
+    // controllare la guarda dell'user
 }

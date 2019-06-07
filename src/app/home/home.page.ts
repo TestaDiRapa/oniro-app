@@ -21,7 +21,9 @@ export class HomePage implements OnInit, OnDestroy {
   private caffe = new Bevanda('', 0);
   private drink = new Bevanda('', 0);
 
-  constructor(private modalCtrl: ModalController, private user: UserService) {
+  constructor(private modalCtrl: ModalController,
+              private user: UserService,
+              private userService: UserService) {
   }
 
   ngOnInit() {

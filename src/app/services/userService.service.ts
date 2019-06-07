@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { AuthenticationService, Respons } from './authentication.service';
+import { AuthenticationService, Response } from './authentication.service';
 import { Abitudini } from '../home/add-abitudini/abitudini.model';
 
 @Injectable({
@@ -29,7 +29,7 @@ export class UserService {
 
   getMyDoctor() {
     const path = 'http://45.76.47.94:8080/user/my_doctors';
-    return this.http.get<Respons>(path, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.auth.getToken()  })});
+    return this.http.get<Response>(path, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.auth.getToken()  })});
   }
 
   putMyHabits(abitudine: Abitudini) {
@@ -37,8 +37,10 @@ export class UserService {
     const token = this.auth.getToken();
     console.log(JSON.stringify(abitudine));
 // tslint:disable-next-line: max-line-length
-    return this.http.put<Respons>(path, JSON.stringify(abitudine), {headers: new HttpHeaders({'Content-Type' : 'application/json', Authorization: 'Bearer ' + token   }) });
+    return this.http.put<Response>(path, JSON.stringify(abitudine), {headers: new HttpHeaders({'Content-Type' : 'application/json', Authorization: 'Bearer ' + token   }) });
 
   }
-
+getTypeUser() {
+  return typeof(this.user) === typeof(Medico);
+}
 }

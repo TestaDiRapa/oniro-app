@@ -19,14 +19,14 @@ export class LoginPage implements OnInit {
   isUser = true;
   private username: string;
   private password: string;
-
+          path: string;
 
   constructor(private router: Router,
-     private auth: AuthenticationService, 
-     private user: UserService,
-      private http: HttpClient,
-      private menuCtrl:MenuController,
-      private alertCtrl: AlertController) { }
+              private auth: AuthenticationService,
+              private user: UserService,
+              private http: HttpClient,
+              private menuCtrl: MenuController,
+              private alertCtrl: AlertController) { }
 
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class LoginPage implements OnInit {
     const alert = this.alertCtrl.create({
       subHeader: mex,
       buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
-    }).then(alert => alert.present());
+    }).then( (alert) => alert.present());
   }
 
   // check if the ion-segment value is changed or not
@@ -69,15 +69,19 @@ export class LoginPage implements OnInit {
         this.http.get<any>('http://45.76.47.94:8080/me', {
           headers: new HttpHeaders({ Authorization: 'Bearer ' + token })
         }).subscribe(resu => {
+          this.auth.isAuthenticated = true;
           if (this.isUser) {
             this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
               resu.message['phone_server'], resu.message['email'], resu.message['_id'], resu.message['age']));
+            this.path = 'home';
           } else {
             this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
               resu.message['phone'], resu.message['email'], resu.message['_id'], resu.message['address']));
+            this.path = 'homedoc';
           }
-          this.auth.isAuthenticated = true;
-          this.router.navigateByUrl('/home');
+          console.log('username',this.username,'password',this.password);
+          console.log(this.path);
+          this.router.navigateByUrl(this.path);
         });
 
       } else {

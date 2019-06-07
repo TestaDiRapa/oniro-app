@@ -7,15 +7,11 @@ import { AuthenticationService } from '../services/authentication.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanLoad  {
-  
-  constructor(private authService: AuthenticationService,
-    private router:Router){}
 
-    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    if(!this.authService.getAuthentication()){
-      this.router.navigateByUrl('/authentication');
-      }
-      return this.authService.getAuthentication();
-    }
-  
+  constructor(private authService: AuthenticationService,
+              private router: Router) {}
+
+    canLoad(_route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
+      return  this.authService.getAuthentication();
+}
 }
