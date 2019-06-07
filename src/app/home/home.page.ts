@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { UserService } from '../services/userService.service';
 import { Medico } from '../register/medico.model';
@@ -11,7 +11,7 @@ import { Bevanda } from './add-abitudini/bevanda.model';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   public currentDate = '';
   public currentTime = '';
   private bevanda: string;
@@ -24,6 +24,9 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.formatDate();
+  }
+  ngOnDestroy(){
+    console.log('onDestroy');
   }
 
   formatDate() {

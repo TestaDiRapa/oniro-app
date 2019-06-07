@@ -7,6 +7,7 @@ import { UserService } from '../services/userService.service';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
+import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -19,7 +20,11 @@ export class LoginPage implements OnInit {
   private username: string;
   private password: string;
 
-  constructor(private router: Router, private auth: AuthenticationService, private user: UserService, private http: HttpClient) { }
+  constructor(private router: Router,
+     private auth: AuthenticationService, 
+     private user: UserService,
+      private http: HttpClient,
+      private menuCtrl:MenuController) { }
 
   ngOnInit() {
   }
@@ -40,6 +45,7 @@ export class LoginPage implements OnInit {
     if (!form.valid) {
       return;
     }
+    this.menuCtrl.enable(true);
     if (this.isUser) {
       this.username = form.value.cf;
     } else {

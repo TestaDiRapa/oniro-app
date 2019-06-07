@@ -5,7 +5,7 @@ import { SegmentChangeEventDetail } from '@ionic/core';
 import { Paziente } from './paziente.model';
 import { AuthenticationService } from '../services/authentication.service';
 import { Medico } from './medico.model';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
 import { UserService } from '../services/userService.service';
 
 @Component({
@@ -21,7 +21,8 @@ export class RegisterPage implements OnInit {
   constructor(private router: Router,
               private auth: AuthenticationService,
               private alertCtrl: AlertController,
-              private userService: UserService
+              private userService: UserService,
+              private menuCtrl: MenuController
     ) { }
 
   ngOnInit() {
@@ -36,6 +37,7 @@ export class RegisterPage implements OnInit {
 
   onSubmit(form: NgForm) {
     if (form.valid) {
+      this.menuCtrl.enable(true);
       if (this.isUser) {
         this.paziente = new Paziente(form.value.nome, form.value.cognome,
                                     form.value.password, form.value.telefono,
