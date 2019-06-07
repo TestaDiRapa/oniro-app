@@ -13,9 +13,11 @@ export class GmapsPage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
 
-  constructor(private geolocation: Geolocation) { }
+  constructor(private geolocation: Geolocation,
+    private menuCtrl: MenuController) { }
 
   ngOnInit() {
+    this.menuCtrl.toggle();
     this.loadMap();
   }
 
