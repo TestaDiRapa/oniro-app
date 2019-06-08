@@ -9,8 +9,8 @@
 
 <ion-content>
     <ion-list>
-        <ion-item *ngFor="let contact of contacts" (click)="contactClick(contact.phone)">
-          <h1> {{contact.id}}</h1>
+        <ion-item *ngFor="let contact of contacts" (click)="contactClick(contact['doctor'].name,contact['doctor'].phone)">
+          <h1> {{contact['doctor'].name}} {{contact['doctor']._id}}</h1>
         </ion-item>
       </ion-list>
 

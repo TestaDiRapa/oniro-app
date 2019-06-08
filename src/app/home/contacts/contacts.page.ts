@@ -25,7 +25,12 @@ export class ContactsPage implements OnInit {
   getContact() {
     this.user.getMyDoctor().subscribe(res => {
       this.contacts = res.message;
+      console.log(res.message);
+      console.log(res.message['doctor']);
       console.log(this.contacts);
+      console.log(this.contacts[0]);
+
+
     });
   }
 

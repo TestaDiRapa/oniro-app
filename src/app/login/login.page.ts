@@ -71,15 +71,19 @@ export class LoginPage implements OnInit {
         }).subscribe(resu => {
           this.auth.isAuthenticated = true;
           if (this.isUser) {
+// tslint:disable-next-line: no-string-literal
             this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
-              resu.message['phone_server'], resu.message['email'], resu.message['_id'], resu.message['age']));
+// tslint:disable-next-line: no-string-literal
+              resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['age']));
             this.path = 'home';
           } else {
+// tslint:disable-next-line: no-string-literal
             this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
-              resu.message['phone'], resu.message['email'], resu.message['_id'], resu.message['address']));
+// tslint:disable-next-line: no-string-literal
+              resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['address']));
             this.path = 'homedoc';
           }
-          console.log('username',this.username,'password',this.password);
+          console.log('username', this.username, 'password', this.password);
           console.log(this.path);
           this.router.navigateByUrl(this.path);
         });
