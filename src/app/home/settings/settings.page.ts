@@ -13,7 +13,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class SettingsPage implements OnInit {
 
   public user: Paziente | Medico;
-  public isUser: boolean;
+  public isUser = false;
 
   constructor(
     private userService: UserService,

@@ -28,6 +28,14 @@ export class Medico {
         return this.phone_number;
     }
 
+    getMail() {
+        return this.email;
+    }
+
+    getAlbo() {
+        return this.id;
+    }
+
     getAddress() {
         return this.address;
     }

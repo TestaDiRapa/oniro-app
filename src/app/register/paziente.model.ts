@@ -32,6 +32,10 @@ export class Paziente {
         return this.age;
     }
 
+    getMail() {
+        return this.email;
+    }
+
     getCf() {
         return this.cf;
     }
