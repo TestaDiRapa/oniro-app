@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MenuController } from '@ionic/angular';
+import { GetCoordService } from './get-coord.service';
 
 declare var google;
 
@@ -14,7 +15,8 @@ export class GmapsPage implements OnInit {
   map: any;
 
   constructor(private geolocation: Geolocation,
-              private menuCtrl: MenuController) { }
+              private menuCtrl: MenuController,
+              private getCoord:GetCoordService) { }
 
   ngOnInit() {
     this.menuCtrl.toggle();
@@ -28,10 +30,17 @@ export class GmapsPage implements OnInit {
         center: latLng,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
+      }
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
     }).catch((error) => {
       console.log('Error getting location', error);
     });
   }
+  getCoordinates() {
+    console.log('sono qui');
+    this.getCoord.getCoordinates().subscribe(res =>{
+      console.log(res);
+    });
+  }
+
 }
