@@ -56,9 +56,13 @@ export class RegisterPage implements OnInit {
         });
         this.userService.setUser(this.paziente);
       } else {
+// tslint:disable-next-line: no-string-literal
         const address = form.value['via'] + ' ' + form.value['civico'] + ' ' + form.value['citta'] + ' ' + form.value['provincia'];
+// tslint:disable-next-line: no-string-literal
         this.medico = new Medico(form.value['nome'], form.value['cognome'],
+// tslint:disable-next-line: no-string-literal
           form.value['password'], form.value['telefono'],
+// tslint:disable-next-line: no-string-literal
           form.value['email'], form.value['idalbo'], address);
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {

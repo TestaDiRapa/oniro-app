@@ -13,10 +13,11 @@ declare var google;
 export class GmapsPage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
+  doctors: any;
 
   constructor(private geolocation: Geolocation,
               private menuCtrl: MenuController,
-              private getCoord:GetCoordService) { }
+              private getCoord: GetCoordService) { }
 
   ngOnInit() {
     this.menuCtrl.toggle();
@@ -30,7 +31,7 @@ export class GmapsPage implements OnInit {
         center: latLng,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
+      };
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
     }).catch((error) => {
       console.log('Error getting location', error);
@@ -38,8 +39,11 @@ export class GmapsPage implements OnInit {
   }
   getCoordinates() {
     console.log('sono qui');
-    this.getCoord.getCoordinates().subscribe(res =>{
-      console.log(res);
+    this.getCoord.getCoordinates().subscribe(res => {
+// tslint:disable-next-line: no-string-literal
+      this.doctors = res['payload'];
+// tslint:disable-next-line: no-string-literal
+      console.log(res['payload']);
     });
   }
 

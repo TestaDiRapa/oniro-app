@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,6 @@ export class GetCoordService {
 
   getCoordinates() {
 this.token = this.authService.getToken();
-return this.http.get<Response>(this.url, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.token })});
+return this.http.get<Respons>(this.url, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.token })});
   }
 }
