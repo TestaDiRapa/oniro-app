@@ -19,7 +19,7 @@ export class LoginPage implements OnInit {
   isUser = true;
   private username: string;
   private password: string;
-          path: string;
+  private path: string;
 
   constructor(private router: Router,
               private auth: AuthenticationService,

@@ -6,7 +6,7 @@ export class Medico {
         public name: string,
         public surname: string,
         private password: string,
-        private phone: string,
+        private phone_number: string,
         private email: string,
         private id: string,
         private address: string
