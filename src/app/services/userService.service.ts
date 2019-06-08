@@ -23,24 +23,24 @@ export class UserService {
   }
 
   setUser(user: Paziente | Medico) {
-      this.user = user;
-      return;
-      }
+    this.user = user;
+    return;
+  }
 
   getMyDoctor() {
     const path = 'http://45.76.47.94:8080/user/my_doctors';
-    return this.http.get<Response>(path, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.auth.getToken()  })});
+    return this.http.get<Response>(path, { headers: new HttpHeaders({ Authorization: 'Bearer ' + this.auth.getToken() }) });
   }
 
   putMyHabits(abitudine: Abitudini) {
     const path = 'http://45.76.47.94:8080/user/habits';
     const token = this.auth.getToken();
     console.log(JSON.stringify(abitudine));
-// tslint:disable-next-line: max-line-length
-    return this.http.put<Response>(path, JSON.stringify(abitudine), {headers: new HttpHeaders({'Content-Type' : 'application/json', Authorization: 'Bearer ' + token   }) });
-
+    // tslint:disable-next-line: max-line-length
+    return this.http.put<Response>(path, JSON.stringify(abitudine), { headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }) });
   }
-getTypeUser() {
-  return typeof(this.user) === typeof(Medico);
-}
+
+  getTypeUser() {
+    return typeof (this.user) === typeof (Medico);
+  }
 }

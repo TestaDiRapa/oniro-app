@@ -8,19 +8,33 @@
 </ion-header>
 
 <ion-content>
-<ion-grid>
-  <ion-row>
-    <ion-col size-sm ="8" offset-sm="2">
-      <img src = "https://upload.wikimedia.org/wikipedia/commons/4/46/Pizza-napoletana.jpg">
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col size-sm="5" offset-sm="2">
-      Nome:
-    </ion-col>
-    <ion-col size-sm="5" offset-sm="2">
-        {{paziente.name}}
+  <ion-grid>
+
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title style="font-weight: bold; font-size: 20px;">Dati personali</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label (click)="onLabelModify('psw')">Password: {{ user.getName() }}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label (click)="onLabelModify('tel')">Telefono: {{ user.getPhone().toString() }}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label *ngIf="isUser" (click)="onLabelModify('eta')">Età: {{user.getAge().toString() }} </ion-label>
+              </ion-item>
+            <ion-item *ngIf="!isUser">
+              <ion-label (click)="onLabelModify('addr')">Indirizzo</ion-label>
+            </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
-  </ion-row>
-</ion-grid>
+    </ion-row>
+
+  </ion-grid>
 </ion-content>

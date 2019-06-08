@@ -3,12 +3,32 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class Medico {
     constructor(
-        public name: string,
-        public surname: string,
+        private name: string,
+        private surname: string,
         private password: string,
         private phone_number: string,
         private email: string,
         private id: string,
         private address: string
     ) {}
+
+    getName(){
+        return this.name;
+    }
+
+    getSurname() {
+        return this.surname;
+    }
+
+    getPassword() {
+        return this.password;
+    }
+
+    getPhone() {
+        return this.phone_number;
+    }
+
+    getAddress() {
+        return this.address;
+    }
 }
