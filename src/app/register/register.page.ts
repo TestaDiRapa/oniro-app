@@ -39,9 +39,12 @@ export class RegisterPage implements OnInit {
     if (form.valid) {
       this.menuCtrl.enable(true);
       if (this.isUser) {
-        this.paziente = new Paziente(form.value.nome, form.value.cognome,
-          form.value.password, form.value.telefono,
-          form.value.email, form.value.cf, form.value.eta.toString());
+// tslint:disable-next-line: no-string-literal
+        this.paziente = new Paziente(form.value['nome'], form.value['cognome'],
+// tslint:disable-next-line: no-string-literal
+          form.value['password'], form.value['telefono'],
+// tslint:disable-next-line: no-string-literal
+          form.value['email'], form.value['cf'], form.value['eta']);
         this.auth.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
@@ -53,10 +56,10 @@ export class RegisterPage implements OnInit {
         });
         this.userService.setUser(this.paziente);
       } else {
-        const address = form.value.via + ' ' + form.value.civico.toString() + ' ' + form.value.citta + ' ' + form.value.provincia;
-        this.medico = new Medico(form.value.nome, form.value.cognome,
-          form.value.password, form.value.telefono,
-          form.value.email, form.value.idalbo, address);
+        const address = form.value['via'] + ' ' + form.value['civico'] + ' ' + form.value['citta'] + ' ' + form.value['provincia'];
+        this.medico = new Medico(form.value['nome'], form.value['cognome'],
+          form.value['password'], form.value['telefono'],
+          form.value['email'], form.value['idalbo'], address);
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
