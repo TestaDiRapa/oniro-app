@@ -14,7 +14,7 @@ export class GmapsPage implements OnInit {
   map: any;
 
   constructor(private geolocation: Geolocation,
-    private menuCtrl: MenuController) { }
+              private menuCtrl: MenuController) { }
 
   ngOnInit() {
     this.menuCtrl.toggle();
@@ -23,12 +23,12 @@ export class GmapsPage implements OnInit {
 
   loadMap() {
     this.geolocation.getCurrentPosition().then((resp) => {
-      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      let mapOptions = {
+      const latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      const mapOptions = {
         center: latLng,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
+      };
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
     }).catch((error) => {
       console.log('Error getting location', error);
