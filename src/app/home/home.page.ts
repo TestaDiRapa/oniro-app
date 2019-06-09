@@ -47,7 +47,6 @@ export class HomePage implements OnInit, OnDestroy {
     const year = date.getFullYear().toString();
     const day = date.getDay().toString();
     const month = date.getMonth().toString();
-    console.log(day);
     this.currentDate = new Date();
   }
 

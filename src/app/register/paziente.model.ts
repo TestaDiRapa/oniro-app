@@ -20,10 +20,6 @@ export class Paziente {
         return this.surname;
     }
 
-    getPassword() {
-        return this.password;
-    }
-
     getPhone() {
         return this.phone_number;
     }
@@ -38,5 +34,13 @@ export class Paziente {
 
     getCf() {
         return this.cf;
+    }
+
+    setAge(age: string) {
+        this.age = age;
+    }
+
+    setPhone(phone: string) {
+        this.phone_number = phone;
     }
 }

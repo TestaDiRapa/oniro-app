@@ -33,43 +33,40 @@
           <ion-card-content>
             <ion-list>
               <ion-item>
-                <ion-label (click)="onLabelModify('psw')">Nome: {{ user.getName() }}</ion-label>
+                <ion-label>Nome: {{ user.getName() }}</ion-label>
               </ion-item>
               <ion-item>
-                <ion-label (click)="onLabelModify('psw')">Cognome: {{ user.getSurname() }}</ion-label>
+                <ion-label>Cognome: {{ user.getSurname() }}</ion-label>
               </ion-item>
               <ion-item *ngIf="isUser">
-                <ion-label  (click)="onLabelModify('psw')">Codice Fiscale: {{ user.getCf() }}</ion-label>
+                <ion-label>Codice Fiscale: {{ user.getCf() }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
-                  <ion-label  (click)="onLabelModify('psw')">Id Albo: {{ user.getAlbo() }}</ion-label>
+                  <ion-label>Id Albo: {{ user.getAlbo() }}</ion-label>
                 </ion-item>
               <ion-item>
                 <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label (click)="onLabelModify('psw')">Password: ********</ion-label>
+                <ion-label (click)="onPswModify()">Password: ********</ion-label>
               </ion-item>
               <ion-item>
                 <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label (click)="onLabelModify('tel')">Telefono: {{ user.getPhone().toString() }}</ion-label>
+                <ion-label (click)="onPhoneModify()">Telefono: {{ user.getPhone().toString() }}</ion-label>
               </ion-item>
               <ion-item>
-                <ion-label (click)="onLabelModify('eta')">E-mail: {{user.getMail().toString() }}</ion-label>
+                <ion-label>E-mail: {{user.getMail().toString() }}</ion-label>
               </ion-item>
               <ion-item *ngIf="isUser">
                 <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label  (click)="onLabelModify('eta')">Età: {{user.getAge().toString() }}</ion-label>
+                <ion-label  (click)="onAgeModify()">Età: {{user.getAge().toString() }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
                   <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label (click)="onLabelModify('addr')">Indirizzo: {{ user.getAddress() }}</ion-label>
+                <ion-label (click)="onAddrModify()">Indirizzo: {{ user.getAddress() }}</ion-label>
               </ion-item>
             </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
-
-
-
   </ion-grid>
 </ion-content>

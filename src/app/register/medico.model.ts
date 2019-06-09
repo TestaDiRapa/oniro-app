@@ -12,16 +12,12 @@ export class Medico {
         private address: string
     ) {}
 
-    getName(){
+    getName() {
         return this.name;
     }
 
     getSurname() {
         return this.surname;
-    }
-
-    getPassword() {
-        return this.password;
     }
 
     getPhone() {
@@ -38,5 +34,13 @@ export class Medico {
 
     getAddress() {
         return this.address;
+    }
+
+    setAddress(address: string) {
+        this.address = address;
+    }
+
+    setPhone(phone: string) {
+        this.phone_number = phone;
     }
 }

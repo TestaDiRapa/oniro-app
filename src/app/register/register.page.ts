@@ -29,7 +29,7 @@ export class RegisterPage implements OnInit {
   }
 
   presentAlert(mex: string) {
-    const alert = this.alertCtrl.create({
+      const alert = this.alertCtrl.create({
       subHeader: mex,
       buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
     }).then(alert => alert.present());
