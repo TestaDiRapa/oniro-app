@@ -19,6 +19,8 @@ After cloning the project, add the following plugins and platforms:<br>
 `npm install --save @ionic/storage`<br>
 `ionic cordova plugin add cordova-plugin-geolocation`<br>
 `npm install --save @ionic-native/geolocation`<br>
+`ionic cordova plugin add cordova-plugin-network-information`<br>
+`npm install @ionic-native/network `
 
 ## Bug da fixare
 Quando si aggiorna la pagina, i dati dell'user vengono persi<br>
