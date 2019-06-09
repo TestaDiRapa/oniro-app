@@ -1,24 +1,24 @@
 import { ApneaEvent } from './apnea-event.model';
 
 export class BluetoothData {
-    public SpO2: number[];
-    public oxyEvents: ApneaEvent[];
-    public diaEvents: ApneaEvent[];
+    public spo2: number[];
+    public oxy_events: ApneaEvent[];
+    public dia_events: ApneaEvent[];
     public hr: number[];
-    public rawHr: number[];
+    public raw_hr: number[];
 
-    constructor() { }
+    constructor(public timestamp: string) { }
 
     insertSpO2(value: number) {
-        this.SpO2.push(value);
+        this.spo2.push(value);
     }
 
-    insertOxyEvent(duration: number, time: Date) {
-        this.oxyEvents.push(new ApneaEvent(duration, time));
+    insertOxyEvent(duration: number, time: string) {
+        this.oxy_events.push(new ApneaEvent(duration, time));
     }
 
-    insertDiaEvent(duration: number, time: Date) {
-        this.diaEvents.push(new ApneaEvent(duration, time));
+    insertDiaEvent(duration: number, time: string) {
+        this.dia_events.push(new ApneaEvent(duration, time));
     }
 
     insertHR(value: number) {
@@ -28,7 +28,7 @@ export class BluetoothData {
     insertRawHR(samples: number[]) {
         for (const sample of samples) {
             if (sample > 0) {
-                this.rawHr.push(sample);
+                this.raw_hr.push(sample);
             }
         }
     }

@@ -5,6 +5,7 @@ import { BluetoothService } from 'src/app/services/bluetooth/bluetooth.service';
 import { Router } from '@angular/router';
 import { ModalController, AlertController } from '@ionic/angular';
 import { SelectDevicePage } from './select-device/select-device.page';
+import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data-storing.service';
 
 @Component({
   selector: 'app-record',
@@ -12,19 +13,18 @@ import { SelectDevicePage } from './select-device/select-device.page';
   styleUrls: ['./record.page.scss'],
 })
 export class RecordPage implements OnInit {
-  isConnected = 'NOT YET';
-  message = 'NO DATA YET';
-  i = 0;
 
   constructor(
     private alertCtrl: AlertController,
     private bluetooth: BluetoothSerial,
     private bluetoothService: BluetoothService,
+    private dataMngr: DataStoringService,
     private modal: ModalController,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.dataMngr.init();
     this.bluetoothService.isEnabled().then(
       success => {
         this.connectRoutine();
@@ -66,14 +66,15 @@ export class RecordPage implements OnInit {
       })
       .then(data => {
         this.bluetooth.connect(data.address).subscribe(
-          success => {
+          () => {
             this.bluetooth.subscribe('\n').subscribe(
               success => {
                 const payload = JSON.parse(success);
+                this.dataMngr.addRawData(payload);
               }
             )
           },
-          error => {
+          () => {
             this.alertCtrl.create({
               header: 'Error',
               message: 'Cannot communicate with the device, try again later!',

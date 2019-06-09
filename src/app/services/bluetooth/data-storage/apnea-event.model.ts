@@ -2,7 +2,7 @@ export class ApneaEvent {
 
     constructor(
         public duration: number,
-        public time: Date
+        public time: string
     ) { }
 
 }
