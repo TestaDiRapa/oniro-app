@@ -13,7 +13,7 @@ import { Abitudini } from './add-abitudini/abitudini.model';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-  public currentDate = '';
+  public currentDate: Date;
   public isValid = false;
   private bevanda: string;
   private isCena = false;
@@ -47,7 +47,8 @@ export class HomePage implements OnInit, OnDestroy {
     const year = date.getFullYear().toString();
     const day = date.getDay().toString();
     const month = date.getMonth().toString();
-    this.currentDate = month + ' ' + day + ', ' + year;
+    console.log(day);
+    this.currentDate = new Date();
   }
 
   onToggleCena(togValue: boolean) {
