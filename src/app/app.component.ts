@@ -1,19 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
-import { Paziente } from './register/paziente.model';
-import { UserService } from './services/userService.service';
-import { Medico } from './register/medico.model';
+import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnDestroy {
-  private user: Paziente | Medico;
+export class AppComponent implements OnDestroy, OnInit {
+  public isUser: boolean;
 
   constructor(
     private platform: Platform,
@@ -21,9 +18,13 @@ export class AppComponent implements OnDestroy {
     private statusBar: StatusBar,
     private router: Router,
     private menu: MenuController ,
-    private userService: UserService
+    private authService: AuthenticationService
   ) {
     this.initializeApp();
+  }
+
+  ngOnInit() {
+    this.isUser = this.authService.getUserType();
   }
 
   initializeApp() {
@@ -31,28 +32,37 @@ export class AppComponent implements OnDestroy {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-    console.log(this.user);
   }
 
   onLogout() {
         this.router.navigateByUrl('/authentication');
         this.menu.enable(false);
   }
+
   onClickSettings() {
     this.router.navigateByUrl('/home/settings');
   }
+
+  onClickRequests() {
+    this.router.navigateByUrl('/homedoc/richieste-pazienti');
+  }
+
   onClickDiary() {
     this.router.navigateByUrl('/home/diary');
   }
+
   onClickMaps() {
     this.router.navigateByUrl('/home/gmaps');
   }
+
   onClickInfo() {
     this.router.navigateByUrl('/home/info');
   }
+
   onClickContacts() {
     this.router.navigateByUrl('/home/contacts');
   }
+
   ngOnDestroy(){
     console.log(this,'onDestroy');
   }

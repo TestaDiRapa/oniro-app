@@ -10,7 +10,6 @@ export class HomedocPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('ciao');
   }
 
 }

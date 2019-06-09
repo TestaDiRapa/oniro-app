@@ -43,4 +43,5 @@ export class Paziente {
     setPhone(phone: string) {
         this.phone_number = phone;
     }
+
 }

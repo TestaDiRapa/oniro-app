@@ -43,4 +43,5 @@ export class Medico {
     setPhone(phone: string) {
         this.phone_number = phone;
     }
+
 }

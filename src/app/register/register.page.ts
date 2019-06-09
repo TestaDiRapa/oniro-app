@@ -67,7 +67,7 @@ export class RegisterPage implements OnInit {
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
-            this.router.navigateByUrl('/home');
+            this.router.navigateByUrl('/homedoc');
           } else {
             this.presentAlert(resData.message);
           }
