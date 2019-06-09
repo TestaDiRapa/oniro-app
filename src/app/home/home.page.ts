@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { UserService } from '../services/userService.service';
 import { Medico } from '../register/medico.model';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
 import { Bevanda } from './add-abitudini/bevanda.model';
 import { Abitudini } from './add-abitudini/abitudini.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -21,9 +22,12 @@ export class HomePage implements OnInit, OnDestroy {
   private caffe = new Bevanda('', 0);
   private drink = new Bevanda('', 0);
 
-  constructor(private modalCtrl: ModalController,
-              private user: UserService,
-              private userService: UserService) {
+  constructor(
+    private modalCtrl: ModalController,
+    private user: UserService,
+    private alertCtrl: AlertController,
+    private router: Router
+  ) {
   }
 
   ngOnInit() {
@@ -62,26 +66,40 @@ export class HomePage implements OnInit, OnDestroy {
     this.bevanda = selectedBevanda;
     this.modalCtrl.create({
       component: AddAbitudiniComponent,
-      componentProps: {bevanda: this.bevanda}
+      componentProps: { bevanda: this.bevanda }
     }).then(modalEl => {
       modalEl.present();
       return modalEl.onDidDismiss();
     }).then(resData => {
       if (selectedBevanda === 'drink') {
-      this.drink.setTipo(selectedBevanda);
-      this.drink.setTotale(resData.data);
-    } else {
-      this.caffe.setTipo(selectedBevanda);
-      this.caffe.setTotale(resData.data);
-    }
+        this.drink.setTipo(selectedBevanda);
+        this.drink.setTotale(resData.data);
+      } else {
+        this.caffe.setTipo(selectedBevanda);
+        this.caffe.setTotale(resData.data);
+      }
     });
   }
 
   onStartMonitoring() {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
-    this.user.putMyHabits(abitudine).subscribe(res => {
-      console.log(res);
-    });
+    this.user.putMyHabits(abitudine).subscribe(
+      success => {
+        this.router.navigate(['/home/record']);
+    },
+      error => {
+        this.alertCtrl.create({
+          header: 'An error occurred!',
+          message: error,
+          buttons: [
+            {
+              text: 'Ok!'
+            }
+          ]
+        }).then(alertEl => {
+          alertEl.present();
+        })
+      });
   }
 
 

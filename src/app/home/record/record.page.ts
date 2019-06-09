@@ -53,28 +53,6 @@ export class RecordPage implements OnInit {
         );
       }
     );
-    /*
-  this.bluetooth.connect('00:18:E4:40:00:06')
-    .subscribe(
-      success => {
-        this.isConnected = "SUCCESSFULLY CONNECTED";
-        this.bluetooth
-          .subscribe('\n')
-          .subscribe(
-            success => {
-              this.message = success;
-              this.i++;
-            },
-            error => {
-              this.message = error;
-            }
-          );
-      },
-      error => {
-        this.isConnected = error;
-      }
-    );
-    */
   }
 
   private connectRoutine() {
@@ -89,7 +67,11 @@ export class RecordPage implements OnInit {
       .then(data => {
         this.bluetooth.connect(data.address).subscribe(
           success => {
-
+            this.bluetooth.subscribe('\n').subscribe(
+              success => {
+                const payload = JSON.parse(success);
+              }
+            )
           },
           error => {
             this.alertCtrl.create({
