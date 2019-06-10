@@ -25,7 +25,8 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova plugin add cordova-plugin-googlemap`<br>
 `npm install --save @ionic-native/core@latest`<br>
 `npm install --save @ionic-native/google-maps@latest`<br>
-
+'ionic cordova plugin add call-number' <br>
+'npm install @ionic-native/call-number' <br>
 
 ## Bug da fixare
 Quando si aggiorna la pagina, i dati dell'user vengono persi<br>
