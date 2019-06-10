@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/userService.service';
 export class RichiestePazientiPage implements OnInit {
 
   public pazienti: any[];
+// tslint:disable-next-line: variable-name
   public n_req: number;
 
   constructor(
@@ -23,23 +24,24 @@ export class RichiestePazientiPage implements OnInit {
   ionViewWillEnter() {
     this.userService.getRequests().then(succes => {
       succes.subscribe(resData => {
-        this.filterRequests(resData['results']);
+// tslint:disable-next-line: no-unused-expression
+        console.log(resData['results']);
+        this.pazienti = resData['results'];
+        //this.filterRequests(resData['results']);
+// tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < this.pazienti.length; i++) {
+          if (resData['results'][i].type === 'registered') {
+            this.pazienti.splice(i, 1);
+          }
+        }
         this.n_req = this.pazienti.length;
-        //this.pazienti = resData['results'];
-        //this.n_req = this.pazienti.length;
-        //this.filterRequests(this.pazienti);
+
       });
     });
   }
 
-  private filterRequests(lista: any){
-    console.log(lista);
-    for (let i = 0; i < lista.length; i++) {
-      if (lista[i]['type'] === 'request') {
-        //this.pazienti.push(lista[i]);
-      }
-    }
-  }
+
+
 
 
 
