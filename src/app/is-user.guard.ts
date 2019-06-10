@@ -12,7 +12,6 @@ export class IsUserGuard implements CanLoad {
 
   constructor(private autService: AuthenticationService){}
   canLoad(route: Route, segments: UrlSegment[]): boolean | Observable<boolean> | Promise<boolean> {
-    console.log('isUser', this.autService.getUserType());
     return this.autService.getUserType();
   }
 

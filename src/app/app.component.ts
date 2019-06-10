@@ -13,17 +13,20 @@ export class AppComponent implements OnDestroy, OnInit {
   public isUser: boolean;
 
   constructor(
+    private auth: AuthenticationService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private menu: MenuController ,
-    private authService: AuthenticationService
+    private menu: MenuController,
   ) {
     this.initializeApp();
   }
 
   ngOnInit() {
+    this.auth.type.subscribe(type => {
+      this.isUser = type;
+    });
   }
 
   initializeApp() {
@@ -33,13 +36,9 @@ export class AppComponent implements OnDestroy, OnInit {
     });
   }
 
-   getUser() {
-    return   this.authService.getUserType();
-  }
-
   onLogout() {
-        this.router.navigateByUrl('/authentication');
-        this.menu.enable(false);
+    this.router.navigateByUrl('/authentication');
+    this.menu.enable(false);
   }
 
   onClickSettings() {
@@ -66,7 +65,7 @@ export class AppComponent implements OnDestroy, OnInit {
     this.router.navigateByUrl('/home/contacts');
   }
 
-  ngOnDestroy(){
-    console.log(this,'onDestroy');
+  ngOnDestroy() {
+    console.log(this, 'onDestroy');
   }
 }

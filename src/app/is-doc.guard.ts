@@ -9,7 +9,6 @@ import { AuthenticationService } from './services/authentication.service';
 export class IsDocGuard implements CanLoad  {
   constructor(private autService: AuthenticationService){}
   canLoad(route: Route, segments: UrlSegment[]): boolean | Observable<boolean> | Promise<boolean> {
-    console.log('isDoc', !this.autService.getUserType());
-    return !this.autService.getUserType();
+    return this.autService.getDocType();
   }
 }

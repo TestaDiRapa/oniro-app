@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'home/contacts', loadChildren: './home/contacts/contacts.module#ContactsPageModule', canLoad: [AuthGuard, IsUserGuard]},
   { path: 'home/diary', loadChildren: 'src/app/home/diary/diary.module#DiaryPageModule', canLoad: [AuthGuard, IsUserGuard]},
   { path: 'home/gmaps', loadChildren: 'src/app/home/gmaps/gmaps.module#GmapsPageModule', canLoad: [AuthGuard, IsUserGuard]},
-  { path: 'home/info', loadChildren: 'src/app/home/info/info.module#InfoPageModule', canLoad: [AuthGuard, IsUserGuard]},
+  { path: 'home/info', loadChildren: 'src/app/home/info/info.module#InfoPageModule', canLoad: [AuthGuard]},
   { path: 'homedoc', loadChildren: 'src/app/homedoc/homedoc.module#HomedocPageModule', canLoad: [IsDocGuard, AuthGuard]},
   { path: 'homedoc/settings', loadChildren: './homedoc/settings/settings.module#SettingsPageModule', canLoad: [IsDocGuard, AuthGuard] },
 // tslint:disable-next-line: max-line-length

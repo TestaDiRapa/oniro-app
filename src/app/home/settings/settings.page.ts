@@ -5,6 +5,7 @@ import { MenuController, AlertController } from '@ionic/angular';
 import { Medico } from '../../register/medico.model';
 import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export interface Respons {
   status: string;
@@ -19,7 +20,7 @@ export interface Respons {
 })
 
 export class SettingsPage implements OnInit {
-  private path = 'http://45.76.47.94:8080/me';
+  private path = 'http://' + environment.serverIp + '/me';
   private header = new HttpHeaders({ Authorization: 'Bearer ' + this.authService.token });
   public user: Paziente | Medico;
   public isUser = false;
@@ -44,6 +45,14 @@ export class SettingsPage implements OnInit {
       });
     });
     this.menuCtrl.toggle();
+  }
+
+  ionViewWillEnter() {
+    this.authService.getUserType().then(userType => {
+      console.log('SETTINGS');
+      console.log(userType);
+      this.isUser = userType;
+    });
   }
 
   private onSubmit(key: string[], value: string[]) {

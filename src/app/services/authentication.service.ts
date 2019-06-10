@@ -4,6 +4,8 @@ import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { environment } from 'src/environments/environment';
 import { Storage } from '@ionic/storage';
+import { BehaviorSubject } from 'rxjs';
+
 
 export interface Respons {
     status: string;
@@ -16,6 +18,7 @@ export class AuthenticationService {
     isAuthenticated = true;
     private isUser: boolean;
     private accessToken: string;
+    private userType = new BehaviorSubject<boolean>(true);
 
     constructor(
         private http: HttpClient,
@@ -26,6 +29,7 @@ export class AuthenticationService {
         let params = new HttpParams();
         let path = 'http://' + environment.serverIp + '/login/';
         this.isUser = isUser;
+        this.userType.next(isUser);
         this.storage.set('is_user', isUser);
         if (isUser) {
             path += 'user';
@@ -48,6 +52,7 @@ export class AuthenticationService {
             path += 'doctor';
         }
         this.isUser = isUser;
+        this.userType.next(isUser);
         return this.http.put<Respons>(
             path,
             user,
@@ -62,6 +67,10 @@ export class AuthenticationService {
         return this.isAuthenticated;
     }
 
+    get type(){
+        return this.userType.asObservable();
+    }
+
     get token() {
         if (!this.accessToken) {
             return this.storage.get('auth_token').then(token => {
@@ -69,7 +78,7 @@ export class AuthenticationService {
                 return token;
             });
         }
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             resolve(this.accessToken);
         });
     }
@@ -81,13 +90,27 @@ export class AuthenticationService {
 
     getUserType() {
         if (!this.isUser) {
-            return this.storage.get('is_user').then(isUser => {
+            return this.storage.get('is_user').then<boolean>(isUser => {
                 this.isUser = isUser;
+                this.userType.next(isUser);
                 return isUser;
             });
         }
-        return new Promise((resolve, reject) => {
+        return new Promise<boolean>((resolve) => {
             resolve(this.isUser);
+        });
+    }
+
+    getDocType() {
+        if (!this.isUser) {
+            return this.storage.get('is_user').then<boolean>(isUser => {
+                this.isUser = isUser;
+                this.userType.next(isUser);
+                return !isUser;
+            });
+        }
+        return new Promise<boolean>((resolve) => {
+            resolve(!this.isUser);
         });
     }
 

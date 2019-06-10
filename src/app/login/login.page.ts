@@ -83,10 +83,8 @@ export class LoginPage implements OnInit {
               resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['address']));
             this.path = 'homedoc';
           }
-          console.log('username', this.username, 'password', this.password);
-          console.log(this.path);
+          
           this.router.navigateByUrl('/' + this.path);
-          console.log('this.router.navigateByUrl(this.path)');
         });
 
       } else {
