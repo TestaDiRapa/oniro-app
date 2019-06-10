@@ -23,6 +23,7 @@ export class SettingsPage implements OnInit {
   private header = new HttpHeaders({ Authorization: 'Bearer ' + this.authService.token });
   public user: Paziente | Medico;
   public isUser = false;
+  public isLoaded = false;
 
   constructor(
     private userService: UserService,
@@ -33,8 +34,15 @@ export class SettingsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user = this.userService.getUser();
-    this.isUser = this.authService.getUserType();
+    this.userService.getUser().then(user => {
+      this.user = user;
+      this.authService.getUserType().then(userType => {
+        console.log('SETTINGS');
+        console.log(userType);
+        this.isUser = userType;
+        this.isLoaded = true;
+      });
+    });
     this.menuCtrl.toggle();
   }
 
