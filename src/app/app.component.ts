@@ -24,7 +24,9 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.isUser = this.authService.getUserType();
+    this.authService.getUserType().then(userType => {
+      this.isUser = userType;
+    });
   }
 
   initializeApp() {
@@ -63,7 +65,7 @@ export class AppComponent implements OnDestroy, OnInit {
     this.router.navigateByUrl('/home/contacts');
   }
 
-  ngOnDestroy(){
-    console.log(this,'onDestroy');
+  ngOnDestroy() {
+    console.log(this, 'onDestroy');
   }
 }
