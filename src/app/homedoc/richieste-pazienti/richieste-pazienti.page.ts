@@ -35,9 +35,16 @@ export class RichiestePazientiPage implements OnInit {
           }
         }
         this.n_req = this.pazienti.length;
-
       });
     });
+  }
+
+  accept() {
+    console.log("accettato");
+  }
+
+  reject() {
+    console.log("rifiutato");
   }
 
 
