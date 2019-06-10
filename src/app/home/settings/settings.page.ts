@@ -46,13 +46,13 @@ export class SettingsPage implements OnInit {
     return this.http.post<Respons>(this.path, formData, { headers: this.header })
       .subscribe(resData => {
         if (resData.status === 'ok') {
-          if (key[0] === 'age') {
+         /* if (key[0] === 'age') {
             this.user.setAge(value[0]);
           } else if (key[0] === 'phone_number') {
             this.user.setPhone(value[0]);
           } else if (key[0] === 'address') {
             this.user.setAddress(value[0]);
-          }
+          }*/
         } else {
           this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
         }
@@ -66,7 +66,7 @@ export class SettingsPage implements OnInit {
         {
           name: 'eta',
           type: 'number',
-          placeholder: this.user.getAge(),
+          placeholder: 'ehi', //this.user.getAge(),
         }],
       buttons: [
         {

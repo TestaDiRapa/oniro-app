@@ -60,6 +60,4 @@ export class AuthenticationService {
         return this.isUser;
     }
 
-
-    // controllare la guarda dell'user
 }

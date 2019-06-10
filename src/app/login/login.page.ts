@@ -85,7 +85,8 @@ export class LoginPage implements OnInit {
           }
           console.log('username', this.username, 'password', this.password);
           console.log(this.path);
-          this.router.navigateByUrl(this.path);
+          this.router.navigateByUrl('/' + this.path);
+          console.log('this.router.navigateByUrl(this.path)');
         });
 
       } else {
