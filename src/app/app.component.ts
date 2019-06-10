@@ -24,6 +24,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.isUser = this.authService.getUserType();
   }
 
   initializeApp() {
