@@ -24,7 +24,6 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.isUser = this.authService.getUserType();
   }
 
   initializeApp() {
@@ -32,6 +31,10 @@ export class AppComponent implements OnDestroy, OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+   getUser() {
+    return   this.authService.getUserType();
   }
 
   onLogout() {
