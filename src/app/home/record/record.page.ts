@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ModalController, AlertController } from '@ionic/angular';
 import { SelectDevicePage } from './select-device/select-device.page';
 import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data-storing.service';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-record',
@@ -13,6 +14,7 @@ import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data
   styleUrls: ['./record.page.scss'],
 })
 export class RecordPage implements OnInit {
+  private timer = interval(60 * 1000);
 
   constructor(
     private alertCtrl: AlertController,
@@ -24,7 +26,9 @@ export class RecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('qui');
+    this.timer.subscribe(() => {
+      this.dataMngr.sendData();
+    });
     this.dataMngr.init();
     this.bluetoothService.isEnabled().then(
       () => {
@@ -73,7 +77,6 @@ export class RecordPage implements OnInit {
                 if (success) {
                   const payload = JSON.parse(success);
                   this.dataMngr.addRawData(payload);
-                  this.dataMngr.sendData();
                 }
               }
             );

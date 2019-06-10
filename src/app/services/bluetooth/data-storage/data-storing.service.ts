@@ -79,27 +79,25 @@ export class DataStoringService {
     }
 
     private sendToServer() {
-        const url = 'http://' + environment.serverIp + '/user/my_recordings';
-        const payload = this.storedData.shift();
-        this.authService.token.then(token => {
-            this.http.put<Respons>(
-                url,
-                JSON.stringify(payload),
-                {
-                    headers: new HttpHeaders({
-                        'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' + token
-                    })
-                }).subscribe(response => {
-                    if (response.status === 'error') {
-                        this.storedData.unshift(payload);
-                        this.alertCtrl.create({
-                            header: 'ERror',
-                            message: response.message
-                        }).then(alert => { alert.present(); });
-                    }
-                });
-        });
+        if (this.storedData.length > 0) {
+            const len = this.storedData.length;
+            const url = 'http://' + environment.serverIp + '/user/my_recordings';
+            const payload = this.storedData.copyWithin(0, len);
+            this.authService.token.then(token => {
+                this.http.put<Respons>(
+                    url,
+                    JSON.stringify(payload),
+                    {
+                        headers: new HttpHeaders({
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + token
+                        })
+                    }).subscribe(response => {
+                        if (response.status === 'ok') {
+                            this.storedData = this.storedData.slice(len, this.storedData.length);
+                        }
+                    });
+            });
+        }
     }
-
 }
