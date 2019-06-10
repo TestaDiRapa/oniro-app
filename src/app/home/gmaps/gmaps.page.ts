@@ -15,9 +15,11 @@ export class GmapsPage implements OnInit {
   map: any;
   doctors: any;
 
-  constructor(private geolocation: Geolocation,
-              private menuCtrl: MenuController,
-              private getCoord: GetCoordService) { }
+  constructor(
+    private geolocation: Geolocation,
+    private menuCtrl: MenuController,
+    private getCoord: GetCoordService
+  ) { }
 
   ngOnInit() {
     this.menuCtrl.toggle();
@@ -37,13 +39,15 @@ export class GmapsPage implements OnInit {
       console.log('Error getting location', error);
     });
   }
+
   getCoordinates() {
     console.log('sono qui');
-    this.getCoord.getCoordinates().subscribe(res => {
-// tslint:disable-next-line: no-string-literal
-      this.doctors = res['payload'];
-// tslint:disable-next-line: no-string-literal
-      console.log(res['payload']);
+    this.getCoord.getCoordinates().then(observable => {
+      observable.subscribe(res => {
+        // tslint:disable: no-string-literal
+        this.doctors = res['payload'];
+        console.log(res['payload']);
+      });
     });
   }
 

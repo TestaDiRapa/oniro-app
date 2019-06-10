@@ -85,12 +85,14 @@ export class HomePage implements OnInit, OnDestroy {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
     this.user.putMyHabits(abitudine).subscribe(
       success => {
+        console.log(success);
         this.router.navigate(['/home/record']);
     },
       error => {
+        console.log(error);
         this.alertCtrl.create({
           header: 'An error occurred!',
-          message: error,
+          message: error.message,
           buttons: [
             {
               text: 'Ok!'
@@ -98,7 +100,7 @@ export class HomePage implements OnInit, OnDestroy {
           ]
         }).then(alertEl => {
           alertEl.present();
-        })
+        });
       });
   }
 
