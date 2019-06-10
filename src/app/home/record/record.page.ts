@@ -24,14 +24,15 @@ export class RecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('qui');
     this.dataMngr.init();
     this.bluetoothService.isEnabled().then(
-      success => {
+      () => {
         this.connectRoutine();
       },
-      error => {
+      () => {
         this.bluetooth.enable().then(
-          success => {
+          () => {
             this.connectRoutine();
           },
           error => {
@@ -71,8 +72,9 @@ export class RecordPage implements OnInit {
               success => {
                 const payload = JSON.parse(success);
                 this.dataMngr.addRawData(payload);
+                this.dataMngr.sendData();
               }
-            )
+            );
           },
           () => {
             this.alertCtrl.create({

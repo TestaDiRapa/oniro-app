@@ -7,13 +7,21 @@ import { AuthenticationService, Respons } from 'src/app/services/authentication.
 })
 export class GetCoordService {
   url = 'http://45.76.47.94:8080/user/getcoordinates';
-  token: string;
 
-  constructor(private http: HttpClient,
-              private authService: AuthenticationService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthenticationService
+  ) { }
 
   getCoordinates() {
-this.token = this.authService.getToken();
-return this.http.get<Respons>(this.url, {headers: new HttpHeaders( {Authorization: 'Bearer ' + this.token })});
+    return this.authService.token.then(token => {
+      return this.http.get<Respons>(
+        this.url,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + token
+          })
+        });
+    });
   }
 }
