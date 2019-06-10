@@ -12,8 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { SelectDevicePageModule } from './home/record/select-device/select-device.module';
-import { GoogleMaps, Geocoder } from '@ionic-native/google-maps';
-import { LocationService } from '@ionic-native/google-maps';
 
 
 @NgModule({
@@ -31,8 +29,6 @@ import { LocationService } from '@ionic-native/google-maps';
     BluetoothSerial,
     StatusBar,
     SplashScreen,
-    GoogleMaps,
-    LocationService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
