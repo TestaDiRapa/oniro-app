@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from '../../authentication.service';
 import { ApneaEvent } from './apnea-event.model';
+import { AlertController } from '@ionic/angular';
 
 export interface RawBluetoothData {
     spo2: number;
@@ -23,6 +24,7 @@ export class DataStoringService {
     private initInstant: string;
 
     constructor(
+        private alertCtrl: AlertController,
         private authService: AuthenticationService,
         private http: HttpClient,
         private network: Network,
@@ -35,11 +37,19 @@ export class DataStoringService {
     }
 
     addRawData(raw: RawBluetoothData) {
+        let oxyEvent = null;
+        let diaEvent = null;
+        if (raw.oxy_event > 0) {
+            oxyEvent = new ApneaEvent(raw.oxy_event, new Date().toISOString());
+        }
+        if (raw.dia_event > 0) {
+            diaEvent = new ApneaEvent(raw.dia_event, new Date().toISOString());
+        }
         this.storedData.push(new BluetoothData(
             this.initInstant,
             raw.spo2,
-            new ApneaEvent(raw.oxy_event, new Date().toISOString()),
-            new ApneaEvent(raw.dia_event, new Date().toISOString()),
+            oxyEvent,
+            diaEvent,
             raw.hr,
             raw.raw_hr
         ));
@@ -83,6 +93,10 @@ export class DataStoringService {
                 }).subscribe(response => {
                     if (response.status === 'error') {
                         this.storedData.unshift(payload);
+                        this.alertCtrl.create({
+                            header: 'ERror',
+                            message: response.message
+                        }).then(alert => { alert.present(); });
                     }
                 });
         });

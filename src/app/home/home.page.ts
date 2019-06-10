@@ -83,25 +83,48 @@ export class HomePage implements OnInit, OnDestroy {
 
   onStartMonitoring() {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
-    this.user.putMyHabits(abitudine).subscribe(
-      success => {
-        console.log(success);
-        this.router.navigate(['/home/record']);
-    },
-      error => {
-        console.log(error);
-        this.alertCtrl.create({
-          header: 'An error occurred!',
-          message: error.message,
-          buttons: [
-            {
-              text: 'Ok!'
-            }
-          ]
-        }).then(alertEl => {
-          alertEl.present();
+    this.user.putMyHabits(abitudine).then(observable => {
+      observable.subscribe(
+        response => {
+          if (response.status === 'ok') {
+            this.router.navigate(['/home/record']).then(
+              ok => {
+                console.log('ok');
+                console.log(ok);
+              },
+              error => {
+                console.log('error');
+                console.log(error);
+              }
+            );
+          } else {
+            this.alertCtrl.create({
+              header: 'An error occurred!',
+              message: response.message,
+              buttons: [
+                {
+                  text: 'Ok'
+                }
+              ]
+            }).then(alertEl => {
+              alertEl.present();
+            });
+          }
+        },
+        error => {
+          this.alertCtrl.create({
+            header: 'An error occurred!',
+            message: error.message,
+            buttons: [
+              {
+                text: 'Ok!'
+              }
+            ]
+          }).then(alertEl => {
+            alertEl.present();
+          });
         });
-      });
+    });
   }
 
 

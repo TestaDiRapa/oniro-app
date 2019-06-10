@@ -56,7 +56,7 @@ export class UserService {
 
   putMyHabits(abitudine: Abitudini) {
     const path = 'http://' + environment.serverIp + '/user/habits';
-    return from(this.auth.token.then(token => {
+    return this.auth.token.then(token => {
       // tslint:disable-next-line: max-line-length
       return this.http.put<Respons>(
         path,
@@ -67,7 +67,7 @@ export class UserService {
             Authorization: 'Bearer ' + token
           })
         });
-    }));
+    });
   }
 
   getTypeUser() {

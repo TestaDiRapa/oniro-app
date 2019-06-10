@@ -70,9 +70,11 @@ export class RecordPage implements OnInit {
           () => {
             this.bluetooth.subscribe('\n').subscribe(
               success => {
-                const payload = JSON.parse(success);
-                this.dataMngr.addRawData(payload);
-                this.dataMngr.sendData();
+                if (success) {
+                  const payload = JSON.parse(success);
+                  this.dataMngr.addRawData(payload);
+                  this.dataMngr.sendData();
+                }
               }
             );
           },

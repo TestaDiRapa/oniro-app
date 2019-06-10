@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { SelectDevicePageModule } from './home/record/select-device/select-device.module';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { SelectDevicePageModule } from './home/record/select-device/select-devic
   ],
   providers: [
     BluetoothSerial,
+    Network,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
