@@ -5,6 +5,7 @@ import { MenuController, AlertController } from '@ionic/angular';
 import { Medico } from '../../register/medico.model';
 import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export interface Respons {
   status: string;
@@ -19,8 +20,7 @@ export interface Respons {
 })
 
 export class SettingsPage implements OnInit {
-  private path = 'http://45.76.47.94:8080/me';
-  private header = new HttpHeaders({ Authorization: 'Bearer ' + this.authService.getToken() });
+  private path = 'http://' + environment.serverIp + '/me';
   public user: Paziente | Medico;
   public isUser = false;
 
@@ -43,20 +43,28 @@ export class SettingsPage implements OnInit {
     for (let i = 0; i < key.length; i++) {
       formData.append(key[i], value[i]);
     }
-    return this.http.post<Respons>(this.path, formData, { headers: this.header })
-      .subscribe(resData => {
-        if (resData.status === 'ok') {
-         /* if (key[0] === 'age') {
-            this.user.setAge(value[0]);
-          } else if (key[0] === 'phone_number') {
-            this.user.setPhone(value[0]);
-          } else if (key[0] === 'address') {
-            this.user.setAddress(value[0]);
-          }*/
-        } else {
-          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
-        }
-      });
+    this.authService.token.then(token => {
+      const header = new HttpHeaders({ Authorization: 'Bearer ' + token });
+      return this.http.post<Respons>(
+        this.path,
+        formData,
+        {
+          headers: header
+        })
+        .subscribe(resData => {
+          if (resData.status === 'ok') {
+            /* if (key[0] === 'age') {
+               this.user.setAge(value[0]);
+             } else if (key[0] === 'phone_number') {
+               this.user.setPhone(value[0]);
+             } else if (key[0] === 'address') {
+               this.user.setAddress(value[0]);
+             }*/
+          } else {
+            this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          }
+        });
+    });
   }
 
   onAgeModify() {
