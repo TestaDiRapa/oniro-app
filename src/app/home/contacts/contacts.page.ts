@@ -13,7 +13,7 @@ export class ContactsPage implements OnInit {
   public contacts: any;
 
   constructor(
-    private user: UserService,
+    private userService: UserService,
     private menuCtrl: MenuController) {
   }
 
@@ -23,7 +23,7 @@ export class ContactsPage implements OnInit {
   }
 
   getContact() {
-    this.user.getMyDoctor().then(success => {
+    this.userService.getMyDoctor().then(success => {
       success.subscribe(res => {
         this.contacts = res.message;
         console.log(res.message);

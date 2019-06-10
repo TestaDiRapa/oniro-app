@@ -1,9 +1,36 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>richieste-pazienti</ion-title>
+  <ion-toolbar color="dark" text-center>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="authentication"></ion-back-button>
+    </ion-buttons>
+    <ion-text color="light" style="font-size: 25px">Richieste Pazienti</ion-text>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+          <ion-card>
+              <ion-card-header>
+                <ion-card-title style="font-weight: bold; font-size: 20px;">Hai {{ n_req}} richieste da accettare:</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-list>
+                  <ion-card *ngFor="let p of pazienti">
+                    <ion-card-content>
+                      <ion-list>
+                        <ion-item>Nome: {{ p['name'] }}</ion-item>
+                        <ion-item>Cognome: {{ p['surname'] }}</ion-item>
+                        <ion-item>CF: {{ p['patient'] }}</ion-item>
+                      </ion-list>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
