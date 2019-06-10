@@ -26,7 +26,6 @@ export class AuthenticationService {
         let params = new HttpParams();
         let path = 'http://' + environment.serverIp + '/login/';
         this.isUser = isUser;
-        this.storage.set('is_user', isUser);
         if (isUser) {
             path += 'user';
             params = params.append('cf', username);
@@ -41,7 +40,6 @@ export class AuthenticationService {
 
     register(user: Medico | Paziente, isUser: boolean) {
         let path = 'http://' + environment.serverIp + '/register/';
-        this.storage.set('is_user', isUser);
         if (isUser) {
             path += 'user';
         } else {
@@ -64,10 +62,7 @@ export class AuthenticationService {
 
     get token() {
         if (!this.accessToken) {
-            return this.storage.get('auth_token').then(token => {
-                this.accessToken = token;
-                return token;
-            });
+            return this.storage.get('auth_token');
         }
         return new Promise((resolve, reject) => {
             resolve(this.accessToken);
@@ -80,15 +75,7 @@ export class AuthenticationService {
     }
 
     getUserType() {
-        if (!this.isUser) {
-            return this.storage.get('is_user').then(isUser => {
-                this.isUser = isUser;
-                return isUser;
-            });
-        }
-        return new Promise((resolve, reject) => {
-            resolve(this.isUser);
-        });
+        return this.isUser;
     }
 
 }

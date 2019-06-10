@@ -6,8 +6,6 @@ import { AuthenticationService, Respons } from './authentication.service';
 import { Abitudini } from '../home/add-abitudini/abitudini.model';
 import { environment } from 'src/environments/environment';
 import { from } from 'rxjs/internal/observable/from';
-import { Storage } from '@ionic/storage';
-import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -18,26 +16,16 @@ export class UserService {
 
 
   constructor(
-    private auth: AuthenticationService,
     private http: HttpClient,
-    private storage: Storage
+    private auth: AuthenticationService
   ) { }
 
   getUser() {
-    if (!this.user) {
-      return this.storage.get('user').then(user => {
-        this.user = JSON.parse(user);
-        return this.user;
-      });
-    }
-    return new Promise<Paziente | Medico>((resolve) => {
-      resolve(this.user);
-    });
+    return this.user;
   }
 
   setUser(user: Paziente | Medico) {
     this.user = user;
-    this.storage.set('user', JSON.stringify(user));
     return;
   }
 
@@ -57,6 +45,7 @@ export class UserService {
   putMyHabits(abitudine: Abitudini) {
     const path = 'http://' + environment.serverIp + '/user/habits';
     return from(this.auth.token.then(token => {
+      console.log(token);
       // tslint:disable-next-line: max-line-length
       return this.http.put<Respons>(
         path,
