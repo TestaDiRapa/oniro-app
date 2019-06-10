@@ -12,6 +12,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { SelectDevicePageModule } from './home/record/select-device/select-device.module';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { SelectDevicePageModule } from './home/record/select-device/select-devic
     BluetoothSerial,
     StatusBar,
     SplashScreen,
+    CallNumber,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
