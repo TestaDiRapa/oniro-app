@@ -24,8 +24,8 @@ export class LoginPage implements OnInit {
 
 
   constructor(private router: Router,
-              private auth: AuthenticationService,
-              private user: UserService,
+              private authService: AuthenticationService,
+              private userService: UserService,
               private http: HttpClient,
               private menuCtrl: MenuController,
               public loadingController: LoaderService,
@@ -68,23 +68,23 @@ export class LoginPage implements OnInit {
     }
     this.password = form.value.password;
     this.loadingController.onCreate();
-    this.auth.login(this.username, this.password, this.isUser).subscribe(res => {
+    this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
       if (res.status === 'ok') {
         const token = res.access_token;
-        this.auth.setToken(token);
+        this.authService.setToken(token);
         this.http.get<any>('http://45.76.47.94:8080/me', {
           headers: new HttpHeaders({ Authorization: 'Bearer ' + token })
         }).subscribe(resu => {
-          this.auth.isAuthenticated = true;
+          this.authService.isAuthenticated = true;
           if (this.isUser) {
-            this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
+            this.userService.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
               resu.message['phone_number'], resu.message['email'], resu.message['_id'],
               resu.message['age'], ''));
 
             this.path = 'home';
           } else {
-            this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
+            this.userService.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
               resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
               resu.message['address'], ''));

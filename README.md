@@ -22,18 +22,18 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova plugin add cordova-plugin-network-information`<br>
 `npm install @ionic-native/network`<br>
 `ionic cordova plugin remove cordova-plugin-geolocation`<br>
-`ionic cordova plugin add cordova-plugin-googlemap`<br>
+`ionic cordova plugin add cordova-plugin-googlemaps`<br>
 `npm install --save @ionic-native/core@latest`<br>
 `npm install --save @ionic-native/google-maps@latest`<br>
-'ionic cordova plugin add call-number' <br>
-'npm install @ionic-native/call-number' <br>
-'ionic cordova plugin add cordova-plugin-camera' <br>
-'npm install --save @ionic-native/camera' <br>
-modify config.xml:
-inside of the <platform name='ios> section add:
-<config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
+`ionic cordova plugin add call-numbe` <br>
+`npm install @ionic-native/call-number` <br>
+`ionic cordova plugin add cordova-plugin-camera` <br>
+`npm install --save @ionic-native/camera` <br>
+modify config.xml:<br>
+inside of the <platform name='ios'> section add:<br>
+`<config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
 	<string>You can take photos</string>
-</config-file>
+</config-file>`
 
 ## Bug da fixare
 Quando si aggiorna la pagina, i dati dell'user vengono persi<br>
