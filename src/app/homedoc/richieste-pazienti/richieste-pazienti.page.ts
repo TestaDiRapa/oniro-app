@@ -25,7 +25,6 @@ export class RichiestePazientiPage implements OnInit {
   ionViewWillEnter() {
     this.userService.getRequests().then(succes => {
       succes.subscribe(resData => {
-// tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < resData['results'].length; i++) {
           if (resData['results'][i].type === 'registered') {
             resData['results'].splice(i, 1);
@@ -57,8 +56,22 @@ export class RichiestePazientiPage implements OnInit {
     });
   }
 
-  reject() {
-    console.log('rifiutato');
+  reject(cf: string) {
+    this.userService.deletePatient(cf).then(success => {
+      success.subscribe(resData => {
+        if (resData.status !== 'ok') {
+          this.alertCtrl.create({
+            subHeader: resData.message,
+            buttons: ['OK']
+          }).then(alert => alert.present());
+        } else {
+          this.alertCtrl.create({
+            subHeader: 'Paziente rifiutato',
+            buttons: ['OK']
+          }).then(alert => alert.present());
+        }
+      });
+    });
   }
 
 

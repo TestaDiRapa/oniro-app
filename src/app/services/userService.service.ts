@@ -112,6 +112,21 @@ export class UserService {
     });
   }
 
+  deletePatient(cf: string) {
+    const path = 'http://' + environment.serverIp + '/doctor/my_patients';
+    let params = new HttpParams();
+    params = params.append('patient_cf', cf);
+    return this.authService.token.then(token => {
+      return this.http.delete<Respons>(
+        path,
+        {
+        headers: new HttpHeaders({'Content-Type': 'application/json', Authorization: 'Bearer ' + token}),
+        params
+        }
+        );
+    });
+  }
+
   getTypeUser() {
     return typeof (this.user) === typeof (Medico);
   }
