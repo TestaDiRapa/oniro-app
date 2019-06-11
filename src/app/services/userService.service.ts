@@ -98,7 +98,6 @@ export class UserService {
   acceptPatient(cf: string) {
     const path = 'http://' + environment.serverIp + '/doctor/my_patients';
     const body = cf;
-    console.log(body);
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
         path,

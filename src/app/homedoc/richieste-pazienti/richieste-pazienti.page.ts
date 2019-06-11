@@ -2,20 +2,22 @@ import { MenuController, AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
 
+
 @Component({
   selector: 'app-richieste-pazienti',
   templateUrl: './richieste-pazienti.page.html',
   styleUrls: ['./richieste-pazienti.page.scss'],
 })
 export class RichiestePazientiPage implements OnInit {
-
   public pazienti: any[];
   public n_req: number;
 
   constructor(
     private menuCtrl: MenuController,
     private userService: UserService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+
+
   ) { }
 
   ngOnInit() {
@@ -51,6 +53,7 @@ export class RichiestePazientiPage implements OnInit {
             subHeader: 'Paziente accettato',
             buttons: ['OK']
           }).then(alert => alert.present());
+          this.ionViewWillEnter();
         }
       });
     });
@@ -69,6 +72,7 @@ export class RichiestePazientiPage implements OnInit {
             subHeader: 'Paziente rifiutato',
             buttons: ['OK']
           }).then(alert => alert.present());
+          this.ionViewWillEnter();
         }
       });
     });
