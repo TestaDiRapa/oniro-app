@@ -10,10 +10,12 @@ import { AlertController } from '@ionic/angular';
 
 export interface RawBluetoothData {
     spo2: number;
+    spo2_rate: number;
     oxy_event: number;
     dia_event: number;
     hr: number;
-    raw_hr: number[];
+    hr_rate: number;
+    movements_count: number;
 }
 
 @Injectable({
@@ -24,7 +26,6 @@ export class DataStoringService {
     private initInstant: string;
 
     constructor(
-        private alertCtrl: AlertController,
         private authService: AuthenticationService,
         private http: HttpClient,
         private network: Network,
@@ -48,10 +49,12 @@ export class DataStoringService {
         this.storedData.push(new BluetoothData(
             this.initInstant,
             raw.spo2,
+            raw.spo2_rate,
             oxyEvent,
             diaEvent,
             raw.hr,
-            raw.raw_hr
+            raw.hr_rate,
+            raw.movements_count
         ));
     }
 
