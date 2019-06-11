@@ -7,7 +7,10 @@ Let's start throwing blood
 2. remove the src folder from the newly created project
 3. clone this repo
 4. copy all the files from the blank project to the repo folder
-5. start working :weary:
+5. add  `<preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="YOUR_API_KEY"/>`<br>
+     	`<preference name="GOOGLE_MAPS_IOS_API_KEY" value="YOUR_API_KEY"/>`<br>
+	to your config.xml file
+6. start working :weary:
 
 ## Platforms/Plugins
 After cloning the project, add the following plugins and platforms:<br>
@@ -26,12 +29,6 @@ After cloning the project, add the following plugins and platforms:<br>
 `npm install @ionic-native/call-number` <br>
 `ionic cordova plugin add cordova-plugin-camera` <br>
 `npm install --save @ionic-native/camera` <br>
-modify config.xml:<br>
-inside of the <platform name='ios'> section add:<br>
-`<config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
-	<string>You can take photos</string>
-</config-file>`
-
 ## Bug da fixare
 Quando si aggiorna la pagina, i dati dell'user vengono persi<br>
 Quando si fa il logout misticamente la pagina dell'homepage dopo il login si rompe
