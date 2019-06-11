@@ -55,7 +55,7 @@ export class UserService {
 
   putMyHabits(abitudine: Abitudini) {
     const path = 'http://' + environment.serverIp + '/user/habits';
-    return from(this.authService.token.then(token => {
+    return this.authService.token.then(token => {
       return this.http.put<Respons>(
         path,
         JSON.stringify(abitudine),
@@ -65,7 +65,7 @@ export class UserService {
             Authorization: 'Bearer ' + token
           })
         });
-    }));
+    });
   }
 
   changeProfile(formData: FormData) {

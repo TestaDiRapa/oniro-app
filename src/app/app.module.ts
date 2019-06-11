@@ -13,9 +13,9 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { SelectDevicePageModule } from './home/record/select-device/select-device.module';
 import { CallNumber } from '@ionic-native/call-number/ngx';
-
+import { Network } from '@ionic-native/network/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
-//import { Camera } from '@ionic-native/camera';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +30,7 @@ import { Camera } from '@ionic-native/camera/ngx';
   ],
   providers: [
     BluetoothSerial,
+    Network,
     StatusBar,
     SplashScreen,
     CallNumber,

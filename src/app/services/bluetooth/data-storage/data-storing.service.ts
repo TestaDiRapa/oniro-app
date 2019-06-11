@@ -6,13 +6,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from '../../authentication.service';
 import { ApneaEvent } from './apnea-event.model';
+import { AlertController } from '@ionic/angular';
 
 export interface RawBluetoothData {
     spo2: number;
+    spo2_rate: number;
     oxy_event: number;
     dia_event: number;
     hr: number;
-    raw_hr: number[];
+    hr_rate: number;
+    movements_count: number;
 }
 
 @Injectable({
@@ -30,62 +33,89 @@ export class DataStoringService {
     ) { }
 
     init() {
-        this.sendData();
         this.initInstant = new Date().toISOString();
+        this.storage.remove('sleep_data');
+        this.storedData = [];
     }
 
     addRawData(raw: RawBluetoothData) {
+        let oxyEvent = null;
+        let diaEvent = null;
+        if (raw.oxy_event > 0) {
+            oxyEvent = new ApneaEvent(raw.oxy_event, new Date().toISOString());
+        }
+        if (raw.dia_event > 0) {
+            diaEvent = new ApneaEvent(raw.dia_event, new Date().toISOString());
+        }
         this.storedData.push(new BluetoothData(
             this.initInstant,
             raw.spo2,
-            new ApneaEvent(raw.oxy_event, new Date().toISOString()),
-            new ApneaEvent(raw.dia_event, new Date().toISOString()),
+            raw.spo2_rate,
+            oxyEvent,
+            diaEvent,
             raw.hr,
-            raw.raw_hr
+            raw.hr_rate,
+            raw.movements_count
         ));
     }
 
-    sendData() {
+    recoverAndSend() {
+        this.storage.get('sleep_data').then(data => {
+            this.storedData = JSON.parse(data).data;
+            this.initInstant = JSON.parse(data).id;
+            this.sendToServer(true);
+        });
+    }
+
+    sendData(terminate = false) {
         if (this.network.type !== this.network.Connection.NONE) {
-            if (this.storedData == null) {
-                this.storage.get('local_data').then(
-                    data => {
-                        if (data) {
-                            this.storedData = JSON.parse(data);
-                        } else {
-                            this.storedData = [];
+            this.sendToServer(terminate);
+        } else {
+            this.serialize();
+        }
+    }
+
+    private sendToServer(terminate: boolean) {
+        if (this.storedData.length > 0) {
+            const len = this.storedData.length;
+            const url = 'http://' + environment.serverIp + '/user/my_recordings';
+            const payload = this.storedData.copyWithin(0, len);
+            this.authService.token.then(token => {
+                this.http.put<Respons>(
+                    url,
+                    JSON.stringify(payload),
+                    {
+                        headers: new HttpHeaders({
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + token
+                        })
+                    }).subscribe(response => {
+                        if (response.status === 'ok') {
+                            this.storedData = this.storedData.slice(len, this.storedData.length);
+                            this.storage.remove('sleep_data');
+                            if (terminate) {
+                                this.http.get(
+                                    `http://${environment.serverIp}/user/my_recordings/process?id=${this.initInstant}`,
+                                    {
+                                        headers: new HttpHeaders({
+                                            'Content-Type': 'application/json',
+                                            Authorization: 'Bearer ' + token
+                                        })
+                                    }
+                                ).subscribe();
+                            }
+                        } else if (response.status === 'error' && terminate) {
+                            this.serialize();
                         }
-                        this.sendToServer();
-                    }
-                );
-            } else {
-                this.sendToServer();
-            }
+                    });
+            });
         }
     }
 
     serialize() {
-        this.storage.set('local_data', JSON.stringify(this.storedData));
+        this.storage.set('sleep_data', JSON.stringify({
+            id: this.initInstant,
+            data: this.storedData
+        }));
     }
-
-    private sendToServer() {
-        const url = 'http://' + environment.serverIp + '/user/my_recordings';
-        const payload = this.storedData.shift();
-        this.authService.token.then(token => {
-            this.http.put<Respons>(
-                url,
-                JSON.stringify(payload),
-                {
-                    headers: new HttpHeaders({
-                        'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' + token
-                    })
-                }).subscribe(response => {
-                    if (response.status === 'error') {
-                        this.storedData.unshift(payload);
-                    }
-                });
-        });
-    }
-
 }

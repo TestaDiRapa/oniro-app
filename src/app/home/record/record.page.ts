@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ModalController, AlertController } from '@ionic/angular';
 import { SelectDevicePage } from './select-device/select-device.page';
 import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data-storing.service';
+import { interval, Subscription, observable } from 'rxjs';
 
 @Component({
   selector: 'app-record',
@@ -13,6 +14,8 @@ import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data
   styleUrls: ['./record.page.scss'],
 })
 export class RecordPage implements OnInit {
+  private timer = interval(60 * 1000);
+  private timerSubscription: Subscription;
 
   constructor(
     private alertCtrl: AlertController,
@@ -24,7 +27,9 @@ export class RecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('qui');
+    this.timerSubscription = this.timer.subscribe(() => {
+      this.dataMngr.sendData();
+    });
     this.dataMngr.init();
     this.bluetoothService.isEnabled().then(
       () => {
@@ -70,9 +75,10 @@ export class RecordPage implements OnInit {
           () => {
             this.bluetooth.subscribe('\n').subscribe(
               success => {
-                const payload = JSON.parse(success);
-                this.dataMngr.addRawData(payload);
-                this.dataMngr.sendData();
+                if (success) {
+                  const payload = JSON.parse(success);
+                  this.dataMngr.addRawData(payload);
+                }
               }
             );
           },
@@ -123,6 +129,12 @@ export class RecordPage implements OnInit {
         return this.bluetoothService.device;
       });
     });
+  }
+
+  onStop() {
+    this.timerSubscription.unsubscribe();
+    this.dataMngr.sendData(true);
+    this.router.navigate(['/home']);
   }
 
 }

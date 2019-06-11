@@ -28,11 +28,11 @@ export class BluetoothService {
           return null;
         }
       },
-      error => {
+      () => {
         return null;
       });
     }
-    return new Promise( (resolve, reject) => {
+    return new Promise( (resolve) => {
       resolve(this.bluetoothDevice);
     });
   }
