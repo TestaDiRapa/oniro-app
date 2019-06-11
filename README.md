@@ -17,11 +17,8 @@ After cloning the project, add the following plugins and platforms:<br>
 `npm install @ionic-native/bluetooth-serial`<br>
 `ionic cordova plugin add cordova-sqlite-storage`<br>
 `npm install --save @ionic/storage`<br>
-`ionic cordova plugin add cordova-plugin-geolocation`<br>
-`npm install --save @ionic-native/geolocation`<br>
 `ionic cordova plugin add cordova-plugin-network-information`<br>
 `npm install @ionic-native/network`<br>
-`ionic cordova plugin remove cordova-plugin-geolocation`<br>
 `ionic cordova plugin add cordova-plugin-googlemaps`<br>
 `npm install --save @ionic-native/core@latest`<br>
 `npm install --save @ionic-native/google-maps@latest`<br>
