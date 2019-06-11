@@ -10,6 +10,7 @@ export class Paziente {
         private email: string,
         private cf: string,
         private age: string,
+        private pathUrl: string
     ) {}
 
     getName() {
@@ -36,6 +37,22 @@ export class Paziente {
         return this.cf;
     }
 
+    getAlbo() {
+        return '';
+    }
+
+    getAddress() {
+        return '';
+    }
+
+    getImg() {
+        return this.pathUrl;
+    }
+
+    setImg(url: string) {
+        this.pathUrl = url;
+    }
+
     setAge(age: string) {
         this.age = age;
     }
@@ -43,5 +60,7 @@ export class Paziente {
     setPhone(phone: string) {
         this.phone_number = phone;
     }
+
+    setAddress(addr: string) {}
 
 }

@@ -44,7 +44,7 @@ export class RegisterPage implements OnInit {
 // tslint:disable-next-line: no-string-literal
           form.value['password'], form.value['telefono'],
 // tslint:disable-next-line: no-string-literal
-          form.value['email'], form.value['cf'], form.value['eta']);
+          form.value['email'], form.value['cf'], form.value['eta'], '');
         this.auth.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
@@ -63,7 +63,7 @@ export class RegisterPage implements OnInit {
 // tslint:disable-next-line: no-string-literal
           form.value['password'], form.value['telefono'],
 // tslint:disable-next-line: no-string-literal
-          form.value['email'], form.value['idalbo'], address);
+          form.value['email'], form.value['idalbo'], address, '');
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');

@@ -74,13 +74,15 @@ export class LoginPage implements OnInit {
 // tslint:disable-next-line: no-string-literal
             this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
-              resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['age']));
+              resu.message['phone_number'], resu.message['email'], resu.message['_id'],
+              resu.message['age'], 'INSERIRE IMMAGINE'));
             this.path = 'home';
           } else {
 // tslint:disable-next-line: no-string-literal
             this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
-              resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['address']));
+              resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
+              resu.message['address'], 'INSERIRE IMMAGINE'));
             this.path = 'homedoc';
           }
           
