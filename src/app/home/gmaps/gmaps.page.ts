@@ -14,7 +14,9 @@ import {
   Geocoder,
   GeocoderResult,
   LocationService,
-  MyLocation
+  MyLocation,
+  GoogleMapsMapTypeId,
+  BaseArrayClass
 } from '@ionic-native/google-maps';
 declare var google;
 
@@ -26,8 +28,8 @@ declare var google;
 export class GmapsPage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: GoogleMap;
-  doctors: any;
-  addresses: string [] ;
+  doctors: any [];
+  addresses: string [] = [] ;
 
   constructor(
     private geolocation: Geolocation,
@@ -38,10 +40,11 @@ export class GmapsPage implements OnInit {
   ngOnInit() {
     this.menuCtrl.toggle();
     this.getCoordinates();
+    this.loadMap();
   }
 
   loadMap() {
-    //const myPosition = this.geolocation.getCurrentPosition();
+    // const myPosition = this.geolocation.getCurrentPosition();
  /*   this.geolocation.getCurrentPosition().then((resp) => {
       const latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       const mapOptions = {
@@ -54,54 +57,67 @@ export class GmapsPage implements OnInit {
     }).catch((error) => {
       console.log('Error getting location', error);
     });**/
-    let opzioni: GoogleMapOptions;
-    LocationService.getMyLocation().then((myLocation: MyLocation) => {
-
-// tslint:disable-next-line: label-position
-     /* opzioni = {
-        camera: {
-          target: myLocation.latLng,
-          zoom: 50
-        },
-      }*/
-      this.map = GoogleMaps.create('map');
-      let marker :Marker = this.map.addMarkerSync({
-        'position': myLocation.latLng,
-        'title': 'Hai aggiunto un Marker'
-      });
-      this.map.animateCamera({
-        target: marker.getPosition(),
-        zoom:17
-      }).then(() => {
-        marker.showInfoWindow();
-      })
-  }); 
-   /* for (const doctor of this.doctors) {
-      this.addresses.push(doctor['address']);
-    }*/
-    
-   /* const marker: Marker = this.map.addMarkerSync({
-      title: 'Ionic',
-      icon: 'blue',
-      animation: 'DROP',
-      position: {
-        lat: 43.0741904,
-        lng: -89.3809802
+let options: GoogleMapOptions;
+LocationService.getMyLocation().then((myLocation: MyLocation) => {
+ options = {
+  controls: {
+    compass: true,
+    myLocationButton: true,
+    myLocation: true,   // (blue dot)
+    indoorPicker: true
+  },
+  gestures: {
+    scroll: true,
+    tilt: true,
+    zoom: true,
+    rotate: true
+  },
+      camera: {
+        target: myLocation.latLng
       }
+    };
+ this.map = GoogleMaps.create('map', options);
+ this.map.animateCamera({
+      target: myLocation.latLng,
+     zoom: 17
+    }).then(() => {
     });
-    marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-      alert('clicked');
-    });*/
-    
-}
+  });
+  }
+
+  findDoctors() {
+    console.log('sei qui');
+    Geocoder.geocode({
+          address: [this.addresses.toString()]
+        }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
+          console.log('ehi');
+          mvcArray.on('finish').toPromise().then(() => {
+            console.log("wow");
+            if (mvcArray.getLength() > 0) {
+              const results: any[] =  mvcArray.getArray();
+              results.forEach((result: GeocoderResult[]) => {
+                this.map.addMarkerSync({
+                  position: result[0].position,
+                  title:  JSON.stringify(result)
+                });
+              });
+            } else {
+              console.log('lunghezza zero');
+            }
+          });
+        });
+  }
 
   getCoordinates() {
-    console.log('sono qui');
     this.getCoord.getCoordinates().then(observable => {
       observable.subscribe(res => {
         // tslint:disable: no-string-literal
         this.doctors = res['payload'];
+
         console.log(res['payload']);
+        for (const doctor of this.doctors) {
+          this.addresses.push(doctor['address']);
+        }
       });
     });
   }
