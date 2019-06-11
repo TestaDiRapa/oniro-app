@@ -67,7 +67,7 @@ export class AuthenticationService {
         return this.isAuthenticated;
     }
 
-    get type(){
+    get type() {
         return this.userType.asObservable();
     }
 

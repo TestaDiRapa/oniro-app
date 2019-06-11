@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/userService.service';
@@ -9,6 +9,7 @@ import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
 import { MenuController } from '@ionic/angular';
+import { LoaderService } from '../services/loader-service.service';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +22,13 @@ export class LoginPage implements OnInit {
   private password: string;
   private path: string;
 
+
   constructor(private router: Router,
               private auth: AuthenticationService,
               private user: UserService,
               private http: HttpClient,
               private menuCtrl: MenuController,
+              public loadingController: LoaderService,
               private alertCtrl: AlertController) { }
 
 
@@ -38,6 +41,8 @@ export class LoginPage implements OnInit {
       buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
     }).then( (alert) => alert.present());
   }
+
+
 
   // check if the ion-segment value is changed or not
   onChange(event: CustomEvent<SegmentChangeEventDetail>, form: NgForm) {
@@ -62,6 +67,7 @@ export class LoginPage implements OnInit {
       this.username = form.value.albo;
     }
     this.password = form.value.password;
+    this.loadingController.onCreate();
     this.auth.login(this.username, this.password, this.isUser).subscribe(res => {
       if (res.status === 'ok') {
         const token = res.access_token;
@@ -71,25 +77,26 @@ export class LoginPage implements OnInit {
         }).subscribe(resu => {
           this.auth.isAuthenticated = true;
           if (this.isUser) {
-// tslint:disable-next-line: no-string-literal
             this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
               resu.message['phone_number'], resu.message['email'], resu.message['_id'],
-              resu.message['age'], 'INSERIRE IMMAGINE'));
+              resu.message['age'], ''));
+
             this.path = 'home';
           } else {
-// tslint:disable-next-line: no-string-literal
             this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
 // tslint:disable-next-line: no-string-literal
               resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
-              resu.message['address'], 'INSERIRE IMMAGINE'));
+              resu.message['address'], ''));
+
             this.path = 'homedoc';
           }
-          
+          this.loadingController.onDismiss();
           this.router.navigateByUrl('/' + this.path);
         });
 
       } else {
+        this.loadingController.onDismiss();
         this.presentAlert(res.message);
       }
 

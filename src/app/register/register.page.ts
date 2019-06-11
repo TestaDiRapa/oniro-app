@@ -7,6 +7,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Medico } from './medico.model';
 import { AlertController, MenuController } from '@ionic/angular';
 import { UserService } from '../services/userService.service';
+import { LoaderService } from '../services/loader-service.service';
 
 @Component({
   selector: 'app-register',
@@ -19,17 +20,19 @@ export class RegisterPage implements OnInit {
   private medico: Medico;
 
   constructor(private router: Router,
-              private auth: AuthenticationService,
-              private alertCtrl: AlertController,
-              private userService: UserService,
-              private menuCtrl: MenuController
-    ) { }
+    private auth: AuthenticationService,
+    private alertCtrl: AlertController,
+    private userService: UserService,
+    private menuCtrl: MenuController,
+    public loadingController: LoaderService
+
+  ) { }
 
   ngOnInit() {
   }
 
   presentAlert(mex: string) {
-      const alert = this.alertCtrl.create({
+    const alert = this.alertCtrl.create({
       subHeader: mex,
       buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
     }).then(alert => alert.present());
@@ -39,12 +42,11 @@ export class RegisterPage implements OnInit {
     if (form.valid) {
       this.menuCtrl.enable(true);
       if (this.isUser) {
-// tslint:disable-next-line: no-string-literal
         this.paziente = new Paziente(form.value['nome'], form.value['cognome'],
-// tslint:disable-next-line: no-string-literal
           form.value['password'], form.value['telefono'],
-// tslint:disable-next-line: no-string-literal
+          // tslint:disable-next-line: no-string-literal
           form.value['email'], form.value['cf'], form.value['eta'], '');
+        this.loadingController.onCreate();
         this.auth.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.presentAlert('Registrazione effettuata con successo!');
@@ -56,19 +58,19 @@ export class RegisterPage implements OnInit {
         });
         this.userService.setUser(this.paziente);
       } else {
-// tslint:disable-next-line: no-string-literal
         const address = form.value['via'] + ' ' + form.value['civico'] + ' ' + form.value['citta'] + ' ' + form.value['provincia'];
-// tslint:disable-next-line: no-string-literal
         this.medico = new Medico(form.value['nome'], form.value['cognome'],
-// tslint:disable-next-line: no-string-literal
           form.value['password'], form.value['telefono'],
-// tslint:disable-next-line: no-string-literal
+          // tslint:disable-next-line: no-string-literal
           form.value['email'], form.value['idalbo'], address, '');
+
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
+            this.loadingController.onDismiss();
             this.presentAlert('Registrazione effettuata con successo!');
             this.router.navigateByUrl('/homedoc');
           } else {
+            this.loadingController.onDismiss();
             this.presentAlert(resData.message);
           }
         });

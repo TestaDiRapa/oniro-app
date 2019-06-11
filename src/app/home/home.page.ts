@@ -7,6 +7,7 @@ import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
 import { Bevanda } from './add-abitudini/bevanda.model';
 import { Abitudini } from './add-abitudini/abitudini.model';
 import { Router } from '@angular/router';
+import { LoaderService } from '../services/loader-service.service';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ export class HomePage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private user: UserService,
     private alertCtrl: AlertController,
+    private loadingController: LoaderService,
     private router: Router
   ) {
   }
@@ -83,13 +85,16 @@ export class HomePage implements OnInit, OnDestroy {
 
   onStartMonitoring() {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
+    this.loadingController.onCreate();
     this.user.putMyHabits(abitudine).subscribe(
       success => {
         console.log(success);
+        this.loadingController.onDismiss();
         this.router.navigate(['/home/record']);
     },
       error => {
         console.log(error);
+        this.loadingController.onDismiss();
         this.alertCtrl.create({
           header: 'An error occurred!',
           message: error.message,

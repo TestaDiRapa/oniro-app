@@ -1,6 +1,8 @@
 import { MenuController, AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
+import { LoaderService } from 'src/app/services/loader-service.service';
+
 
 @Component({
   selector: 'app-richieste-pazienti',
@@ -8,14 +10,15 @@ import { UserService } from 'src/app/services/userService.service';
   styleUrls: ['./richieste-pazienti.page.scss'],
 })
 export class RichiestePazientiPage implements OnInit {
-
   public pazienti: any[];
   public n_req: number;
 
   constructor(
     private menuCtrl: MenuController,
     private userService: UserService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loadingController: LoaderService
+
   ) { }
 
   ngOnInit() {
@@ -23,9 +26,10 @@ export class RichiestePazientiPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.loadingController.onCreate();
     this.userService.getRequests().then(succes => {
       succes.subscribe(resData => {
-// tslint:disable-next-line: prefer-for-of
+        console.log(resData);
         for (let i = 0; i < resData['results'].length; i++) {
           if (resData['results'][i].type === 'registered') {
             resData['results'].splice(i, 1);
@@ -36,10 +40,12 @@ export class RichiestePazientiPage implements OnInit {
         this.n_req = this.pazienti.length;
       });
     });
+    this.loadingController.onDismiss();
   }
 
   accept(cf: string) {
     const params = '{"user_cf":' + '"' + cf + '"' + '}';
+    this.loadingController.onCreate();
     this.userService.acceptPatient(params).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
@@ -52,13 +58,30 @@ export class RichiestePazientiPage implements OnInit {
             subHeader: 'Paziente accettato',
             buttons: ['OK']
           }).then(alert => alert.present());
+          this.ionViewWillEnter();
         }
       });
     });
   }
 
-  reject() {
-    console.log('rifiutato');
+  reject(cf: string) {
+    this.loadingController.onCreate();
+    this.userService.deletePatient(cf).then(success => {
+      success.subscribe(resData => {
+        if (resData.status !== 'ok') {
+          this.alertCtrl.create({
+            subHeader: resData.message,
+            buttons: ['OK']
+          }).then(alert => alert.present());
+        } else {
+          this.alertCtrl.create({
+            subHeader: 'Paziente rifiutato',
+            buttons: ['OK']
+          }).then(alert => alert.present());
+          this.ionViewWillEnter();
+        }
+      });
+    });
   }
 
 
