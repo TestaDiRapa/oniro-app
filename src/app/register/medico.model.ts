@@ -9,7 +9,8 @@ export class Medico {
         private phone_number: string,
         private email: string,
         private id: string,
-        private address: string
+        private address: string,
+        private pathUrl: string
     ) {}
 
     getName() {
@@ -36,6 +37,18 @@ export class Medico {
         return this.address;
     }
 
+    getImg() {
+        return this.pathUrl;
+    }
+
+    getCf() {
+        return '';
+    }
+
+    setImg(url: string) {
+        this.pathUrl = url;
+    }
+
     setAddress(address: string) {
         this.address = address;
     }
@@ -43,5 +56,11 @@ export class Medico {
     setPhone(phone: string) {
         this.phone_number = phone;
     }
+
+    getAge() {
+        return '';
+    }
+
+    setAge(age: string) {}
 
 }

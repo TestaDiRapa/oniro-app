@@ -78,11 +78,17 @@ export class LoginPage implements OnInit {
           this.auth.isAuthenticated = true;
           if (this.isUser) {
             this.user.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
-              resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['age']));
+// tslint:disable-next-line: no-string-literal
+              resu.message['phone_number'], resu.message['email'], resu.message['_id'],
+              resu.message['age'], ''));
+
             this.path = 'home';
           } else {
             this.user.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
-              resu.message['phone_number'], resu.message['email'], resu.message['_id'], resu.message['address']));
+// tslint:disable-next-line: no-string-literal
+              resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
+              resu.message['address'], ''));
+
             this.path = 'homedoc';
           }
           this.loadingController.onDismiss();

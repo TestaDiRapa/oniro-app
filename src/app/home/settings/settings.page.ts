@@ -4,8 +4,6 @@ import { Paziente } from '../../register/paziente.model';
 import { MenuController, AlertController } from '@ionic/angular';
 import { Medico } from '../../register/medico.model';
 import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 
@@ -17,9 +15,11 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 export class SettingsPage implements OnInit {
   public user: Paziente | Medico;
+  public isEmpty: boolean;
   public isUser = false;
   public isLoaded = false;
-  private img: any = '';
+  public img = '';
+  // public base64Image: string;
 
   constructor(
     private userService: UserService,
@@ -27,15 +27,22 @@ export class SettingsPage implements OnInit {
     private menuCtrl: MenuController,
     private alertCtrl: AlertController,
     private camera: Camera
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.userService.getUser().then(user => {
       this.user = user;
+      if (!(this.user.getImg())) {
+          this.isEmpty = false;
+          this.img = this.user.getImg();
+        } else {
+          this.isEmpty = true;
+        }
       this.authService.getUserType().then(userType => {
         this.isUser = userType;
         this.isLoaded = true;
       });
+      console.log(this.isEmpty);
     });
     this.menuCtrl.toggle();
   }
@@ -218,8 +225,6 @@ export class SettingsPage implements OnInit {
       targetWidth: 250,
       sourceType: this.camera.PictureSourceType.CAMERA,
       correctOrientation: true
-      // encodingType: this.camera.EncodingType.JPEG,
-      // mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
       this.img = (<any>window).Ionic.WebView.convertFileSrc(imageData);
@@ -229,7 +234,40 @@ export class SettingsPage implements OnInit {
   }
 
   accessGallery() {
-    console.log("galleria");
+    const options: CameraOptions = {
+      quality: 100,
+      targetHeight: 350,
+      targetWidth: 350,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      correctOrientation: true
+    };
+    this.camera.getPicture(options).then(imgData => {
+      console.log(imgData);
+      //this.updateImage(imgData);
+      // this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      // this.user.setImg(this.base64Image);
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  private updateImage(imgData: string) {
+    const formData = new FormData();
+    formData.append('image', this.img);
+    this.userService.changeProfile(formData).subscribe(success => {
+      success.subscribe(resData => {
+        if (resData.status === 'ok') {
+          // update the storage if the media server is updated
+          this.img = imgData;
+          console.log(this.img);
+          this.user.setImg(imgData);
+          this.userService.setUser(this.user);
+        } else {
+          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          console.log(this.img);
+        }
+      });
+    });
   }
 
 }
