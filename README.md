@@ -27,6 +27,13 @@ After cloning the project, add the following plugins and platforms:<br>
 `npm install --save @ionic-native/google-maps@latest`<br>
 'ionic cordova plugin add call-number' <br>
 'npm install @ionic-native/call-number' <br>
+'cordova plugin add cordova-plugin-camera' <br>
+'npm install --save @ionic-native/camera' <br>
+modify config.xml:
+inside of the <platform name='ios> section add:
+<config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
+	<string>You can take photos</string>
+</config-file>
 
 ## Bug da fixare
 Quando si aggiorna la pagina, i dati dell'user vengono persi<br>
