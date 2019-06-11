@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { ModalController, AlertController } from '@ionic/angular';
 import { SelectDevicePage } from './select-device/select-device.page';
 import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data-storing.service';
-import { interval } from 'rxjs';
+import { interval, Subscription, observable } from 'rxjs';
 
 @Component({
   selector: 'app-record',
@@ -15,6 +15,7 @@ import { interval } from 'rxjs';
 })
 export class RecordPage implements OnInit {
   private timer = interval(60 * 1000);
+  private timerSubscription: Subscription;
 
   constructor(
     private alertCtrl: AlertController,
@@ -26,7 +27,7 @@ export class RecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.timer.subscribe(() => {
+    this.timerSubscription = this.timer.subscribe(() => {
       this.dataMngr.sendData();
     });
     this.dataMngr.init();
@@ -128,6 +129,12 @@ export class RecordPage implements OnInit {
         return this.bluetoothService.device;
       });
     });
+  }
+
+  onStop() {
+    this.timerSubscription.unsubscribe();
+    this.dataMngr.sendData(true);
+    this.router.navigate(['/home']);
   }
 
 }

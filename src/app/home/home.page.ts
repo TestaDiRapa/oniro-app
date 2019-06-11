@@ -7,6 +7,9 @@ import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
 import { Bevanda } from './add-abitudini/bevanda.model';
 import { Abitudini } from './add-abitudini/abitudini.model';
 import { Router } from '@angular/router';
+import { Network } from '@ionic-native/network/ngx';
+import { Storage } from '@ionic/storage';
+import { DataStoringService } from '../services/bluetooth/data-storage/data-storing.service';
 
 @Component({
   selector: 'app-home',
@@ -23,15 +26,25 @@ export class HomePage implements OnInit, OnDestroy {
   private drink = new Bevanda('', 0);
 
   constructor(
-    private modalCtrl: ModalController,
-    private user: UserService,
     private alertCtrl: AlertController,
-    private router: Router
+    private dataMngr: DataStoringService,
+    private modalCtrl: ModalController,
+    private network: Network,
+    private router: Router,
+    private storage: Storage,
+    private user: UserService,
   ) {
   }
 
   ngOnInit() {
     this.formatDate();
+    this.network.onConnect().subscribe(() => {
+      this.storage.get('sleep_data').then(data => {
+        if (data) {
+          this.dataMngr.recoverAndSend();
+        }
+      })
+    });
   }
 
   ngOnDestroy() {
