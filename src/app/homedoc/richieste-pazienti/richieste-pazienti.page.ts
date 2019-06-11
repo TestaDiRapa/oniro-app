@@ -25,15 +25,14 @@ export class RichiestePazientiPage implements OnInit {
   ionViewWillEnter() {
     this.userService.getRequests().then(succes => {
       succes.subscribe(resData => {
-        // tslint:disable-next-line: no-unused-expression
-        console.log(resData['results']);
-        this.pazienti = resData['results'];
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < this.pazienti.length; i++) {
+// tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < resData['results'].length; i++) {
           if (resData['results'][i].type === 'registered') {
-            this.pazienti.splice(i, 1);
+            resData['results'].splice(i, 1);
+            i = i - 1;
           }
         }
+        this.pazienti = resData['results'];
         this.n_req = this.pazienti.length;
       });
     });
@@ -59,7 +58,7 @@ export class RichiestePazientiPage implements OnInit {
   }
 
   reject() {
-    console.log("rifiutato");
+    console.log('rifiutato');
   }
 
 
