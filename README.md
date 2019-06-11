@@ -7,7 +7,7 @@ Let's start throwing blood
 2. remove the src folder from the newly created project
 3. clone this repo
 4. copy all the files from the blank project to the repo folder
-5. add  `<preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="YOUR_API_KEY"/>`<br>
+5. add <br>`<preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="YOUR_API_KEY"/>`<br>
      	`<preference name="GOOGLE_MAPS_IOS_API_KEY" value="YOUR_API_KEY"/>`<br>
 	to your config.xml file
 6. start working :weary:
