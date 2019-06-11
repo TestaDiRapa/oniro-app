@@ -14,7 +14,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { SelectDevicePageModule } from './home/record/select-device/select-device.module';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 
-
+import { Camera } from '@ionic-native/camera/ngx';
+//import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,6 +33,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
     StatusBar,
     SplashScreen,
     CallNumber,
+    Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -32,13 +32,8 @@
             </ion-item>
             <ion-item>
               <ion-label class="login-label" position="floating">Password</ion-label>
-              <ion-input type="password" ngModel name="password" required minlength="8" #passwordCtrl="ngModel">
+              <ion-input type="password" ngModel name="password" required #passwordCtrl="ngModel">
               </ion-input>
-            </ion-item>
-            <ion-item *ngIf="!passwordCtrl.valid && passwordCtrl.touched" lines="none">
-              <ion-label color="danger" class="valid-label">
-                Inserire almeno 8 caratteri
-              </ion-label>
             </ion-item>
           </ion-list>
         </ion-col>

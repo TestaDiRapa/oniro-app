@@ -55,15 +55,27 @@ export class UserService {
 
   putMyHabits(abitudine: Abitudini) {
     const path = 'http://' + environment.serverIp + '/user/habits';
-    const header = new HttpHeaders();
     return from(this.authService.token.then(token => {
-      // tslint:disable-next-line: max-line-length
       return this.http.put<Respons>(
         path,
         JSON.stringify(abitudine),
         {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          })
+        });
+    }));
+  }
+
+  changeProfile(formData: FormData) {
+    const path = 'http://' + environment.serverIp + '/me';
+    return from(this.authService.token.then(token => {
+      return this.http.post<Respons>(
+        path,
+        formData,
+        {
+          headers: new HttpHeaders({
             Authorization: 'Bearer ' + token
           })
         });
@@ -77,6 +89,23 @@ export class UserService {
         path,
         {
           headers: new HttpHeaders({
+            Authorization: 'Bearer ' + token
+          })
+        });
+    });
+  }
+
+  acceptPatient(cf: string) {
+    const path = 'http://' + environment.serverIp + '/doctor/my_patients';
+    const body = cf;
+    console.log(body);
+    return this.authService.token.then(token => {
+      return this.http.post<Respons>(
+        path,
+        body,
+        {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
             Authorization: 'Bearer ' + token
           })
         });

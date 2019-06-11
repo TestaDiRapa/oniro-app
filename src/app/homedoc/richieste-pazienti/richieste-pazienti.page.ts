@@ -1,4 +1,4 @@
-import { MenuController } from '@ionic/angular';
+import { MenuController, AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
 
@@ -10,12 +10,13 @@ import { UserService } from 'src/app/services/userService.service';
 export class RichiestePazientiPage implements OnInit {
 
   public pazienti: any[];
-// tslint:disable-next-line: variable-name
   public n_req: number;
 
   constructor(
     private menuCtrl: MenuController,
-    private userService: UserService) { }
+    private userService: UserService,
+    private alertCtrl: AlertController
+  ) { }
 
   ngOnInit() {
     this.menuCtrl.toggle();
@@ -24,11 +25,10 @@ export class RichiestePazientiPage implements OnInit {
   ionViewWillEnter() {
     this.userService.getRequests().then(succes => {
       succes.subscribe(resData => {
-// tslint:disable-next-line: no-unused-expression
+        // tslint:disable-next-line: no-unused-expression
         console.log(resData['results']);
         this.pazienti = resData['results'];
-        //this.filterRequests(resData['results']);
-// tslint:disable-next-line: prefer-for-of
+        // tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < this.pazienti.length; i++) {
           if (resData['results'][i].type === 'registered') {
             this.pazienti.splice(i, 1);
@@ -39,8 +39,23 @@ export class RichiestePazientiPage implements OnInit {
     });
   }
 
-  accept() {
-    console.log("accettato");
+  accept(cf: string) {
+    const params = '{"user_cf":' + '"' + cf + '"' + '}';
+    this.userService.acceptPatient(params).then(success => {
+      success.subscribe(resData => {
+        if (resData.status !== 'ok') {
+          this.alertCtrl.create({
+            subHeader: resData.message,
+            buttons: ['OK']
+          }).then(alert => alert.present());
+        } else {
+          this.alertCtrl.create({
+            subHeader: 'Paziente accettato',
+            buttons: ['OK']
+          }).then(alert => alert.present());
+        }
+      });
+    });
   }
 
   reject() {

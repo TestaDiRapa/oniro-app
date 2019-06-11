@@ -6,6 +6,8 @@ import { Medico } from '../../register/medico.model';
 import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+
 
 @Component({
   selector: 'app-settings',
@@ -14,26 +16,23 @@ import { environment } from 'src/environments/environment';
 })
 
 export class SettingsPage implements OnInit {
-  private path = 'http://' + environment.serverIp + '/me';
-  private header = new HttpHeaders({ Authorization: 'Bearer ' + this.authService.token });
   public user: Paziente | Medico;
   public isUser = false;
   public isLoaded = false;
+  private img: any = '';
 
   constructor(
     private userService: UserService,
     private authService: AuthenticationService,
     private menuCtrl: MenuController,
     private alertCtrl: AlertController,
-    private http: HttpClient
+    private camera: Camera
   ) { }
 
   ngOnInit() {
     this.userService.getUser().then(user => {
       this.user = user;
       this.authService.getUserType().then(userType => {
-        console.log('SETTINGS');
-        console.log(userType);
         this.isUser = userType;
         this.isLoaded = true;
       });
@@ -41,26 +40,29 @@ export class SettingsPage implements OnInit {
     this.menuCtrl.toggle();
   }
 
-  ionViewWillEnter() {
-    this.authService.getUserType().then(userType => {
-      console.log('SETTINGS');
-      console.log(userType);
-      this.isUser = userType;
-    });
-  }
 
-  private onSubmit(key: string[], value: string[]) {
+  private onSubmit(key: string[], value: string[], type: string) {
     const formData = new FormData();
     for (let i = 0; i < key.length; i++) {
       formData.append(key[i], value[i]);
     }
-    return this.http.post<Respons>(this.path, formData, { headers: this.header })
-      .subscribe(resData => {
+    this.userService.changeProfile(formData).subscribe(success => {
+      success.subscribe(resData => {
         if (resData.status === 'ok') {
+          if (type === 'addr') {
+            this.user.setAddress(formData.get('address').toString());
+          } else if (type === 'phone') {
+            this.user.setPhone(formData.get('phone_number').toString());
+          } else if (type === 'age') {
+            this.user.setAge(formData.get('age').toString());
+          }
+          this.userService.setUser(this.user);
+          this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
         } else {
           this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
         }
       });
+    });
   }
 
   onAgeModify() {
@@ -70,7 +72,7 @@ export class SettingsPage implements OnInit {
         {
           name: 'eta',
           type: 'number',
-          placeholder: 'ehi', // this.user.getAge(),
+          placeholder: '__',
         }],
       buttons: [
         {
@@ -81,7 +83,7 @@ export class SettingsPage implements OnInit {
             if (eta.length > 0) {
               const key = ['age'];
               const value = [eta];
-              this.onSubmit(key, value);
+              this.onSubmit(key, value, 'age');
             }
           }
         },
@@ -111,7 +113,7 @@ export class SettingsPage implements OnInit {
             if (phone.length > 0) {
               const key = ['phone_number'];
               const value = [phone];
-              this.onSubmit(key, value);
+              this.onSubmit(key, value, 'phone');
             }
           }
         },
@@ -147,7 +149,7 @@ export class SettingsPage implements OnInit {
             if (newp.length > 0) {
               const key = ['old_password', 'new_password'];
               const value = [oldp, newp];
-              this.onSubmit(key, value);
+              this.onSubmit(key, value, 'psw');
             }
           }
         },
@@ -197,7 +199,7 @@ export class SettingsPage implements OnInit {
               const address = road + ' ' + numb + ' ' + city + ' ' + prov;
               const key = ['address'];
               const value = [address];
-              this.onSubmit(key, value);
+              this.onSubmit(key, value, 'addr');
             }
           }
         },
@@ -207,6 +209,27 @@ export class SettingsPage implements OnInit {
           handler: () => { }
         }]
     }).then(alert => alert.present());
+  }
+
+  accessCamera() {
+    const options: CameraOptions = {
+      quality: 100,
+      targetHeight: 250,
+      targetWidth: 250,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      correctOrientation: true
+      // encodingType: this.camera.EncodingType.JPEG,
+      // mediaType: this.camera.MediaType.PICTURE
+    };
+    this.camera.getPicture(options).then((imageData) => {
+      this.img = (<any>window).Ionic.WebView.convertFileSrc(imageData);
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  accessGallery() {
+    console.log("galleria");
   }
 
 }
