@@ -32,7 +32,7 @@ export class SettingsPage implements OnInit {
   ngOnInit() {
     this.userService.getUser().then(user => {
       this.user = user;
-      if (!(this.user.getImg())) {
+      if (this.user.getImg()) {
           this.isEmpty = false;
           this.img = this.user.getImg();
         } else {
@@ -243,7 +243,7 @@ export class SettingsPage implements OnInit {
     };
     this.camera.getPicture(options).then(imgData => {
       console.log(imgData);
-      //this.updateImage(imgData);
+      this.updateImage(imgData);
       // this.base64Image = 'data:image/jpeg;base64,' + imgData;
       // this.user.setImg(this.base64Image);
     }, (err) => {
