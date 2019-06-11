@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
 import { MenuController } from '@ionic/angular';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { LoaderService } from 'src/app/services/loader-service.service';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class ContactsPage implements OnInit {
 
     private userService: UserService,
     private menuCtrl: MenuController,
+    private loadingController: LoaderService,
     private call: CallNumber) {
   }
 
@@ -27,16 +29,16 @@ export class ContactsPage implements OnInit {
   }
 
   getContact() {
+    this.loadingController.onCreate();
     this.userService.getMyDoctor().then(success => {
       success.subscribe(res => {
         this.contacts = res.message;
-        console.log(res.message);
-// tslint:disable-next-line: no-string-literal
-        console.log(res.message['doctor']);
-        console.log(this.contacts);
-        console.log(this.contacts[0]);
+        this.loadingController.onDismiss();
+
       });
     });
+    this.loadingController.onDismiss();
+
   }
 
   async callNumber(phone: string): Promise<any> {
