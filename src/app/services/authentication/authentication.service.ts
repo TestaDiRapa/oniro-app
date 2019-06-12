@@ -104,7 +104,7 @@ export class AuthenticationService {
     get token() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then(user => {
-                this.loggedUser = JSON.parse(user);
+                this.loggedUser = this.loadUser(user);
                 return this.loggedUser.accessToken;
             });
         }
@@ -121,7 +121,7 @@ export class AuthenticationService {
     getUserType() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then<boolean>(user => {
-                this.loggedUser = JSON.parse(user);
+                this.loggedUser = this.loadUser(user);
                 this.userType.next(this.loggedUser.isUser);
                 return this.loggedUser.isUser;
             });
@@ -134,7 +134,7 @@ export class AuthenticationService {
     getDocType() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then<boolean>(user => {
-                this.loggedUser = JSON.parse(user);
+                this.loggedUser = this.loadUser(user);
                 this.userType.next(!this.loggedUser.isUser);
                 return this.loggedUser.isUser;
             });
@@ -147,7 +147,10 @@ export class AuthenticationService {
     getUser() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then(user => {
-                this.loggedUser = JSON.parse(user);
+                this.loggedUser = this.loadUser(user);
+                this.loggedUser = new LoggedUser(
+
+                )
                 return this.loggedUser.user;
             });
         }
@@ -161,11 +164,43 @@ export class AuthenticationService {
         this.serialize();
     }
 
-    saveUser() {
-        this.serialize();
-    }
-
     getTypeUser() {
         return typeof (this.loggedUser.user) === typeof (Medico);
+    }
+
+    private loadUser(JSONstring: string) {
+        const tmp = JSON.parse(JSONstring);
+
+        let tmpUser;
+
+        if(tmp.isUser) {
+            tmpUser = new Paziente(
+                tmp.user.name,
+                tmp.user.surname,
+                '',
+                tmp.user.phone_number,
+                tmp.user.email,
+                tmp.user.cf,
+                tmp.user.age,
+                tmp.user.pathUrl
+            )
+        } else {
+            tmpUser = new Medico(
+                tmp.user.name,
+                tmp.user.surname,
+                '',
+                tmp.user.phone_number,
+                tmp.user.email,
+                tmp.user.id,
+                tmp.user.address,
+                tmp.user.pathUrl
+            )
+        }
+
+        const loggedUser = new LoggedUser();
+        loggedUser.isUser = tmp.isUser;
+        loggedUser.accessToken = tmp.accessToken;
+        loggedUser.user = tmpUser;
+        return loggedUser;
     }
 }
