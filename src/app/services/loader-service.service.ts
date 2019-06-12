@@ -17,7 +17,7 @@ export class LoaderService {
 
   async onCreate() {
     return await this.loadingController.create({
-      message: 'Please wait...',
+      message: 'Attendi...',
       translucent: true,
     }).then(a => {
       a.present().then(() => {
