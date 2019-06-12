@@ -30,9 +30,13 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova plugin add cordova-plugin-camera` <br>
 `npm install --save @ionic-native/camera` <br>
 `ionic cordova plugin add cordova-plugin-background-mode ` <br>
+'ionic cordova plugin add cordova-plugin-file-transfer' <br>
+'npm install @ionic-native/file-transfer' <br>
+'ionic cordova plugin add cordova-plugin-file' <br>
+'npm install @ionic-native/file' <br>
+
 `npm install @ionic-native/background-mode ` <br>
 
 ## Bug da fixare
-Quando si aggiorna la pagina, i dati dell'user vengono persi<br>
-Quando si fa il logout misticamente la pagina dell'homepage dopo il login si rompe
+
 
