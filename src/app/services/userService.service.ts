@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { AuthenticationService, Respons } from './authentication.service';
+import { AuthenticationService, Respons } from './authentication/authentication.service';
 import { Abitudini } from '../home/add-abitudini/abitudini.model';
 import { environment } from 'src/environments/environment';
 import { from } from 'rxjs/internal/observable/from';
@@ -13,32 +13,11 @@ import { Storage } from '@ionic/storage';
 })
 export class UserService {
 
-  private user: Paziente | Medico;
-
-
   constructor(
     private authService: AuthenticationService,
     private http: HttpClient,
     private storage: Storage
   ) { }
-
-  getUser() {
-    if (!this.user) {
-      return this.storage.get('user').then(user => {
-        this.user = JSON.parse(user);
-        return this.user;
-      });
-    }
-    return new Promise<Paziente | Medico>((resolve) => {
-      resolve(this.user);
-    });
-  }
-
-  setUser(user: Paziente | Medico) {
-    this.user = user;
-    this.storage.set('user', JSON.stringify(user));
-    return;
-  }
 
   getMyDoctor() {
     const path = 'http://' + environment.serverIp + '/user/my_doctors';
@@ -124,9 +103,5 @@ export class UserService {
         }
         );
     });
-  }
-
-  getTypeUser() {
-    return typeof (this.user) === typeof (Medico);
   }
 }

@@ -3,7 +3,7 @@ import { UserService } from '../../services/userService.service';
 import { Paziente } from '../../register/paziente.model';
 import { MenuController, AlertController } from '@ionic/angular';
 import { Medico } from '../../register/medico.model';
-import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
+import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 
@@ -30,7 +30,7 @@ export class SettingsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userService.getUser().then(user => {
+    this.authService.getUser().then(user => {
       this.user = user;
       if (this.user.getImg()) {
           this.isEmpty = false;
@@ -63,7 +63,7 @@ export class SettingsPage implements OnInit {
           } else if (type === 'age') {
             this.user.setAge(formData.get('age').toString());
           }
-          this.userService.setUser(this.user);
+          this.authService.setUser(this.user);
           this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
         } else {
           this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
@@ -261,7 +261,7 @@ export class SettingsPage implements OnInit {
           this.img = imgData;
           console.log(this.img);
           this.user.setImg(imgData);
-          this.userService.setUser(this.user);
+          this.authService.setUser(this.user);
         } else {
           this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
           console.log(this.img);

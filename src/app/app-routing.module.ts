@@ -18,8 +18,14 @@ const routes: Routes = [
   { path: 'home/gmaps', loadChildren: 'src/app/home/gmaps/gmaps.module#GmapsPageModule', canLoad: [AuthGuard, IsUserGuard]},
   { path: 'home/info', loadChildren: 'src/app/home/info/info.module#InfoPageModule', canLoad: [AuthGuard]},
   { path: 'homedoc', loadChildren: 'src/app/homedoc/homedoc.module#HomedocPageModule', canLoad: [IsDocGuard, AuthGuard]},
-// tslint:disable-next-line: max-line-length
-  { path: 'homedoc/richieste-pazienti', loadChildren: './homedoc/richieste-pazienti/richieste-pazienti.module#RichiestePazientiPageModule', canLoad: [IsDocGuard,AuthGuard] }
+  { 
+    path: 'homedoc/richieste-pazienti',
+    loadChildren: './homedoc/richieste-pazienti/richieste-pazienti.module#RichiestePazientiPageModule',
+    canLoad: [
+      IsDocGuard,
+      AuthGuard
+    ]
+  }
 
 ];
 

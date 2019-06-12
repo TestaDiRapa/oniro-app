@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanLoad } from '@
 import { Observable } from 'rxjs';
 import { Route, UrlSegment } from '@angular/router';
 import { AuthGuard } from './login/auth.guard';
-import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
