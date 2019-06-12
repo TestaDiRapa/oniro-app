@@ -10,7 +10,7 @@ export class GetCoordService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
   ) { }
 
   getCoordinates() {

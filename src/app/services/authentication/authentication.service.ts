@@ -5,12 +5,16 @@ import { Medico } from '../../register/medico.model';
 import { environment } from 'src/environments/environment';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
-import { LoggedUser } from './logged-user.model';
+import { LoggedUser, Token } from './logged-user.model';
+import { Router } from '@angular/router';
 
 
 export interface Respons {
     status: string;
     access_token: string;
+    access_token_exp: number;
+    refresh_token: string;
+    refresh_token_exp: number;
     message: string;
 }
 
@@ -24,6 +28,7 @@ export class AuthenticationService {
 
     constructor(
         private http: HttpClient,
+        private router: Router,
         private storage: Storage
     ) { }
 
@@ -37,17 +42,14 @@ export class AuthenticationService {
             return this.storage.get('logged_user').then<boolean>(user => {
                 if (user) {
                     this.loggedUser = JSON.parse(user);
-                    console.log("1", user, this.loggedUser);
                     return true;
                 }
                 else {
                     this.loggedUser = new LoggedUser();
-                    console.log("2", this.loggedUser)
                     return false;
                 }
             });
         }
-        console.log("3", this.loggedUser);
         return new Promise<boolean>((resolve) => {
             resolve(true);
         })
@@ -102,19 +104,74 @@ export class AuthenticationService {
     }
 
     get token() {
+        return this.retrieveAuthToken().then(token => {
+            if (token === null) {
+                this.logout();
+                this.router.navigate(['/']);
+            }
+            if (token.expirationDate <= new Date()) {
+                return this.retrieveRefToken().then(refToken => {
+                    if (refToken === null) {
+                        this.logout();
+                        this.router.navigate(['/']);
+                    }
+                    if (refToken.expirationDate <= new Date()) {
+                        this.logout();
+                        this.router.navigate(['/']);
+                    } else {
+                        return this.http.get<Respons>(
+                            `http://${environment.serverIp}/refresh`,
+                            {
+                                headers: new HttpHeaders({
+                                    Authorization: `Bearer ${refToken.token}`
+                                })
+                            }
+                        ).toPromise().then(response => {
+                            this.setAuthToken(response.access_token, response.access_token_exp);
+                            return response.access_token;
+                        })
+                    }
+
+                });
+            }
+            else {
+                return token.token;
+            }
+        });
+    }
+
+    private retrieveRefToken() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then(user => {
+            return this.storage.get('logged_user').then<Token>(user => {
+                this.loggedUser = this.loadUser(user);
+                return this.loggedUser.refreshToken;
+            });
+        }
+        return new Promise<Token>((resolve) => {
+            resolve(this.loggedUser.refreshToken);
+        });
+    }
+
+    private retrieveAuthToken() {
+        if (!this.loggedUser) {
+            return this.storage.get('logged_user').then<Token>(user => {
                 this.loggedUser = this.loadUser(user);
                 return this.loggedUser.accessToken;
             });
         }
-        return new Promise((resolve) => {
+        return new Promise<Token>((resolve) => {
             resolve(this.loggedUser.accessToken);
         });
     }
 
-    setToken(token: string) {
-        this.loggedUser.accessToken = token;
+    setAuthToken(token: string, interval: number) {
+
+        this.loggedUser.accessToken = new Token(token, new Date(interval*1000));
+        this.serialize();
+    }
+
+    setRefreshToken(token: string, interval: number) {
+        this.loggedUser.refreshToken = new Token(token, new Date(interval*1000));
         this.serialize();
     }
 
@@ -148,9 +205,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then(user => {
                 this.loggedUser = this.loadUser(user);
-                this.loggedUser = new LoggedUser(
-
-                )
                 return this.loggedUser.user;
             });
         }
@@ -173,7 +227,7 @@ export class AuthenticationService {
 
         let tmpUser;
 
-        if(tmp.isUser) {
+        if (tmp.isUser) {
             tmpUser = new Paziente(
                 tmp.user.name,
                 tmp.user.surname,
@@ -199,7 +253,8 @@ export class AuthenticationService {
 
         const loggedUser = new LoggedUser();
         loggedUser.isUser = tmp.isUser;
-        loggedUser.accessToken = tmp.accessToken;
+        loggedUser.accessToken = new Token(tmp.accessToken.token, new Date(tmp.accessToken.expirationDate));
+        loggedUser.refreshToken = new Token(tmp.refreshToken.token, new Date(tmp.refreshToken.expirationDate));
         loggedUser.user = tmpUser;
         return loggedUser;
     }

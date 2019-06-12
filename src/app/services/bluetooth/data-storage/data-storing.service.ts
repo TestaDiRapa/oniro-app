@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from '../../authentication/authentication.service';
 import { ApneaEvent } from './apnea-event.model';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 export interface RawBluetoothData {
     spo2: number;
