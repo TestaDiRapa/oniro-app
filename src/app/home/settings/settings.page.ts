@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService.service';
 import { MenuController, AlertController } from '@ionic/angular';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
-
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
@@ -15,7 +14,7 @@ export class SettingsPage implements OnInit {
 
   public isEmpty: boolean;
   public isLoaded = false;
-  public img: string;
+  public urlImgage: string;
   public base64Image: string;
   public isUser = true;
   public name: string;
@@ -36,9 +35,10 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     this.authService.getUser().then(user => {
+      console.log("Cosa ci sta? "+user.getImg());
       if (user.getImg()) {
         this.isEmpty = false;
-        this.img = user.getImg();
+        this.base64Image = user.getImg();
       } else {
         this.isEmpty = true;
       }
@@ -48,7 +48,7 @@ export class SettingsPage implements OnInit {
       this.email = user.getMail();
       this.authService.getUserType().then(isUser => {
         this.isUser = isUser;
-        if(isUser){
+        if (isUser) {
           this.id = user.getCf();
           this.age = user.getAge();
         } else {
@@ -69,6 +69,7 @@ export class SettingsPage implements OnInit {
     }
     this.userService.changeProfile(formData).subscribe(success => {
       success.subscribe(resData => {
+        console.log('ResData PEr Age', resData);
         if (resData.status === 'ok') {
           this.authService.getUser().then(user => {
             if (type === 'addr') {
@@ -242,16 +243,16 @@ export class SettingsPage implements OnInit {
   accessCamera() {
     const options: CameraOptions = {
       quality: 100,
-      targetHeight: 250,
-      targetWidth: 250,
+      targetHeight: 350,
+      targetWidth: 350,
       sourceType: this.camera.PictureSourceType.CAMERA,
       destinationType: this.camera.DestinationType.FILE_URI,
-      //encodingType: this.camera.EncodingType.PNG,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
     this.camera.getPicture(options).then((imgData) => {
-      this.img = (<any>window).Ionic.WebView.convertFileSrc(imgData);
+      this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
+      this.base64Image = this.urlImgage;
     }, (err) => {
       console.log(err);
     });
@@ -264,92 +265,29 @@ export class SettingsPage implements OnInit {
       targetWidth: 350,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       destinationType: this.camera.DestinationType.FILE_URI,
-      //encodingType: this.camera.EncodingType.PNG,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
-      /*
-      this.img = imgData;
-      this.uploadImage(imgData);
-      */
-     this.base64Image = 'data:image/jpeg;base64,' + imgData;
-      let formData = new FormData();
-      formData.append('image', imgData);
+      this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      const formData = new FormData();
+      formData.append('image', this.base64Image);
       this.userService.changeProfile(formData).subscribe(success => {
         success.subscribe(resData => {
           if (resData.status === 'ok') {
-            console.log("OOOOOOOOOOOOOOOOOK \n");
-            console.log(this.img);
-            this.base64Image = 'data:image/jpeg;base64,' + this.img;
-            this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+            this.urlImgage = resData.message; // url dell'immagine
+            this.authService.getUser().then(user => {
+              user.setImg(this.urlImgage);
+              this.authService.setUser(user);
+            });
           } else {
-              //this.alertCtrl.create({ header: resData.toString() }).then(alert => alert.present());
-              console.log("OH nooooooooo \n");
-              //console.log(this.img);
-              console.log("MESSAGGIO -- "+resData.message);
-              console.log(resData);
-            }
-          });
+            this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          }
         });
-
-      console.log("FILEuri -- "+imgData);
-      this.base64Image = 'data:image/jpeg;base64,' + imgData;
-      console.log("base64: --- " + this.base64Image);
+      });
     }, (err) => {
       console.log(err);
     });
   }
-
-  private uploadImage(imageFileUri: any) {
-    console.log("in upload image");
-    console.log("FILE URI: " + this.img);
-    window['resolveLocalFileSystemURL'](imageFileUri,
-      entry => {
-        entry['file'](file => {
-          console.log("prima di read file: \n " + file);
-          this.readFile(file)});
-      });
-  }
-
-
-  private readFile(file: any) {
-    console.log("readfile method");
-    const reader = new FileReader();
-    const formData = new FormData();
-    // formData.append("file", { uri: "file://path/to/image.png", type: "image/png" });
-    reader.onloadend = () => {
-      const imgBlob = new Blob([reader.result], { type: file.type });
-      console.log("result reader:  " + reader.result);
-      console.log("tupe: -- " + file.type);
-      formData.append('file', imgBlob, file.name);
-      this.requestPost(formData);
-    };
-    reader.readAsArrayBuffer(file);
-  }
-
-    private requestPost(formData: FormData){
-    this.userService.changeProfile(formData).subscribe(success => {
-      success.subscribe(resData => {
-        if (resData.status === 'ok') {
-          console.log("OOOOOOOOOOOOOOOOOK \n");
-          console.log(this.img);
-          this.base64Image = 'data:image/jpeg;base64,' + this.img;
-          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
-          // update the storage if the media server is updated
-          //this.img = imgData;
-          //console.log(this.img);
-          //this.user.setImg(imgData);
-          //this.userService.setUser(this.user);
-        } else {
-          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
-          console.log("OH nooooooooo \n");
-          console.log(this.img);
-        }
-
-      });
-    });
-  }
-  
 
 }
