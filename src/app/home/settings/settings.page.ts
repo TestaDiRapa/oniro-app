@@ -3,9 +3,8 @@ import { UserService } from '../../services/userService.service';
 import { Paziente } from '../../register/paziente.model';
 import { MenuController, AlertController } from '@ionic/angular';
 import { Medico } from '../../register/medico.model';
-import { AuthenticationService, Respons } from 'src/app/services/authentication.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-
 
 @Component({
   selector: 'app-settings',
@@ -18,31 +17,30 @@ export class SettingsPage implements OnInit {
   public isEmpty: boolean;
   public isUser = false;
   public isLoaded = false;
-  public img = '';
-  // public base64Image: string;
+  public img: string;
+  public base64Image: string;
 
   constructor(
     private userService: UserService,
     private authService: AuthenticationService,
     private menuCtrl: MenuController,
     private alertCtrl: AlertController,
-    private camera: Camera
-  ) {}
+    private camera: Camera,
+  ) { }
 
   ngOnInit() {
     this.userService.getUser().then(user => {
       this.user = user;
       if (this.user.getImg()) {
-          this.isEmpty = false;
-          this.img = this.user.getImg();
-        } else {
-          this.isEmpty = true;
-        }
+        this.isEmpty = false;
+        this.img = this.user.getImg();
+      } else {
+        this.isEmpty = true;
+      }
       this.authService.getUserType().then(userType => {
         this.isUser = userType;
         this.isLoaded = true;
       });
-      console.log(this.isEmpty);
     });
     this.menuCtrl.toggle();
   }
@@ -224,10 +222,13 @@ export class SettingsPage implements OnInit {
       targetHeight: 250,
       targetWidth: 250,
       sourceType: this.camera.PictureSourceType.CAMERA,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.PNG,
+      mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
-    this.camera.getPicture(options).then((imageData) => {
-      this.img = (<any>window).Ionic.WebView.convertFileSrc(imageData);
+    this.camera.getPicture(options).then((imgData) => {
+      this.img = (<any>window).Ionic.WebView.convertFileSrc(imgData);
     }, (err) => {
       console.log(err);
     });
@@ -239,35 +240,68 @@ export class SettingsPage implements OnInit {
       targetHeight: 350,
       targetWidth: 350,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      correctOrientation: true
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.PNG,
+      mediaType: this.camera.MediaType.PICTURE,
+      correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
-      console.log(imgData);
-      this.updateImage(imgData);
-      // this.base64Image = 'data:image/jpeg;base64,' + imgData;
-      // this.user.setImg(this.base64Image);
+      this.img = imgData;
+      this.uploadImage(imgData);
     }, (err) => {
       console.log(err);
     });
   }
 
-  private updateImage(imgData: string) {
+  
+  private uploadImage(imageFileUri: any) {
+    console.log("in upload image");
+    console.log("FILE URI: " + this.img);
+    window['resolveLocalFileSystemURL'](imageFileUri,
+      entry => {
+        entry['file'](file => {
+          console.log("prima di read file: \n " + file);
+          this.readFile(file)});
+      });
+  }
+
+
+  private readFile(file: any) {
+    console.log("readfile method");
+    const reader = new FileReader();
     const formData = new FormData();
-    formData.append('image', this.img);
+    // formData.append("file", { uri: "file://path/to/image.png", type: "image/png" });
+    reader.onloadend = () => {
+      const imgBlob = new Blob([reader.result], { type: file.type });
+      console.log("result reader:  " + reader.result);
+      console.log("tupe: -- " + file.type);
+      formData.append('file', imgBlob, file.name);
+      this.requestPost(formData);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+    private requestPost(formData: FormData){
     this.userService.changeProfile(formData).subscribe(success => {
       success.subscribe(resData => {
         if (resData.status === 'ok') {
-          // update the storage if the media server is updated
-          this.img = imgData;
+          console.log("OOOOOOOOOOOOOOOOOK \n");
           console.log(this.img);
-          this.user.setImg(imgData);
-          this.userService.setUser(this.user);
+          this.base64Image = 'data:image/jpeg;base64,' + this.img;
+          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          // update the storage if the media server is updated
+          //this.img = imgData;
+          //console.log(this.img);
+          //this.user.setImg(imgData);
+          //this.userService.setUser(this.user);
         } else {
           this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          console.log("OH nooooooooo \n");
           console.log(this.img);
         }
       });
     });
   }
+  
 
 }

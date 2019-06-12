@@ -18,10 +18,10 @@
           <ion-card-content>
               <ion-thumbnail *ngIf="isEmpty">
                   <img src="assets/image/panda-login.jpg">
-                </ion-thumbnail>
-              <ion-thumbnail *ngIf="!isEmpty">
-                  <img [src]="img">
-                </ion-thumbnail>
+              </ion-thumbnail>
+              <ion-thumbnail >
+                  <img [src]="base64Image">
+              </ion-thumbnail>
             <ion-button (click)="accessCamera()">Camera
               <ion-icon slot="start" name="camera"></ion-icon>
             </ion-button>
@@ -76,12 +76,5 @@
         </ion-card>
       </ion-col>
     </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <img [src]="img">
-      </ion-col>
-    </ion-row>
-
   </ion-grid>
 </ion-content>
