@@ -15,6 +15,7 @@ import { SelectDevicePageModule } from './home/record/select-device/select-devic
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { Camera } from '@ionic-native/camera/ngx';
     IonicStorageModule.forRoot()
   ],
   providers: [
+    BackgroundMode,
     BluetoothSerial,
     Network,
     StatusBar,

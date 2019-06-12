@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { ModalController, AlertController } from '@ionic/angular';
 import { SelectDevicePage } from './select-device/select-device.page';
 import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data-storing.service';
-import { interval, Subscription, observable } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-record',
