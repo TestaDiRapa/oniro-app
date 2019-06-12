@@ -9,10 +9,10 @@
 
 <ion-content>
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-      <ion-segment (ionChange)="onChange($event, f)">
-          <ion-segment-button value="doc">Dottore</ion-segment-button>
-          <ion-segment-button value="user" checked>Paziente</ion-segment-button>
-        </ion-segment>
+    <ion-segment (ionChange)="onChange($event, f)">
+      <ion-segment-button value="doc">Dottore</ion-segment-button>
+      <ion-segment-button value="user" checked>Paziente</ion-segment-button>
+    </ion-segment>
     <ion-grid>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
@@ -84,8 +84,9 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-button expand="block" type="submit" [disabled]="!f.valid">
-              <ion-icon slot="end" ios="ios-person-add" md="md-person-add"></ion-icon>
-            Submit</ion-button>
+            <ion-icon slot="end" ios="ios-person-add" md="md-person-add"></ion-icon>
+            Submit
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

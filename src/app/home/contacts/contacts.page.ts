@@ -28,17 +28,15 @@ export class ContactsPage implements OnInit {
     this.getContact();
   }
 
-  getContact() {
+  private getContact() {
     this.loadingController.onCreate();
     this.userService.getMyDoctor().then(success => {
       success.subscribe(res => {
         this.contacts = res.message;
         this.loadingController.onDismiss();
-
       });
     });
     this.loadingController.onDismiss();
-
   }
 
   async callNumber(phone: string): Promise<any> {

@@ -73,7 +73,7 @@ export class LoginPage implements OnInit {
     this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
       if (res.status === 'ok') {
         const authToken = res.access_token;
-        const authExp = res.access_token_exp
+        const authExp = res.access_token_exp;
         this.authService.setAuthToken(authToken, authExp);
 
         const refToken = res.refresh_token;
@@ -83,7 +83,6 @@ export class LoginPage implements OnInit {
         this.http.get<any>(`http://${environment.serverIp}/me`, {
           headers: new HttpHeaders({ Authorization: `Bearer ${authToken}` })
         }).subscribe(response => {
-          
           if (response.status === 'ok') {
             let imagePath = '';
             if (response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
@@ -105,14 +104,11 @@ export class LoginPage implements OnInit {
             this.router.navigateByUrl('/' + this.path);
           }
         });
-
       } else {
         this.loadingController.onDismiss();
         this.presentAlert(res.message);
       }
-
     });
-
   }
 
 }

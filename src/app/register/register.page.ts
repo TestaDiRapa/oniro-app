@@ -6,7 +6,6 @@ import { Paziente } from './paziente.model';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Medico } from './medico.model';
 import { AlertController, MenuController } from '@ionic/angular';
-import { UserService } from '../services/userService.service';
 import { LoaderService } from '../services/loader-service.service';
 
 @Component({
@@ -19,13 +18,12 @@ export class RegisterPage implements OnInit {
   private paziente: Paziente;
   private medico: Medico;
 
-  constructor(private router: Router,
-    private auth: AuthenticationService,
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService,
     private alertCtrl: AlertController,
-    private userService: UserService,
     private menuCtrl: MenuController,
     public loadingController: LoaderService
-
   ) { }
 
   ngOnInit() {
@@ -44,26 +42,24 @@ export class RegisterPage implements OnInit {
       if (this.isUser) {
         this.paziente = new Paziente(form.value['nome'], form.value['cognome'],
           form.value['password'], form.value['telefono'],
-          // tslint:disable-next-line: no-string-literal
           form.value['email'], form.value['cf'], form.value['eta'], '');
         this.loadingController.onCreate();
-        this.auth.register(this.paziente, this.isUser).subscribe(resData => {
+        this.authService.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
-            
-            this.auth.isAuthenticated = true;
-            
+            this.authService.isAuthenticated = true;
+
             const authToken = resData.access_token;
-            const authExp = resData.access_token_exp
-            this.auth.setAuthToken(authToken, authExp);
-    
+            const authExp = resData.access_token_exp;
+            this.authService.setAuthToken(authToken, authExp);
+
             const refToken = resData.refresh_token;
             const refExp = resData.refresh_token_exp;
-            this.auth.setRefreshToken(refToken, refExp);
+            this.authService.setRefreshToken(refToken, refExp);
 
-            this.auth.setUser(this.paziente);
-            
+            this.authService.setUser(this.paziente);
+
             this.presentAlert('Registrazione effettuata con successo!');
-            this.router.navigateByUrl('/home'); 
+            this.router.navigateByUrl('/home');
           } else {
             this.presentAlert(resData.status);
           }
@@ -72,22 +68,21 @@ export class RegisterPage implements OnInit {
         const address = form.value['via'] + ' ' + form.value['civico'] + ' ' + form.value['citta'] + ' ' + form.value['provincia'];
         this.medico = new Medico(form.value['nome'], form.value['cognome'],
           form.value['password'], form.value['telefono'],
-          // tslint:disable-next-line: no-string-literal
           form.value['email'], form.value['idalbo'], address, '');
 
-        this.auth.register(this.medico, this.isUser).subscribe(resData => {
+        this.authService.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.loadingController.onDismiss();
 
             const authToken = resData.access_token;
-            const authExp = resData.access_token_exp
-            this.auth.setAuthToken(authToken, authExp);
-    
+            const authExp = resData.access_token_exp;
+            this.authService.setAuthToken(authToken, authExp);
+
             const refToken = resData.refresh_token;
             const refExp = resData.refresh_token_exp;
-            this.auth.setRefreshToken(refToken, refExp);
+            this.authService.setRefreshToken(refToken, refExp);
 
-            this.auth.setUser(this.medico);
+            this.authService.setUser(this.medico);
 
             this.presentAlert('Registrazione effettuata con successo!');
             this.router.navigateByUrl('/homedoc');
@@ -97,7 +92,7 @@ export class RegisterPage implements OnInit {
           }
         });
 
-        
+
       }
     } else {
       this.presentAlert('Form non valido. Riprova');

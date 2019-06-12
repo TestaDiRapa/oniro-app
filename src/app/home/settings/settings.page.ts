@@ -69,7 +69,6 @@ export class SettingsPage implements OnInit {
     }
     this.userService.changeProfile(formData).subscribe(success => {
       success.subscribe(resData => {
-        console.log('ResData PEr Age', resData);
         if (resData.status === 'ok') {
           this.authService.getUser().then(user => {
             if (type === 'addr' && user.hasOwnProperty('address')) {
@@ -251,7 +250,7 @@ export class SettingsPage implements OnInit {
       correctOrientation: true
     };
     this.camera.getPicture(options).then((imgData) => {
-      this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
+      this.urlImgage = (<any> window).Ionic.WebView.convertFileSrc(imgData);
       this.base64Image = this.urlImgage;
     }, (err) => {
       console.log(err);
@@ -275,9 +274,7 @@ export class SettingsPage implements OnInit {
       this.userService.changeProfile(formData).subscribe(success => {
         success.subscribe(resData => {
           if (resData.status === 'ok') {
-            console.log("PRIMA: " + this.urlImgage);
             this.urlImgage = resData.message; // url dell'immagine
-            console.log("DOPO: " + this.urlImgage);
             this.authService.getUser().then(user => {
               user.image = this.urlImgage;
               this.authService.setUser(user);

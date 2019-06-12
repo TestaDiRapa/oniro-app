@@ -8,12 +8,7 @@ export class LoaderService {
 
   isLoading = false;
 
-
-  constructor(
-    public loadingController: LoadingController,
-
-  ) { }
-
+  constructor(public loadingController: LoadingController) { }
 
   async onCreate() {
     return await this.loadingController.create({

@@ -166,12 +166,12 @@ export class AuthenticationService {
 
     setAuthToken(token: string, interval: number) {
 
-        this.loggedUser.accessToken = new Token(token, new Date(interval*1000));
+        this.loggedUser.accessToken = new Token(token, new Date(interval * 1000));
         this.serialize();
     }
 
     setRefreshToken(token: string, interval: number) {
-        this.loggedUser.refreshToken = new Token(token, new Date(interval*1000));
+        this.loggedUser.refreshToken = new Token(token, new Date(interval * 1000));
         this.serialize();
     }
 
