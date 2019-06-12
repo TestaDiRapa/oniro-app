@@ -37,14 +37,17 @@ export class AuthenticationService {
             return this.storage.get('logged_user').then<boolean>(user => {
                 if (user) {
                     this.loggedUser = JSON.parse(user);
+                    console.log("1", user, this.loggedUser);
                     return true;
                 }
                 else {
                     this.loggedUser = new LoggedUser();
+                    console.log("2", this.loggedUser)
                     return false;
                 }
             });
         }
+        console.log("3", this.loggedUser);
         return new Promise<boolean>((resolve) => {
             resolve(true);
         })
