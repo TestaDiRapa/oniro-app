@@ -246,8 +246,16 @@ export class SettingsPage implements OnInit {
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
+      
       this.img = imgData;
       this.uploadImage(imgData);
+      
+     // this.base64Image = 'data:image/jpeg;base64,' + imgData;
+     // window.atob(this.base64Image);
+
+
+
+
     }, (err) => {
       console.log(err);
     });
