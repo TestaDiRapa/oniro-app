@@ -34,25 +34,26 @@ export class SettingsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.authService.getUser().then(user => { console.log(user); });
     this.authService.getUser().then(user => {
-      if (user.getImg()) {
+      if (user.image) {
         this.isEmpty = false;
-        this.base64Image = user.getImg();
+        this.base64Image = user.image;
       } else {
         this.isEmpty = true;
       }
-      this.name = user.getName();
-      this.surname = user.getSurname();
-      this.phone = user.getPhone();
-      this.email = user.getMail();
+      this.name = user.name;
+      this.surname = user.surname;
+      this.phone = user.phone_number
+      this.email = user.email;
       this.authService.getUserType().then(isUser => {
         this.isUser = isUser;
         if (isUser) {
-          this.id = user.getCf();
-          this.age = user.getAge();
+          this.id = user['cf'];
+          this.age = user['age'];
         } else {
-          this.id = user.getAlbo();
-          this.address = user.getAddress();
+          this.id = user['id'];
+          this.address = user['address'];
         }
         this.isLoaded = true;
       });
@@ -71,14 +72,14 @@ export class SettingsPage implements OnInit {
         console.log('ResData PEr Age', resData);
         if (resData.status === 'ok') {
           this.authService.getUser().then(user => {
-            if (type === 'addr') {
-              user.setAddress(formData.get('address').toString());
+            if (type === 'addr' && user.hasOwnProperty('address')) {
+              user['address'] = formData.get('address').toString();
               this.address = formData.get('address').toString();
-            } else if (type === 'phone') {
-              user.setPhone(formData.get('phone_number').toString());
+            } else if (type === 'phone' ) {
+              user.phone_number = formData.get('phone_number').toString();
               this.phone = formData.get('phone_number').toString();
-            } else if (type === 'age') {
-              user.setAge(formData.get('age').toString());
+            } else if (type === 'age' && user.hasOwnProperty('age')) {
+              user['age'] = formData.get('age').toString();
               this.age = formData.get('age').toString();
             }
             this.authService.setUser(user);
@@ -129,7 +130,7 @@ export class SettingsPage implements OnInit {
           {
             name: 'telefono',
             type: 'tel',
-            placeholder: user.getPhone(),
+            placeholder: user.phone_number,
           }],
         buttons: [
           {
@@ -276,7 +277,7 @@ export class SettingsPage implements OnInit {
           if (resData.status === 'ok') {
             this.urlImgage = resData.message; // url dell'immagine
             this.authService.getUser().then(user => {
-              user.setImg(this.urlImgage);
+              user.image = this.urlImgage;
               this.authService.setUser(user);
             });
           } else {

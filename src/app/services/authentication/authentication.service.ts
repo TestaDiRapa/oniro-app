@@ -23,7 +23,7 @@ export interface Respons {
 })
 export class AuthenticationService {
     isAuthenticated = true;
-    public loggedUser: LoggedUser;
+    private loggedUser: LoggedUser;
     private userType = new BehaviorSubject<boolean>(true);
 
     constructor(
@@ -42,17 +42,14 @@ export class AuthenticationService {
             return this.storage.get('logged_user').then<boolean>(user => {
                 if (user) {
                     this.loggedUser = JSON.parse(user);
-                    console.log("1", user, this.loggedUser);
                     return true;
                 }
                 else {
                     this.loggedUser = new LoggedUser();
-                    console.log("2", this.loggedUser)
                     return false;
                 }
             });
         }
-        console.log("3", this.loggedUser);
         return new Promise<boolean>((resolve) => {
             resolve(true);
         })
@@ -208,9 +205,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then(user => {
                 this.loggedUser = this.loadUser(user);
-                this.loggedUser = new LoggedUser(
-
-                )
                 return this.loggedUser.user;
             });
         }

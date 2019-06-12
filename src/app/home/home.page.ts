@@ -43,7 +43,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.auth.loggedUser);
     this.formatDate();
     this.network.onConnect().subscribe(() => {
       this.storage.get('sleep_data').then(data => {
