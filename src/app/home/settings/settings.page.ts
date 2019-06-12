@@ -246,7 +246,7 @@ export class SettingsPage implements OnInit {
       targetWidth: 250,
       sourceType: this.camera.PictureSourceType.CAMERA,
       destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.PNG,
+      //encodingType: this.camera.EncodingType.PNG,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
@@ -264,7 +264,7 @@ export class SettingsPage implements OnInit {
       targetWidth: 350,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.PNG,
+      //encodingType: this.camera.EncodingType.PNG,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true,
     };
@@ -284,9 +284,11 @@ export class SettingsPage implements OnInit {
             this.base64Image = 'data:image/jpeg;base64,' + this.img;
             this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
           } else {
-              this.alertCtrl.create({ header: resData.toString() }).then(alert => alert.present());
+              //this.alertCtrl.create({ header: resData.toString() }).then(alert => alert.present());
               console.log("OH nooooooooo \n");
-              console.log(this.img);
+              //console.log(this.img);
+              console.log("MESSAGGIO -- "+resData.message);
+              console.log(resData);
             }
           });
         });
