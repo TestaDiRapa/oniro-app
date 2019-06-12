@@ -4,6 +4,8 @@ import { MenuController, AlertController } from '@ionic/angular';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Paziente } from 'src/app/register/paziente.model';
+import { Medico } from 'src/app/register/medico.model';
 
 @Component({
   selector: 'app-settings',
@@ -36,6 +38,7 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     this.authService.getUser().then(user => {
+      console.log(user);
       if (user.getImg()) {
         this.isEmpty = false;
         this.img = user.getImg();
@@ -48,7 +51,7 @@ export class SettingsPage implements OnInit {
       this.email = user.getMail();
       this.authService.getUserType().then(isUser => {
         this.isUser = isUser;
-        if(isUser){
+        if (isUser) {
           this.id = user.getCf();
           this.age = user.getAge();
         } else {
@@ -59,7 +62,7 @@ export class SettingsPage implements OnInit {
       });
     });
 
-    this.menuCtrl.toggle();
+    this.menuCtrl.close();
   }
 
   private onSubmit(key: string[], value: string[], type: string) {
@@ -81,7 +84,7 @@ export class SettingsPage implements OnInit {
               user.setAge(formData.get('age').toString());
               this.age = formData.get('age').toString();
             }
-            this.authService.saveUser();
+            this.authService.setUser(user);
             this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
           });
         } else {
@@ -273,7 +276,7 @@ export class SettingsPage implements OnInit {
       this.img = imgData;
       this.uploadImage(imgData);
       */
-     this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      this.base64Image = 'data:image/jpeg;base64,' + imgData;
       let formData = new FormData();
       formData.append('image', imgData);
       this.userService.changeProfile(formData).subscribe(success => {
@@ -282,18 +285,19 @@ export class SettingsPage implements OnInit {
             console.log("OOOOOOOOOOOOOOOOOK \n");
             console.log(this.img);
             this.base64Image = 'data:image/jpeg;base64,' + this.img;
+            
             this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
           } else {
-              //this.alertCtrl.create({ header: resData.toString() }).then(alert => alert.present());
-              console.log("OH nooooooooo \n");
-              //console.log(this.img);
-              console.log("MESSAGGIO -- "+resData.message);
-              console.log(resData);
-            }
-          });
+            //this.alertCtrl.create({ header: resData.toString() }).then(alert => alert.present());
+            console.log("OH nooooooooo \n");
+            //console.log(this.img);
+            console.log("MESSAGGIO -- " + resData.message);
+            console.log(resData);
+          }
         });
+      });
 
-      console.log("FILEuri -- "+imgData);
+      console.log("FILEuri -- " + imgData);
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
       console.log("base64: --- " + this.base64Image);
     }, (err) => {
@@ -308,7 +312,8 @@ export class SettingsPage implements OnInit {
       entry => {
         entry['file'](file => {
           console.log("prima di read file: \n " + file);
-          this.readFile(file)});
+          this.readFile(file)
+        });
       });
   }
 
@@ -328,7 +333,7 @@ export class SettingsPage implements OnInit {
     reader.readAsArrayBuffer(file);
   }
 
-    private requestPost(formData: FormData){
+  private requestPost(formData: FormData) {
     this.userService.changeProfile(formData).subscribe(success => {
       success.subscribe(resData => {
         if (resData.status === 'ok') {
@@ -350,6 +355,6 @@ export class SettingsPage implements OnInit {
       });
     });
   }
-  
+
 
 }
