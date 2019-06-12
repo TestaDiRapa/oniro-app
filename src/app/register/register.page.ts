@@ -49,14 +49,25 @@ export class RegisterPage implements OnInit {
         this.loadingController.onCreate();
         this.auth.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
-            this.presentAlert('Registrazione effettuata con successo!');
+            
             this.auth.isAuthenticated = true;
-            this.router.navigateByUrl('/home');
+            
+            const authToken = resData.access_token;
+            const authExp = resData.access_token_exp
+            this.auth.setAuthToken(authToken, authExp);
+    
+            const refToken = resData.refresh_token;
+            const refExp = resData.refresh_token_exp;
+            this.auth.setRefreshToken(refToken, refExp);
+
+            this.auth.setUser(this.paziente);
+            
+            this.presentAlert('Registrazione effettuata con successo!');
+            this.router.navigateByUrl('/home'); 
           } else {
             this.presentAlert(resData.status);
           }
         });
-        this.auth.setUser(this.paziente);
       } else {
         const address = form.value['via'] + ' ' + form.value['civico'] + ' ' + form.value['citta'] + ' ' + form.value['provincia'];
         this.medico = new Medico(form.value['nome'], form.value['cognome'],
@@ -67,6 +78,17 @@ export class RegisterPage implements OnInit {
         this.auth.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.loadingController.onDismiss();
+
+            const authToken = resData.access_token;
+            const authExp = resData.access_token_exp
+            this.auth.setAuthToken(authToken, authExp);
+    
+            const refToken = resData.refresh_token;
+            const refExp = resData.refresh_token_exp;
+            this.auth.setRefreshToken(refToken, refExp);
+
+            this.auth.setUser(this.medico);
+
             this.presentAlert('Registrazione effettuata con successo!');
             this.router.navigateByUrl('/homedoc');
           } else {
@@ -75,7 +97,7 @@ export class RegisterPage implements OnInit {
           }
         });
 
-        this.auth.setUser(this.medico);
+        
       }
     } else {
       this.presentAlert('Form non valido. Riprova');

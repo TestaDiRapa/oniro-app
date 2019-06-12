@@ -75,10 +75,16 @@ export class LoginPage implements OnInit {
     this.loadingController.onCreate();
     this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
       if (res.status === 'ok') {
-        const token = res.access_token;
-        this.authService.setToken(token);
+        const authToken = res.access_token;
+        const authExp = res.access_token_exp
+        this.authService.setAuthToken(authToken, authExp);
+
+        const refToken = res.refresh_token;
+        const refExp = res.refresh_token_exp;
+        this.authService.setRefreshToken(refToken, refExp);
+
         this.http.get<any>(`http://${environment.serverIp}/me`, {
-          headers: new HttpHeaders({ Authorization: 'Bearer ' + token })
+          headers: new HttpHeaders({ Authorization: `Bearer ${authToken}` })
         }).subscribe(response => {
           /*
           this.transfer.create().download(
