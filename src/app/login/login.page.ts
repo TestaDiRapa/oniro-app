@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { SegmentChangeEventDetail } from '@ionic/core';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 import { UserService } from '../services/userService.service';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
@@ -78,17 +78,15 @@ export class LoginPage implements OnInit {
         }).subscribe(resu => {
           this.authService.isAuthenticated = true;
           if (this.isUser) {
-            this.userService.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
+            this.authService.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
               resu.message['phone_number'], resu.message['email'], resu.message['_id'],
               resu.message['age'], ''));
-
-            this.path = 'home';
+              this.path = 'home';
           } else {
-            this.userService.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
+            this.authService.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
               resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
               resu.message['address'], ''));
-
-            this.path = 'homedoc';
+              this.path = 'homedoc';
           }
           this.loadingController.onDismiss();
           this.router.navigateByUrl('/' + this.path);

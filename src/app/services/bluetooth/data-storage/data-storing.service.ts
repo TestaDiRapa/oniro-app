@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 import { BluetoothData } from './bluetooth-data.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { AuthenticationService, Respons } from '../../authentication.service';
+import { AuthenticationService, Respons } from '../../authentication/authentication.service';
 import { ApneaEvent } from './apnea-event.model';
 import { AlertController } from '@ionic/angular';
 
