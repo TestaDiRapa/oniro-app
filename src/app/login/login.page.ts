@@ -4,13 +4,15 @@ import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthenticationService } from '../services/authentication/authentication.service';
-import { UserService } from '../services/userService.service';
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
-import { HttpClient,  HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MenuController } from '@ionic/angular';
 import { LoaderService } from '../services/loader-service.service';
 import { environment } from 'src/environments/environment';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { File } from '@ionic-native/file/ngx';
+
 
 @Component({
   selector: 'app-login',
@@ -25,12 +27,14 @@ export class LoginPage implements OnInit {
 
 
   constructor(private router: Router,
-              private authService: AuthenticationService,
-              private userService: UserService,
-              private http: HttpClient,
-              private menuCtrl: MenuController,
-              public loadingController: LoaderService,
-              private alertCtrl: AlertController) { }
+    private authService: AuthenticationService,
+    private file: File,
+    private http: HttpClient,
+    private menuCtrl: MenuController,
+    public loadingController: LoaderService,
+    private alertCtrl: AlertController,
+    private transfer: FileTransfer,
+  ) { }
 
 
   ngOnInit() {
@@ -40,7 +44,7 @@ export class LoginPage implements OnInit {
     const alert = this.alertCtrl.create({
       subHeader: mex,
       buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
-    }).then( (alert) => alert.present());
+    }).then((alert) => alert.present());
   }
 
 
@@ -75,21 +79,38 @@ export class LoginPage implements OnInit {
         this.authService.setToken(token);
         this.http.get<any>(`http://${environment.serverIp}/me`, {
           headers: new HttpHeaders({ Authorization: 'Bearer ' + token })
-        }).subscribe(resu => {
-          this.authService.isAuthenticated = true;
-          if (this.isUser) {
-            this.authService.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
-              resu.message['phone_number'], resu.message['email'], resu.message['_id'],
-              resu.message['age'], ''));
+        }).subscribe(response => {
+          /*
+          this.transfer.create().download(
+            'http://45.76.47.94:8082/mediaserver/TEST-propic.jpg',
+            this.file.dataDirectory + "propic.jpg"
+          ).then(entry => {
+            console.log('download complete: ' + entry.toURL());
+          }, (error) => {
+            console.log('error', error);
+          })
+          */
+
+          if (response.status === 'ok') {
+            let imagePath = ''
+            if(response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
+              imagePath = response.message['profile_picture'];
+            }
+            this.authService.isAuthenticated = true;
+            if (this.isUser) {
+              this.authService.setUser(new Paziente(response.message['name'], response.message['surname'], null,
+                response.message['phone_number'], response.message['email'], response.message['_id'],
+                response.message['age'], imagePath));
               this.path = 'home';
-          } else {
-            this.authService.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
-              resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
-              resu.message['address'], ''));
+            } else {
+              this.authService.setUser(new Medico(response.message['name'], response.message['surname'], null,
+                response.message['phone_number'], response.message['email'], response.message['_id'],
+                response.message['address'], imagePath));
               this.path = 'homedoc';
+            }
+            this.loadingController.onDismiss();
+            this.router.navigateByUrl('/' + this.path);
           }
-          this.loadingController.onDismiss();
-          this.router.navigateByUrl('/' + this.path);
         });
 
       } else {

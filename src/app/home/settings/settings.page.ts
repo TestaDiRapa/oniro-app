@@ -35,7 +35,6 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     this.authService.getUser().then(user => {
-      console.log("Cosa ci sta? "+user.getImg());
       if (user.getImg()) {
         this.isEmpty = false;
         this.base64Image = user.getImg();
@@ -59,7 +58,7 @@ export class SettingsPage implements OnInit {
       });
     });
 
-    this.menuCtrl.toggle();
+    this.menuCtrl.close();
   }
 
   private onSubmit(key: string[], value: string[], type: string) {
@@ -82,7 +81,7 @@ export class SettingsPage implements OnInit {
               user.setAge(formData.get('age').toString());
               this.age = formData.get('age').toString();
             }
-            this.authService.saveUser();
+            this.authService.setUser(user);
             this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
           });
         } else {
@@ -289,5 +288,4 @@ export class SettingsPage implements OnInit {
       console.log(err);
     });
   }
-
 }
