@@ -12,7 +12,6 @@ export class AuthGuard implements CanLoad  {
               private router: Router) {}
 
     canLoad(_route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-      console.log("auth",this.authService.getAuthentication());
       return this.authService.getAuthentication();
 }
 }

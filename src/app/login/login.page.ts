@@ -10,6 +10,7 @@ import { Medico } from '../register/medico.model';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
 import { MenuController } from '@ionic/angular';
 import { LoaderService } from '../services/loader-service.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -72,20 +73,18 @@ export class LoginPage implements OnInit {
       if (res.status === 'ok') {
         const token = res.access_token;
         this.authService.setToken(token);
-        this.http.get<any>('http://45.76.47.94:8080/me', {
+        this.http.get<any>(`http://${environment.serverIp}/me`, {
           headers: new HttpHeaders({ Authorization: 'Bearer ' + token })
         }).subscribe(resu => {
           this.authService.isAuthenticated = true;
           if (this.isUser) {
             this.userService.setUser(new Paziente(resu.message['name'], resu.message['surname'], null,
-// tslint:disable-next-line: no-string-literal
               resu.message['phone_number'], resu.message['email'], resu.message['_id'],
               resu.message['age'], ''));
 
             this.path = 'home';
           } else {
             this.userService.setUser(new Medico(resu.message['name'], resu.message['surname'], null,
-// tslint:disable-next-line: no-string-literal
               resu.message['phone_number'], resu.message['email'], resu.message['_id'], 
               resu.message['address'], ''));
 
