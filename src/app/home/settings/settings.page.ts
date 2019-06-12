@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService.service';
 import { MenuController, AlertController } from '@ionic/angular';
-import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
@@ -38,6 +38,7 @@ export class SettingsPage implements OnInit {
       if (user.getImg()) {
         this.isEmpty = false;
         this.base64Image = user.getImg();
+        console.log("quando entro: " + this.base64Image);
       } else {
         this.isEmpty = true;
       }
@@ -269,12 +270,14 @@ export class SettingsPage implements OnInit {
     };
     this.camera.getPicture(options).then(imgData => {
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append('image', this.base64Image);
       this.userService.changeProfile(formData).subscribe(success => {
         success.subscribe(resData => {
           if (resData.status === 'ok') {
+            console.log("PRIMA: " + this.urlImgage);
             this.urlImgage = resData.message; // url dell'immagine
+            console.log("DOPO: " + this.urlImgage);
             this.authService.getUser().then(user => {
               user.setImg(this.urlImgage);
               this.authService.setUser(user);
