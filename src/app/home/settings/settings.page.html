@@ -19,7 +19,7 @@
               <ion-thumbnail *ngIf="isEmpty">
                   <img src="assets/image/panda-login.jpg">
               </ion-thumbnail>
-              <ion-thumbnail >
+              <ion-thumbnail *ngIf="!isEmpty">
                   <img [src]="base64Image">
               </ion-thumbnail>
             <ion-button (click)="accessCamera()">Camera
