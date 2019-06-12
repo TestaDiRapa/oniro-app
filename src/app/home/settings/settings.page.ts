@@ -246,22 +246,37 @@ export class SettingsPage implements OnInit {
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
-      
+      /*
       this.img = imgData;
       this.uploadImage(imgData);
-      
-     // this.base64Image = 'data:image/jpeg;base64,' + imgData;
-     // window.atob(this.base64Image);
+      */
+     this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      let formData = new FormData();
+      formData.append('image', imgData);
+      this.userService.changeProfile(formData).subscribe(success => {
+        success.subscribe(resData => {
+          if (resData.status === 'ok') {
+            console.log("OOOOOOOOOOOOOOOOOK \n");
+            console.log(this.img);
+            this.base64Image = 'data:image/jpeg;base64,' + this.img;
+            this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          } else {
+              this.alertCtrl.create({ header: resData.toString() }).then(alert => alert.present());
+              console.log("OH nooooooooo \n");
+              console.log(this.img);
+            }
+          });
+        });
 
-
-
-
+      console.log("FILEuri -- "+imgData);
+      this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      console.log("base64: --- " + this.base64Image);
     }, (err) => {
       console.log(err);
     });
   }
 
-  
+
   private uploadImage(imageFileUri: any) {
     console.log("in upload image");
     console.log("FILE URI: " + this.img);
