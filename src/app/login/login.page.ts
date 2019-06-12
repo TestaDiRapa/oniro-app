@@ -9,9 +9,9 @@ import { Medico } from '../register/medico.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MenuController } from '@ionic/angular';
 import { LoaderService } from '../services/loader-service.service';
+//import { File } from '@ionic-native/file/ngx';
 import { environment } from 'src/environments/environment';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-import { File } from '@ionic-native/file/ngx';
+//import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 
 @Component({
@@ -27,13 +27,13 @@ export class LoginPage implements OnInit {
 
 
   constructor(private router: Router,
-    private authService: AuthenticationService,
-    private file: File,
-    private http: HttpClient,
-    private menuCtrl: MenuController,
-    public loadingController: LoaderService,
-    private alertCtrl: AlertController,
-    private transfer: FileTransfer,
+              private authService: AuthenticationService,
+              //private file: File,
+              private http: HttpClient,
+              private menuCtrl: MenuController,
+              public loadingController: LoaderService,
+              private alertCtrl: AlertController,
+             //private transfer: FileTransfer,
   ) { }
 
 
@@ -92,8 +92,8 @@ export class LoginPage implements OnInit {
           */
 
           if (response.status === 'ok') {
-            let imagePath = ''
-            if(response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
+            let imagePath = '';
+            if (response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
               imagePath = response.message['profile_picture'];
             }
             this.authService.isAuthenticated = true;

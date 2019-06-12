@@ -16,8 +16,8 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-import { File } from '@ionic-native/file/ngx';
+//import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+//import { File } from '@ionic-native/file/ngx';
 
 
 @NgModule({
@@ -34,8 +34,8 @@ import { File } from '@ionic-native/file/ngx';
   providers: [
     BackgroundMode,
     BluetoothSerial,
-    FileTransfer,
-    File,
+    //FileTransfer,
+    //File,
     Network,
     StatusBar,
     SplashScreen,
