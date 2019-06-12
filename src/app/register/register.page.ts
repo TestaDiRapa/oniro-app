@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { Paziente } from './paziente.model';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Medico } from './medico.model';
 import { AlertController, MenuController } from '@ionic/angular';
 import { UserService } from '../services/userService.service';
@@ -56,7 +56,7 @@ export class RegisterPage implements OnInit {
             this.presentAlert(resData.status);
           }
         });
-        this.userService.setUser(this.paziente);
+        this.auth.setUser(this.paziente);
       } else {
         const address = form.value['via'] + ' ' + form.value['civico'] + ' ' + form.value['citta'] + ' ' + form.value['provincia'];
         this.medico = new Medico(form.value['nome'], form.value['cognome'],
@@ -75,7 +75,7 @@ export class RegisterPage implements OnInit {
           }
         });
 
-        this.userService.setUser(this.medico);
+        this.auth.setUser(this.medico);
       }
     } else {
       this.presentAlert('Form non valido. Riprova');

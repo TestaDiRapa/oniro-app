@@ -41,16 +41,16 @@
           <ion-card-content>
             <ion-list>
               <ion-item>
-                <ion-label>Nome: {{ user.getName() }}</ion-label>
+                <ion-label>Nome: {{ name }}</ion-label>
               </ion-item>
               <ion-item>
-                <ion-label>Cognome: {{ user.getSurname() }}</ion-label>
+                <ion-label>Cognome: {{ surname }}</ion-label>
               </ion-item>
               <ion-item *ngIf="isUser">
-                <ion-label>Codice Fiscale: {{ user.getCf() }}</ion-label>
+                <ion-label>Codice Fiscale: {{ id }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
-                  <ion-label>Id Albo: {{ user.getAlbo() }}</ion-label>
+                  <ion-label>Id Albo: {{ id }}</ion-label>
                 </ion-item>
               <ion-item>
                 <ion-icon slot="end" name="share-alt"></ion-icon>
@@ -58,18 +58,18 @@
               </ion-item>
               <ion-item>
                 <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label (click)="onPhoneModify()">Telefono: {{ user.getPhone().toString() }}</ion-label>
+                <ion-label (click)="onPhoneModify()">Telefono: {{ phone }}</ion-label>
               </ion-item>
               <ion-item>
-                <ion-label>E-mail: {{user.getMail().toString() }}</ion-label>
+                <ion-label>E-mail: {{ email }}</ion-label>
               </ion-item>
               <ion-item *ngIf="isUser">
                 <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label  (click)="onAgeModify()">Età: {{user.getAge().toString() }}</ion-label>
+                <ion-label  (click)="onAgeModify()">Età: {{ age }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
                   <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label (click)="onAddrModify()">Indirizzo: {{ user.getAddress() }}</ion-label>
+                <ion-label (click)="onAddrModify()">Indirizzo: {{ address }}</ion-label>
               </ion-item>
             </ion-list>
           </ion-card-content>
