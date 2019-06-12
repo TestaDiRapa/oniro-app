@@ -55,7 +55,8 @@ export class UserService {
         formData,
         {
           headers: new HttpHeaders({
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`,
+            'Cache-Control': 'no-cache'
           })
         });
     }));
