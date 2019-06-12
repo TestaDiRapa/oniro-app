@@ -40,6 +40,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   onLogout() {
+    this.auth.logout();
     this.router.navigateByUrl('/authentication');
     this.menu.enable(false);
   }

@@ -14,11 +14,18 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 })
 
 export class SettingsPage implements OnInit {
-  public user: Paziente | Medico;
+
   public isEmpty: boolean;
-  public isUser = false;
   public isLoaded = false;
+  public isUser = true;
   public img = '';
+  public name: string;
+  public surname: string;
+  public id: string;
+  public phone: string;
+  public age: string;
+  public email: string;
+  public address: string;
   // public base64Image: string;
 
   constructor(
@@ -27,26 +34,35 @@ export class SettingsPage implements OnInit {
     private menuCtrl: MenuController,
     private alertCtrl: AlertController,
     private camera: Camera
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.authService.getUser().then(user => {
-      this.user = user;
-      if (this.user.getImg()) {
-          this.isEmpty = false;
-          this.img = this.user.getImg();
+      if (user.getImg()) {
+        this.isEmpty = false;
+        this.img = user.getImg();
+      } else {
+        this.isEmpty = true;
+      }
+      this.name = user.getName();
+      this.surname = user.getSurname();
+      this.phone = user.getPhone();
+      this.email = user.getMail();
+      this.authService.getUserType().then(isUser => {
+        this.isUser = isUser;
+        if(isUser){
+          this.id = user.getCf();
+          this.age = user.getAge();
         } else {
-          this.isEmpty = true;
+          this.id = user.getAlbo();
+          this.address = user.getAddress();
         }
-      this.authService.getUserType().then(userType => {
-        this.isUser = userType;
         this.isLoaded = true;
       });
-      console.log(this.isEmpty);
     });
+
     this.menuCtrl.toggle();
   }
-
 
   private onSubmit(key: string[], value: string[], type: string) {
     const formData = new FormData();
@@ -56,15 +72,20 @@ export class SettingsPage implements OnInit {
     this.userService.changeProfile(formData).subscribe(success => {
       success.subscribe(resData => {
         if (resData.status === 'ok') {
-          if (type === 'addr') {
-            this.user.setAddress(formData.get('address').toString());
-          } else if (type === 'phone') {
-            this.user.setPhone(formData.get('phone_number').toString());
-          } else if (type === 'age') {
-            this.user.setAge(formData.get('age').toString());
-          }
-          this.authService.setUser(this.user);
-          this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
+          this.authService.getUser().then(user => {
+            if (type === 'addr') {
+              user.setAddress(formData.get('address').toString());
+              this.address = formData.get('address').toString();
+            } else if (type === 'phone') {
+              user.setPhone(formData.get('phone_number').toString());
+              this.phone = formData.get('phone_number').toString();
+            } else if (type === 'age') {
+              user.setAge(formData.get('age').toString());
+              this.age = formData.get('age').toString();
+            }
+            this.authService.saveUser();
+            this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
+          });
         } else {
           this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
         }
@@ -103,33 +124,35 @@ export class SettingsPage implements OnInit {
   }
 
   onPhoneModify() {
-    this.alertCtrl.create({
-      header: 'Vuoi cambiare il tuo numero di cellulare?',
-      inputs: [
-        {
-          name: 'telefono',
-          type: 'tel',
-          placeholder: this.user.getPhone(),
-        }],
-      buttons: [
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: (inputs: { telefono: string }) => {
-            const phone = inputs.telefono.trim();
-            if (phone.length > 0) {
-              const key = ['phone_number'];
-              const value = [phone];
-              this.onSubmit(key, value, 'phone');
+    this.authService.getUser().then(user => {
+      this.alertCtrl.create({
+        header: 'Vuoi cambiare il tuo numero di cellulare?',
+        inputs: [
+          {
+            name: 'telefono',
+            type: 'tel',
+            placeholder: user.getPhone(),
+          }],
+        buttons: [
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: (inputs: { telefono: string }) => {
+              const phone = inputs.telefono.trim();
+              if (phone.length > 0) {
+                const key = ['phone_number'];
+                const value = [phone];
+                this.onSubmit(key, value, 'phone');
+              }
             }
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => { }
-        }]
-    }).then(alert => alert.present());
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          }]
+      }).then(alert => alert.present());
+    });
   }
 
   onPswModify() {
@@ -252,20 +275,22 @@ export class SettingsPage implements OnInit {
   }
 
   private updateImage(imgData: string) {
-    const formData = new FormData();
-    formData.append('image', this.img);
-    this.userService.changeProfile(formData).subscribe(success => {
-      success.subscribe(resData => {
-        if (resData.status === 'ok') {
-          // update the storage if the media server is updated
-          this.img = imgData;
-          console.log(this.img);
-          this.user.setImg(imgData);
-          this.authService.setUser(this.user);
-        } else {
-          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
-          console.log(this.img);
-        }
+    this.authService.getUser().then(user => {
+      const formData = new FormData();
+      formData.append('image', this.img);
+      this.userService.changeProfile(formData).subscribe(success => {
+        success.subscribe(resData => {
+          if (resData.status === 'ok') {
+            // update the storage if the media server is updated
+            this.img = imgData;
+            console.log(this.img);
+            user.setImg(imgData);
+            this.authService.saveUser();
+          } else {
+            this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+            console.log(this.img);
+          }
+        });
       });
     });
   }

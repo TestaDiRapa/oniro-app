@@ -12,6 +12,7 @@ import { LoaderService } from '../services/loader-service.service';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
 import { DataStoringService } from '../services/bluetooth/data-storage/data-storing.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     private alertCtrl: AlertController,
+    private auth: AuthenticationService,
     private dataMngr: DataStoringService,
     private loadingController: LoaderService,
     private modalCtrl: ModalController,
@@ -41,6 +43,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.auth.getUser().then(user => { console.log(user); });
     this.formatDate();
     this.network.onConnect().subscribe(() => {
       this.storage.get('sleep_data').then(data => {

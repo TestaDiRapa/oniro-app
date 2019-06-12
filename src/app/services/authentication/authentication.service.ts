@@ -27,6 +27,11 @@ export class AuthenticationService {
         private storage: Storage
     ) { }
 
+    logout() {
+        this.loggedUser = null;
+        this.storage.remove('logged_user');
+    }
+
     autologin() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then<boolean>(user => {
@@ -150,6 +155,10 @@ export class AuthenticationService {
 
     setUser(user: Paziente | Medico) {
         this.loggedUser.user = user;
+        this.serialize();
+    }
+
+    saveUser() {
         this.serialize();
     }
 
