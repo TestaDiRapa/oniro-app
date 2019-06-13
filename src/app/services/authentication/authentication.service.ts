@@ -295,6 +295,7 @@ export class AuthenticationService {
                 this.loggedUser = loggedUser;
                 return loggedUser;
             } else {
+                this.loggedUser = new LoggedUser();
                 return null;
             }
         });
