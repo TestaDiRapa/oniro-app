@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title align-center>
+      Recording details
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home/diary"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="isLoaded">
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2">
+        <ion-icon name="moon"></ion-icon> Sleep duration
+      </ion-col>
+      <ion-col pull="1" pull-sm="2" class="right">
+        {{ aggregate.sleep_duration }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2">
+        <ion-icon name="warning"></ion-icon> Number of apnea events
+      </ion-col>
+      <ion-col pull="1" pull-sm="2" class="right">
+          <div align-right>{{ aggregate.apnea_events }}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2">
+        <ion-icon name="time"></ion-icon> Average duration of apnea events
+      </ion-col>
+      <ion-col pull="1" pull-sm="2" class="right">
+        {{ aggregate.avg_duration }} s
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2">
+        <ion-icon name="pulse"></ion-icon> Average Heart Rate value
+      </ion-col>
+      <ion-col pull="1" pull-sm="2" class="right">
+        {{ aggregate.avg_hr | number:'2.0-0' }} bpm
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2">
+        <ion-icon name="speedometer"></ion-icon>Average SpO2 value
+      </ion-col>
+      <ion-col pull="1" pull-sm="2" class="right">
+        {{ aggregate.avg_spo2 | number:'2.2-3' }} %
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2">
+        <ion-icon name="body"></ion-icon> Number of movements
+      </ion-col>
+      <ion-col pull="1" pull-sm="2" class="right">
+        {{ aggregate.total_movements }}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

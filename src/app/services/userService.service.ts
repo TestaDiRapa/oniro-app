@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Paziente } from '../register/paziente.model';
-import { Medico } from '../register/medico.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthenticationService, Respons } from './authentication/authentication.service';
 import { Abitudini } from '../home/add-abitudini/abitudini.model';

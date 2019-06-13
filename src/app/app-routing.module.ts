@@ -25,6 +25,13 @@ const routes: Routes = [
       IsDocGuard,
       AuthGuard
     ]
+  },
+  { 
+    path: 'home/diary/diary-detail',
+    loadChildren: './home/diary/diary-detail/diary-detail.module#DiaryDetailPageModule',
+    canLoad: [
+      AuthGuard
+    ]
   }
 
 ];

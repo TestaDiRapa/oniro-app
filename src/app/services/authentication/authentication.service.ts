@@ -50,11 +50,9 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.loadUser().then<boolean>(user => {
                 if (user) {
-                    this.loggedUser = user;
                     return true;
                 }
                 else {
-                    this.loggedUser = new LoggedUser();
                     return false;
                 }
             });
@@ -175,7 +173,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.loadUser().then<Token>(user => {
                 if (user) {
-                    this.loggedUser = user;
                     return user.refreshToken;
                 }
             })
@@ -189,7 +186,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.loadUser().then<Token>(user => {
                 if (user) {
-                    this.loggedUser = user;
                     return user.accessToken;
                 }
             })
@@ -214,7 +210,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
                 if (user) {
-                    this.loggedUser = user;
                     return user.isUser;
                 }
             });
@@ -228,7 +223,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
                 if (user) {
-                    this.loggedUser = user;
                     return !user.isUser;
                 }
             });
@@ -242,7 +236,6 @@ export class AuthenticationService {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
                 if (user) {
-                    this.loggedUser = user;
                     return user.user;
                 }
             });
@@ -299,6 +292,7 @@ export class AuthenticationService {
                 loggedUser.refreshToken = new Token(tmp.refreshToken.token, new Date(tmp.refreshToken.expirationDate));
                 loggedUser.user = tmpUser;
                 this.setUserIdentity(loggedUser.user.name, loggedUser.user.surname);
+                this.loggedUser = loggedUser;
                 return loggedUser;
             } else {
                 return null;
