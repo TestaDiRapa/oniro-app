@@ -1,8 +1,13 @@
 <ion-header>
     <ion-toolbar>
     <ion-title text-center>
-      Eventi avvenuti al giorno {{date | date}}
+      Eventi del giorno {{date | date:'medium'}}
     </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onCloseModal()">
+        <ion-icon name="close"></ion-icon>
+        </ion-button>
+        </ion-buttons>
     </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -23,7 +28,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-list>
+            <ion-list size-md ="8" offset-md="2">
                 <ion-item *ngFor="let chart of charts">
                     <google-chart
                     width="600"

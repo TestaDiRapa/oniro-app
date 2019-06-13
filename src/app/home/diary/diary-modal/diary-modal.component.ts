@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { testUserAgent } from '@ionic/core';
+import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 
 export interface Aggregate {
   apnea_events: number;
@@ -253,11 +254,19 @@ this.charts.push({
     data: this.dat,
     roles: [],
     options: {
-           vAxis: {
-             logScale: true,
-             scaleType: 'mirrorLog'
-            }
+          legend:{
+            display:false
+          },
+          vAxis:{
+            viewWindowMax:'auto'
+          },
+          hAxis:{
+            viewWindowMax:'auto'
+          }
            }
   });
+}
+onCloseModal(){
+  this.modalCtrl.dismiss(null,'close');
 }
 }

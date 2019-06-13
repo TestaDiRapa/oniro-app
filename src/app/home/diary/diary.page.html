@@ -13,7 +13,7 @@
       <ion-col>
         <ion-list>
           <ion-item *ngFor="let p of preview" (click)="onclick([p._id])">
-              Data {{ p._id | date }} <br>
+              Data {{ p._id }} <br>
               Apnea {{ p.preview.apnea_events | number }} <br>
               AVG_H {{ p.preview.avg_hr | number: '3.1-2'  }} <br>
               AVG_SPO2 {{ p.preview.avg_spo2 | number: '2.1-2' }}% <br>
