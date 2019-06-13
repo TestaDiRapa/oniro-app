@@ -88,9 +88,13 @@ export class DiaryDetailPage implements OnInit {
           },
           total_movements: response['payload']['total_movements']
         };
-
-        // ATTENZIONE
-        // CONTINUA A LAVORARE DA QUI
+        this.prepareLineChart();
+        this.charts.push({
+title:'Densità spettrale di potenza del segnale Heart Rate',
+type: 'LineChart',
+    data: this.aggregateData,
+    roles: [],
+        });
 
         //QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
         this.loader.onDismiss();
@@ -128,7 +132,12 @@ export class DiaryDetailPage implements OnInit {
       }
     });
   }
-
+prepareLineChart(){
+  for (let x = 0; x < this.aggregate.hr_spectra['frequencies'].length ; x++) {
+    this.aggregateData.push([this.aggregate.hr_spectra['frequencies'][x],
+                  this.aggregate.hr_spectra['spectral_density'][x]]);
+  }
+}
   ngOnInit() {
   }
 
