@@ -100,6 +100,7 @@ export class LoginPage implements OnInit {
                 response.message['address'], imagePath));
               this.path = 'homedoc';
             }
+            this.authService.setUserIdentity(response.message['name'], response.message['surname']);
             this.loadingController.onDismiss();
             this.router.navigateByUrl('/' + this.path);
           }

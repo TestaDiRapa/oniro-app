@@ -18,6 +18,11 @@ export interface Respons {
     message: string;
 }
 
+export interface Person {
+    name: string;
+    surname: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -25,6 +30,10 @@ export class AuthenticationService {
     isAuthenticated = true;
     private loggedUser: LoggedUser;
     private userType = new BehaviorSubject<boolean>(true);
+    private userIdentity = new BehaviorSubject<Person>({
+        name: '',
+        surname: ''
+    });
 
     constructor(
         private http: HttpClient,
@@ -42,6 +51,7 @@ export class AuthenticationService {
             return this.storage.get('logged_user').then<boolean>(user => {
                 if (user) {
                     this.loggedUser = JSON.parse(user);
+                    this.setUserIdentity(this.loggedUser.user.name, this.loggedUser.user.surname);
                     return true;
                 }
                 else {
@@ -50,6 +60,7 @@ export class AuthenticationService {
                 }
             });
         }
+        this.setUserIdentity(this.loggedUser.user.name, this.loggedUser.user.surname);
         return new Promise<boolean>((resolve) => {
             resolve(true);
         })
@@ -97,6 +108,19 @@ export class AuthenticationService {
 
     getAuthentication() {
         return this.isAuthenticated;
+    }
+
+    setUserIdentity(name: string, surname: string) {
+        this.userIdentity.next(
+            {
+                name: name,
+                surname: surname
+            }
+        );
+    }
+
+    get user() {
+        return this.userIdentity.asObservable();
     }
 
     get type() {
@@ -152,8 +176,10 @@ export class AuthenticationService {
     private retrieveRefToken() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then<Token>(user => {
-                this.loggedUser = this.loadUser(user);
-                return this.loggedUser.refreshToken;
+                if (user) {
+                    this.loggedUser = this.loadUser(user);
+                    return this.loggedUser.refreshToken;
+                }
             });
         }
         return new Promise<Token>((resolve) => {
@@ -164,8 +190,10 @@ export class AuthenticationService {
     private retrieveAuthToken() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then<Token>(user => {
-                this.loggedUser = this.loadUser(user);
-                return this.loggedUser.accessToken;
+                if (user) {
+                    this.loggedUser = this.loadUser(user);
+                    return this.loggedUser.accessToken;
+                }
             });
         }
         return new Promise<Token>((resolve) => {
@@ -200,9 +228,11 @@ export class AuthenticationService {
     getDocType() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then<boolean>(user => {
-                this.loggedUser = this.loadUser(user);
-                this.userType.next(!this.loggedUser.isUser);
-                return this.loggedUser.isUser;
+                if (user) {
+                    this.loggedUser = this.loadUser(user);
+                    this.userType.next(!this.loggedUser.isUser);
+                    return this.loggedUser.isUser;
+                }
             });
         }
         return new Promise<boolean>((resolve) => {
@@ -213,8 +243,10 @@ export class AuthenticationService {
     getUser() {
         if (!this.loggedUser) {
             return this.storage.get('logged_user').then(user => {
-                this.loggedUser = this.loadUser(user);
-                return this.loggedUser.user;
+                if (user) {
+                    this.loggedUser = this.loadUser(user);
+                    return this.loggedUser.user;
+                }
             });
         }
         return new Promise<Paziente | Medico>((resolve) => {
