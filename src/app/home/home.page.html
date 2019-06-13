@@ -19,9 +19,11 @@
     </ion-row>
     <ion-row>
       <ion-col size-sm="6" offset-sm="3">
-        <ion-card padding>
-          <ion-card-header>Random facts about sleep</ion-card-header>
-          <ion-card-subtitle>{{ fact }}</ion-card-subtitle>
+        <ion-card style="background: white">
+          <ion-card-title >Curiosità</ion-card-title>
+          <ion-card-content>
+            <ion-text>{{ fact }}</ion-text>
+          </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
@@ -29,8 +31,7 @@
       <ion-col size-sm="6" offset-sm="3">
         <ion-card>
           <ion-card-header>
-            <ion-card-title color="warning" style="text-decoration: underline; font-weight: bold; font-size: 20px;">
-              Abitudini giornaliere</ion-card-title>
+            <ion-card-title>Abitudini giornaliere</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-list>
@@ -48,11 +49,13 @@
               </ion-item>
               <ion-item>
                 <ion-icon name="beer"></ion-icon>
-                <ion-label margin (click)="openModal('drink')">Alchool</ion-label>
+                <ion-label margin>Alchool: {{ drink.getTot() }}</ion-label>
+                <ion-icon name="add" slot="end" (click)="openModal('drink')"></ion-icon>
               </ion-item>
               <ion-item>
                 <ion-icon name="cafe"></ion-icon>
-                <ion-label margin (click)="openModal('caffè')">Caffe</ion-label>
+                <ion-label margin >Caffe: {{ caffe.getTot() }}</ion-label>
+                <ion-icon name="add" slot="end" (click)="openModal('caffè')"></ion-icon>
               </ion-item>
             </ion-list>
           </ion-card-content>

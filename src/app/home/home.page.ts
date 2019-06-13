@@ -26,9 +26,9 @@ export class HomePage implements OnInit, OnDestroy {
   private bevanda: string;
   private isCena = false;
   private isSport = false;
-  private caffe = new Bevanda('', 0);
-  private drink = new Bevanda('', 0);
-  private fact = "";
+  public caffe = new Bevanda('', 0);
+  public drink = new Bevanda('', 0);
+  public fact = "";
 
   constructor(
     private alertCtrl: AlertController,

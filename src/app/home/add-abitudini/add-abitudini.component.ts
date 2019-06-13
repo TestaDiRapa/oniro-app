@@ -15,7 +15,7 @@ export class AddAbitudiniComponent implements OnInit {
 
   // simply close the modal
   onCloseModal() {
-    this.modalCtrl.dismiss(null, 'close');
+    this.modalCtrl.dismiss(0, 'close');
   }
 
   onSubmitModal(total: number) {

@@ -12,4 +12,8 @@ export class Bevanda {
         this.totale = tot;
     }
 
+    getTot() {
+        return this.totale;
+    }
+
 }
