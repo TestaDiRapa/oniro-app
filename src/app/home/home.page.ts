@@ -12,7 +12,7 @@ import { LoaderService } from '../services/loader-service.service';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
 import { DataStoringService } from '../services/bluetooth/data-storage/data-storing.service';
-import { AuthenticationService } from '../services/authentication/authentication.service';
+import { UselessService } from '../services/useless.service';
 
 
 @Component({
@@ -28,11 +28,12 @@ export class HomePage implements OnInit, OnDestroy {
   private isSport = false;
   private caffe = new Bevanda('', 0);
   private drink = new Bevanda('', 0);
+  private fact = "";
 
   constructor(
     private alertCtrl: AlertController,
-    private auth: AuthenticationService,
     private dataMngr: DataStoringService,
+    private facts: UselessService,
     private loadingController: LoaderService,
     private modalCtrl: ModalController,
     private network: Network,
@@ -43,6 +44,10 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.facts.init()
+    this.facts.facts.subscribe(text => {
+      this.fact = text;
+    });
     this.currentDate = new Date();
     this.network.onConnect().subscribe(() => {
       this.storage.get('sleep_data').then(data => {
@@ -58,6 +63,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    this.facts.newFact();
     this.currentDate = new Date();
   }
 
