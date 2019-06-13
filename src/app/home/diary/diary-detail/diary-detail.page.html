@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title align-center>
-      Recording details
+      Prova   (da sistemare)
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home/diary"></ion-back-button>
@@ -57,6 +57,31 @@
       </ion-col>
       <ion-col pull="1" pull-sm="2" class="right">
         {{ aggregate.total_movements }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let chart of charts">
+            <google-chart
+            width="600"
+            [title]="chart.title"
+            [type]="chart.type"
+            [data]="chart.data"
+            [columnNames]="chart.columnNames"
+            [roles]="chart.roles"
+            [options]="chart.options"
+          >
+          </google-chart>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button>
+          Avvisa il medico <ion-icon slot="end" name="medkit"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
