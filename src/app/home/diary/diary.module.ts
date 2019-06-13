@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { DiaryPage } from './diary.page';
+import { GoogleChartsModule } from 'angular-google-charts';
+import { DiaryModalComponent } from './diary-modal/diary-modal.component';
 
 const routes: Routes = [
   {
@@ -19,8 +21,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DiaryPage]
+  declarations: [DiaryPage, DiaryModalComponent],
+  entryComponents: [DiaryModalComponent]
 })
 export class DiaryPageModule {}

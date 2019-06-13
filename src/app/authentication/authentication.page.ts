@@ -20,7 +20,6 @@ export class AuthenticationPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    console.log("AUTHENTICATION");
     this.loader.onCreate();
     this.auth.autologin().then(response => {
       this.loader.onDismiss();

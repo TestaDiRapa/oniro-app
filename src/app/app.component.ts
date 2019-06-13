@@ -3,7 +3,7 @@ import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
-import { AuthenticationService } from './services/authentication/authentication.service';
+import { AuthenticationService, Person } from './services/authentication/authentication.service';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Component({
@@ -12,8 +12,7 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 })
 export class AppComponent implements OnInit {
   public isUser: boolean;
-  public name: string;
-  public surname: string;
+  public identity: Person;
 
   constructor(
     private authService: AuthenticationService,
@@ -28,10 +27,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getUser().then(user => {
-      this.name = user.name;
-      this.surname = user.surname;
-    });
+    this.authService.user.subscribe(person => {
+      this.identity = person;
+    })
     this.authService.type.subscribe(type => {
       this.isUser = type;
     });

@@ -18,6 +18,11 @@ export interface Respons {
     message: string;
 }
 
+export interface Person {
+    name: string;
+    surname: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -25,6 +30,10 @@ export class AuthenticationService {
     isAuthenticated = true;
     private loggedUser: LoggedUser;
     private userType = new BehaviorSubject<boolean>(true);
+    private userIdentity = new BehaviorSubject<Person>({
+        name: '',
+        surname: ''
+    });
 
     constructor(
         private http: HttpClient,
@@ -39,9 +48,9 @@ export class AuthenticationService {
 
     autologin() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then<boolean>(user => {
+            return this.loadUser().then<boolean>(user => {
                 if (user) {
-                    this.loggedUser = JSON.parse(user);
+                    this.loggedUser = user;
                     return true;
                 }
                 else {
@@ -99,6 +108,19 @@ export class AuthenticationService {
         return this.isAuthenticated;
     }
 
+    private setUserIdentity(name: string, surname: string) {
+        this.userIdentity.next(
+            {
+                name: name,
+                surname: surname
+            }
+        );
+    }
+
+    get user() {
+        return this.userIdentity.asObservable();
+    }
+
     get type() {
         return this.userType.asObservable();
     }
@@ -106,19 +128,24 @@ export class AuthenticationService {
     get token() {
         return this.retrieveAuthToken().then(token => {
             if (token === null) {
+                console.log("AUTH NULL");
                 this.logout();
                 this.router.navigate(['/']);
             }
             if (token.expirationDate <= new Date()) {
+                console.log("AUTH EXPIRED");
                 return this.retrieveRefToken().then(refToken => {
                     if (refToken === null) {
+                        console.log("REF NULL");
                         this.logout();
                         this.router.navigate(['/']);
                     }
                     if (refToken.expirationDate <= new Date()) {
+                        console.log("REF EXPIRED");
                         this.logout();
                         this.router.navigate(['/']);
                     } else {
+                        console.log("REF OK")
                         return this.http.get<Respons>(
                             `http://${environment.serverIp}/refresh`,
                             {
@@ -127,7 +154,10 @@ export class AuthenticationService {
                                 })
                             }
                         ).toPromise().then(response => {
+                            console.log(response);
                             this.setAuthToken(response.access_token, response.access_token_exp);
+                            console.log("OLD TOKEN", token);
+                            console.log("NEW TOKEN", response.access_token);
                             return response.access_token;
                         })
                     }
@@ -135,6 +165,7 @@ export class AuthenticationService {
                 });
             }
             else {
+                console.log("AUTH OK");
                 return token.token;
             }
         });
@@ -142,10 +173,12 @@ export class AuthenticationService {
 
     private retrieveRefToken() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then<Token>(user => {
-                this.loggedUser = this.loadUser(user);
-                return this.loggedUser.refreshToken;
-            });
+            return this.loadUser().then<Token>(user => {
+                if (user) {
+                    this.loggedUser = user;
+                    return user.refreshToken;
+                }
+            })
         }
         return new Promise<Token>((resolve) => {
             resolve(this.loggedUser.refreshToken);
@@ -154,10 +187,12 @@ export class AuthenticationService {
 
     private retrieveAuthToken() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then<Token>(user => {
-                this.loggedUser = this.loadUser(user);
-                return this.loggedUser.accessToken;
-            });
+            return this.loadUser().then<Token>(user => {
+                if (user) {
+                    this.loggedUser = user;
+                    return user.accessToken;
+                }
+            })
         }
         return new Promise<Token>((resolve) => {
             resolve(this.loggedUser.accessToken);
@@ -177,10 +212,11 @@ export class AuthenticationService {
 
     getUserType() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then<boolean>(user => {
-                this.loggedUser = this.loadUser(user);
-                this.userType.next(this.loggedUser.isUser);
-                return this.loggedUser.isUser;
+            return this.loadUser().then(user => {
+                if (user) {
+                    this.loggedUser = user;
+                    return user.isUser;
+                }
             });
         }
         return new Promise<boolean>((resolve) => {
@@ -190,10 +226,11 @@ export class AuthenticationService {
 
     getDocType() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then<boolean>(user => {
-                this.loggedUser = this.loadUser(user);
-                this.userType.next(!this.loggedUser.isUser);
-                return this.loggedUser.isUser;
+            return this.loadUser().then(user => {
+                if (user) {
+                    this.loggedUser = user;
+                    return !user.isUser;
+                }
             });
         }
         return new Promise<boolean>((resolve) => {
@@ -203,9 +240,11 @@ export class AuthenticationService {
 
     getUser() {
         if (!this.loggedUser) {
-            return this.storage.get('logged_user').then(user => {
-                this.loggedUser = this.loadUser(user);
-                return this.loggedUser.user;
+            return this.loadUser().then(user => {
+                if (user) {
+                    this.loggedUser = user;
+                    return user.user;
+                }
             });
         }
         return new Promise<Paziente | Medico>((resolve) => {
@@ -215,6 +254,7 @@ export class AuthenticationService {
 
     setUser(user: Paziente | Medico) {
         this.loggedUser.user = user;
+        this.setUserIdentity(user.name, user.surname);
         this.serialize();
     }
 
@@ -222,40 +262,48 @@ export class AuthenticationService {
         return typeof (this.loggedUser.user) === typeof (Medico);
     }
 
-    private loadUser(JSONstring: string) {
-        const tmp = JSON.parse(JSONstring);
+    private loadUser() {
+        return this.storage.get('logged_user').then(JSONstring => {
+            if (JSONstring) {
+                const tmp = JSON.parse(JSONstring);
 
-        let tmpUser;
+                let tmpUser;
 
-        if (tmp.isUser) {
-            tmpUser = new Paziente(
-                tmp.user.name,
-                tmp.user.surname,
-                '',
-                tmp.user.phone_number,
-                tmp.user.email,
-                tmp.user.cf,
-                tmp.user.age,
-                tmp.user.pathUrl
-            )
-        } else {
-            tmpUser = new Medico(
-                tmp.user.name,
-                tmp.user.surname,
-                '',
-                tmp.user.phone_number,
-                tmp.user.email,
-                tmp.user.id,
-                tmp.user.address,
-                tmp.user.pathUrl
-            )
-        }
+                if (tmp.isUser) {
+                    tmpUser = new Paziente(
+                        tmp.user.name,
+                        tmp.user.surname,
+                        '',
+                        tmp.user.phone_number,
+                        tmp.user.email,
+                        tmp.user.cf,
+                        tmp.user.age,
+                        tmp.user.image
+                    )
+                } else {
+                    tmpUser = new Medico(
+                        tmp.user.name,
+                        tmp.user.surname,
+                        '',
+                        tmp.user.phone_number,
+                        tmp.user.email,
+                        tmp.user.id,
+                        tmp.user.address,
+                        tmp.user.image
+                    )
+                }
 
-        const loggedUser = new LoggedUser();
-        loggedUser.isUser = tmp.isUser;
-        loggedUser.accessToken = new Token(tmp.accessToken.token, new Date(tmp.accessToken.expirationDate));
-        loggedUser.refreshToken = new Token(tmp.refreshToken.token, new Date(tmp.refreshToken.expirationDate));
-        loggedUser.user = tmpUser;
-        return loggedUser;
+                const loggedUser = new LoggedUser();
+                loggedUser.isUser = tmp.isUser;
+                loggedUser.accessToken = new Token(tmp.accessToken.token, new Date(tmp.accessToken.expirationDate));
+                loggedUser.refreshToken = new Token(tmp.refreshToken.token, new Date(tmp.refreshToken.expirationDate));
+                loggedUser.user = tmpUser;
+                this.setUserIdentity(loggedUser.user.name, loggedUser.user.surname);
+                return loggedUser;
+            } else {
+                return null;
+            }
+        });
     }
+
 }

@@ -34,7 +34,6 @@ export class SettingsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.authService.getUser().then(user => { console.log(user); });
     this.authService.getUser().then(user => {
       if (user.image) {
         this.isEmpty = false;
