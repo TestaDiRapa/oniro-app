@@ -73,7 +73,7 @@ export class SettingsPage implements OnInit {
             if (type === 'addr' && user.hasOwnProperty('address')) {
               user['address'] = formData.get('address').toString();
               this.address = formData.get('address').toString();
-            } else if (type === 'phone' ) {
+            } else if (type === 'phone') {
               user.phone_number = formData.get('phone_number').toString();
               this.phone = formData.get('phone_number').toString();
             } else if (type === 'age' && user.hasOwnProperty('age')) {
@@ -249,8 +249,9 @@ export class SettingsPage implements OnInit {
       correctOrientation: true
     };
     this.camera.getPicture(options).then((imgData) => {
-      this.urlImgage = (<any> window).Ionic.WebView.convertFileSrc(imgData);
-      this.base64Image = this.urlImgage;
+      this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
+      this.uploadPhoto(imgData);
+      //this.base64Image = this.urlImgage;
     }, (err) => {
       console.log(err);
     });
@@ -267,6 +268,8 @@ export class SettingsPage implements OnInit {
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
+      this.uploadPhoto(imgData);
+      /*
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
       let formData = new FormData();
       formData.append('image', this.base64Image);
@@ -283,8 +286,30 @@ export class SettingsPage implements OnInit {
           }
         });
       });
+      */
+
     }, (err) => {
       console.log(err);
     });
   }
+
+  private uploadPhoto(imgData: any) {
+    this.base64Image = 'data:image/jpeg;base64,' + imgData;
+    let formData = new FormData();
+    formData.append('image', this.base64Image);
+    this.userService.changeProfile(formData).subscribe(success => {
+      success.subscribe(resData => {
+        if (resData.status === 'ok') {
+          this.urlImgage = resData.message; // url dell'immagine
+          this.authService.getUser().then(user => {
+            user.image = this.urlImgage;
+            this.authService.setUser(user);
+          });
+        } else {
+          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+        }
+      });
+    });
+  }
+
 }

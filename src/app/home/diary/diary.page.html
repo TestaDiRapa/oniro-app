@@ -15,7 +15,7 @@
           <ion-item *ngFor="let p of preview" (click)="onclick([p._id])">
               <ion-grid>
                 <ion-row>
-                  <ion-col>
+                  <ion-col color="warning">
                     {{ p._id | date: 'EEE dd MMM yyyy'}}
                   </ion-col>
                 </ion-row>

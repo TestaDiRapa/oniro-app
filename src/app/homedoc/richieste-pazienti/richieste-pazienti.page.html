@@ -1,19 +1,19 @@
 <ion-header>
-  <ion-toolbar color="dark" text-center>
+  <ion-toolbar color="light" text-center>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="authentication"></ion-back-button>
+      <ion-back-button defaultHref="/homedoc"></ion-back-button>
     </ion-buttons>
-    <ion-text color="light" style="font-size: 25px">Richieste Pazienti</ion-text>
+    <ion-text style="font-size: 25px">Richieste Pazienti</ion-text>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col size-md="6" offset-md="3">
-        <ion-card style="border: 2px solid black">
+      <ion-col size-md="8" offset-md="2">
+        <ion-card>
           <ion-card-header>
-            <ion-card-title style="font-weight: bold; font-size: 20px;">Hai {{ n_req}} richieste da accettare:
+            <ion-card-title style="color: white; font-weight: bold; font-size: 20px;">Hai {{ n_req}} richieste da accettare:
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -22,15 +22,15 @@
                 <ion-item>
                   <ion-grid>
                     <ion-row>
-                      <ion-col size-md="8" offset-md="2">
+                      <ion-col size-md="10" offset-md="1">
                         <ion-card class="paziente">
-                          <ion-item>
+                          <ion-item lines="none">
                             Nome: {{ p['name'] }}
                           </ion-item>
-                          <ion-item>
+                          <ion-item lines="none">
                             Cognome: {{ p['surname'] }}
                           </ion-item>
-                          <ion-item>
+                          <ion-item lines="none">
                             CF: {{ p['patient'] }}
                           </ion-item>
                         </ion-card>
@@ -39,12 +39,12 @@
                   </ion-grid>
                 </ion-item>
                 <ion-item-options side="start">
-                  <ion-item-option color="secondary" (click)="reject(p['patient'])"> Rifiuta 
+                  <ion-item-option color="danger" (click)="reject(p['patient'])"> Rifiuta 
                     <ion-icon name="trash" slot="icon-only"></ion-icon>
                   </ion-item-option>
                 </ion-item-options>
                 <ion-item-options side="end">
-                  <ion-item-option color="tertiary" (click)="accept(p['patient'])"> Accetta 
+                  <ion-item-option color="success" (click)="accept(p['patient'])"> Accetta 
                     <ion-icon name="checkmark-circle" slot="icon-only"></ion-icon>                  
                   </ion-item-option>
                 </ion-item-options>

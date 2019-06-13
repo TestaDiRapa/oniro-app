@@ -40,7 +40,7 @@ export class DiaryDetailPage implements OnInit {
 
   aggregate: Aggregate;
   isLoaded = false;
-  
+
   aggregateData: Array<Array<string | number | {}>> = [];
   charts: Array<{
     title: string;
@@ -67,7 +67,7 @@ export class DiaryDetailPage implements OnInit {
     this.loader.onCreate();
     this.chartsService.data.then(response => {
       console.log(response);
-      if (response['status'] == 'ok') {
+      if (response['status'] === 'ok') {
         this.aggregate = {
           apnea_events: response['payload']['apnea_events'],
           avg_duration: response['payload']['avg_duration'],
