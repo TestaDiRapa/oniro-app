@@ -277,7 +277,7 @@ export class AuthenticationService {
                 tmp.user.email,
                 tmp.user.cf,
                 tmp.user.age,
-                tmp.user.pathUrl
+                tmp.user.image
             )
         } else {
             tmpUser = new Medico(
@@ -288,7 +288,7 @@ export class AuthenticationService {
                 tmp.user.email,
                 tmp.user.id,
                 tmp.user.address,
-                tmp.user.pathUrl
+                tmp.user.image
             )
         }
 
