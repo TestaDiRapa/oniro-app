@@ -24,14 +24,18 @@
             <ion-thumbnail *ngIf="!isEmpty">
               <img [src]="base64Image">
             </ion-thumbnail>
-            <ion-button class="settings" (click)="accessCamera()">Camera
-              <ion-icon slot="start" name="camera"></ion-icon>
-            </ion-button>
-            <ion-button class="settings" (click)="accessGallery()">Galleria
-              <ion-icon slot="start" name="image"></ion-icon>
-            </ion-button>
           </ion-card-content>
         </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" ofsset-sm="3" text-center>
+        <ion-button (click)="accessCamera()">Camera
+          <ion-icon slot="start" name="camera"></ion-icon>
+        </ion-button>       
+        <ion-button (click)="accessGallery()">Galleria
+          <ion-icon slot="start" name="image"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
     <ion-row>

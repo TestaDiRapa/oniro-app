@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title align-center>
-      Prova   (da sistemare)
+      {{ currentDate }}
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home/diary"></ion-back-button>
@@ -24,12 +24,12 @@
         <ion-icon name="warning"></ion-icon> Eventi di apnea
       </ion-col>
       <ion-col pull="1" pull-sm="2" class="right">
-          <div align-right>{{ aggregate.apnea_events }}</div>
+        <div align-right>{{ aggregate.apnea_events }}</div>
       </ion-col>
     </ion-row>
     <ion-row margin-top="20px">
       <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="time"></ion-icon> Durata media degli eventi di apnea
+        <ion-icon name="time"></ion-icon> Durata media eventi di apnea
       </ion-col>
       <ion-col pull="1" pull-sm="2" class="right">
         {{ aggregate.avg_duration }} s
@@ -60,27 +60,21 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>
+      <ion-col size-sm="6" offset-sm="3">
         <ion-list>
           <ion-item *ngFor="let chart of charts">
-            <google-chart style="text-size-adjust: initial"
-            width="600"
-            [title]="chart.title"
-            [type]="chart.type"
-            [data]="chart.data"
-            [columnNames]="chart.columnNames"
-            [roles]="chart.roles"
-            [options]="chart.options"
-          >
-          </google-chart>
+            <google-chart width="600" [title]="chart.title" [type]="chart.type" [data]="chart.data"
+              [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options">
+            </google-chart>
           </ion-item>
         </ion-list>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>
-        <ion-button>
-          Avvisa il medico <ion-icon slot="end" name="medkit"></ion-icon>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-button (click)="onSendRecToDoctor()">
+          Avvisa il medico
+          <ion-icon slot="end" name="medkit"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UselessService {
-  private factSubject = new BehaviorSubject<string>("");
+  private factSubject = new BehaviorSubject<string>('');
   private factsList: string[];
 
   constructor(

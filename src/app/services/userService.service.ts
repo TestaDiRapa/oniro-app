@@ -4,7 +4,6 @@ import { AuthenticationService, Respons } from './authentication/authentication.
 import { Abitudini } from '../home/add-abitudini/abitudini.model';
 import { environment } from 'src/environments/environment';
 import { from } from 'rxjs/internal/observable/from';
-import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,6 @@ export class UserService {
   constructor(
     private authService: AuthenticationService,
     private http: HttpClient,
-    private storage: Storage
   ) { }
 
   getMyDoctor() {
@@ -97,10 +95,28 @@ export class UserService {
       return this.http.delete<Respons>(
         path,
         {
-        headers: new HttpHeaders({'Content-Type': 'application/json', Authorization: 'Bearer ' + token}),
-        params
+          headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }),
+          params
         }
-        );
+      );
     });
   }
+
+  sendRecordings(doctorId: string, dateID: string) {
+    const path = 'http://' + environment.serverIp + '/user/my_recordings';
+    let body = new HttpParams();
+   
+    /* here the body append */
+
+    console.log("BODY OF SEND REQUEST -- " + body);
+    return this.authService.token.then(token => {
+      return this.http.put<Respons>(
+        path,
+        body,
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }),
+        });
+    });
+  }
+
 }
