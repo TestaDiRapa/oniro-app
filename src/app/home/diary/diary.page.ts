@@ -5,6 +5,8 @@
   import { environment } from 'src/environments/environment';
   import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
   import { DiaryModalComponent } from './diary-modal/diary-modal.component';
+import { ChartsService } from 'src/app/services/charts.service';
+import { Router } from '@angular/router';
 
   export interface Data {
     _id: Date;
@@ -31,13 +33,16 @@
     @ViewChild('chart')
     chart: GoogleChartComponent;
 
-    constructor(private menuCtrl: MenuController,
-                private http: HttpClient,
-                private authService: AuthenticationService,
-                private modalCtrl: ModalController) {}
+    constructor(
+      private authService: AuthenticationService,
+      private charts: ChartsService,
+      private http: HttpClient,
+      private menuCtrl: MenuController,
+      private router: Router
+    ) {}
 
     ngOnInit() {
-      this.menuCtrl.toggle();
+      this.menuCtrl.close();
       this.authService.token.then(token => {
         this.http.get<Respons>(
           this.url,
@@ -267,30 +272,8 @@
       console.log('No longer hovering ' + event.toString());
     }
   */
-    onclick(id: Date) {
-      const params = new HttpParams();
-      let url = this.url+'?id='+ id.toString();
-      params.append('id', id.toString());
-      console.log('id.toString', id.toString());
-      this.authService.token.then(token => {
-        this.http.get<Respons>(
-          url,
-          {
-            headers: new HttpHeaders({
-              Authorization: 'Bearer ' + token
-            }),
-            params
-          }
-        ).subscribe(res => {
-          this.modalCtrl.create({
-            component: DiaryModalComponent,
-            componentProps: {data : res['payload'], date: id }
-        }).then(modalEl => {
-          modalEl.present();
-          });
-          console.log(res);
-        });
-        console.log(this.url);
-      });
+    onclick(id: string) {
+      this.charts.dataId = id;
+      this.router.navigate(['/home/diary/diary-detail']);
     }
   }
