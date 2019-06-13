@@ -30,6 +30,7 @@ export class GmapsPage implements OnInit {
   map: GoogleMap;
   doctors: any [];
   addresses: string [] = [] ;
+  myLoc;
 
   constructor(
     private geolocation: Geolocation,
@@ -59,7 +60,8 @@ export class GmapsPage implements OnInit {
     });**/
 let options: GoogleMapOptions;
 LocationService.getMyLocation().then((myLocation: MyLocation) => {
- options = {
+  this.myLoc = myLocation;
+  options = {
   controls: {
     compass: true,
     myLocationButton: true,
@@ -76,8 +78,8 @@ LocationService.getMyLocation().then((myLocation: MyLocation) => {
         target: myLocation.latLng
       }
     };
- this.map = GoogleMaps.create('map', options);
- this.map.animateCamera({
+  this.map = GoogleMaps.create('map', options);
+  this.map.animateCamera({
       target: myLocation.latLng,
      zoom: 17
     }).then(() => {
@@ -86,18 +88,16 @@ LocationService.getMyLocation().then((myLocation: MyLocation) => {
   }
 
   findDoctors() {
-    console.log('sei qui');
     Geocoder.geocode({
-          address: [this.addresses.toString()]
+          address: ['Rome,Italy' ]
         }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
           console.log('ehi');
-          mvcArray.on('finish').toPromise().then(() => {
-            console.log("wow");
+          mvcArray.on('finish').subscribe(() => {
             if (mvcArray.getLength() > 0) {
               const results: any[] =  mvcArray.getArray();
               results.forEach((result: GeocoderResult[]) => {
                 this.map.addMarkerSync({
-                  position: result[0].position,
+                  position: this.myLoc.latLng,
                   title:  JSON.stringify(result)
                 });
               });
