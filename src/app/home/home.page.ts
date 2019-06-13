@@ -43,14 +43,13 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.auth.getUser().then(user => { console.log(user); });
-    this.formatDate();
+    this.currentDate = new Date();
     this.network.onConnect().subscribe(() => {
       this.storage.get('sleep_data').then(data => {
         if (data) {
           this.dataMngr.recoverAndSend();
         }
-      })
+      });
     });
   }
 
@@ -59,18 +58,10 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    this.formatDate();
+    this.currentDate = new Date();
   }
 
   ionViewDidEnter() {
-    this.formatDate();
-  }
-
-  formatDate() {
-    const date = new Date();
-    const year = date.getFullYear().toString();
-    const day = date.getDay().toString();
-    const month = date.getMonth().toString();
     this.currentDate = new Date();
   }
 
@@ -113,7 +104,7 @@ export class HomePage implements OnInit, OnDestroy {
           } else {
             this.loadingController.onDismiss();
             this.alertCtrl.create({
-              header: 'An error occurred!',
+              header: 'Si è verificato un errore!',
               message: response.message,
               buttons: [
                 {
@@ -128,7 +119,7 @@ export class HomePage implements OnInit, OnDestroy {
         error => {
           this.loadingController.onDismiss();
           this.alertCtrl.create({
-            header: 'An error occurred!',
+            header: 'Si è verificato un errore!',
             message: error.message,
             buttons: [
               {
@@ -138,11 +129,8 @@ export class HomePage implements OnInit, OnDestroy {
           }).then(alertEl => {
             alertEl.present();
           });
-
         });
     });
   }
-
-
 
 }

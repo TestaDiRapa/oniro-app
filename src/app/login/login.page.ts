@@ -10,8 +10,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MenuController } from '@ionic/angular';
 import { LoaderService } from '../services/loader-service.service';
 import { environment } from 'src/environments/environment';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-import { File } from '@ionic-native/file/ngx';
 
 
 @Component({
@@ -26,14 +24,13 @@ export class LoginPage implements OnInit {
   private path: string;
 
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private authService: AuthenticationService,
-    private file: File,
     private http: HttpClient,
     private menuCtrl: MenuController,
     public loadingController: LoaderService,
     private alertCtrl: AlertController,
-    private transfer: FileTransfer,
   ) { }
 
 
@@ -75,25 +72,20 @@ export class LoginPage implements OnInit {
     this.loadingController.onCreate();
     this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
       if (res.status === 'ok') {
-        const token = res.access_token;
-        this.authService.setToken(token);
-        this.http.get<any>(`http://${environment.serverIp}/me`, {
-          headers: new HttpHeaders({ Authorization: 'Bearer ' + token })
-        }).subscribe(response => {
-          /*
-          this.transfer.create().download(
-            'http://45.76.47.94:8082/mediaserver/TEST-propic.jpg',
-            this.file.dataDirectory + "propic.jpg"
-          ).then(entry => {
-            console.log('download complete: ' + entry.toURL());
-          }, (error) => {
-            console.log('error', error);
-          })
-          */
+        const authToken = res.access_token;
+        const authExp = res.access_token_exp;
+        this.authService.setAuthToken(authToken, authExp);
 
+        const refToken = res.refresh_token;
+        const refExp = res.refresh_token_exp;
+        this.authService.setRefreshToken(refToken, refExp);
+
+        this.http.get<any>(`http://${environment.serverIp}/me`, {
+          headers: new HttpHeaders({ Authorization: `Bearer ${authToken}` })
+        }).subscribe(response => {
           if (response.status === 'ok') {
-            let imagePath = ''
-            if(response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
+            let imagePath = '';
+            if (response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
               imagePath = response.message['profile_picture'];
             }
             this.authService.isAuthenticated = true;
@@ -112,14 +104,11 @@ export class LoginPage implements OnInit {
             this.router.navigateByUrl('/' + this.path);
           }
         });
-
       } else {
         this.loadingController.onDismiss();
         this.presentAlert(res.message);
       }
-
     });
-
   }
 
 }

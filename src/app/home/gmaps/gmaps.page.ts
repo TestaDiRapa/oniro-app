@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MenuController } from '@ionic/angular';
-import { GetCoordService } from './get-coord.service';
+import { GetCoordService } from '../../services/get-coord.service';
 import {
   GoogleMaps,
   GoogleMap,

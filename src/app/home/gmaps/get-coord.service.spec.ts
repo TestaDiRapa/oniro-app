@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GetCoordService } from './get-coord.service';
+import { GetCoordService } from '../../services/get-coord.service';
 
 describe('GetCoordService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

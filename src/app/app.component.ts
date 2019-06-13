@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -10,11 +10,13 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements OnInit {
   public isUser: boolean;
+  public name: string;
+  public surname: string;
 
   constructor(
-    private auth: AuthenticationService,
+    private authService: AuthenticationService,
     private background: BackgroundMode,
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -26,7 +28,11 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.auth.type.subscribe(type => {
+    this.authService.getUser().then(user => {
+      this.name = user.name;
+      this.surname = user.surname;
+    });
+    this.authService.type.subscribe(type => {
       this.isUser = type;
     });
   }
@@ -40,7 +46,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   onLogout() {
-    this.auth.logout();
+    this.authService.logout();
     this.router.navigateByUrl('/');
     this.menu.enable(false);
   }
@@ -69,7 +75,4 @@ export class AppComponent implements OnDestroy, OnInit {
     this.router.navigateByUrl('/home/contacts');
   }
 
-  ngOnDestroy() {
-    console.log(this, 'onDestroy');
-  }
 }
