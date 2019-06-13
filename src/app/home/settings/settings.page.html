@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar color="dark" text-center>
+  <ion-toolbar color="light" text-center>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="authentication"></ion-back-button>
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-text color="light" style="font-size: 25px">Impostazioni</ion-text>
+    <ion-text style="font-size: 25px">Impostazioni</ion-text>
   </ion-toolbar>
 </ion-header>
 
@@ -13,15 +13,16 @@
       <ion-col size-sm="6" offset-sm="3">
         <ion-card>
           <ion-card-header>
-            <ion-card-title style="font-weight: bold; font-size: 20px;">Immagine Profilo</ion-card-title>
+            <ion-card-title color="warning" style="text-decoration: underline; font-weight: bold; font-size: 20px;">
+              Immagine Profilo</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-              <ion-thumbnail *ngIf="isEmpty">
-                  <img src="assets/image/panda-login.jpg">
-              </ion-thumbnail>
-              <ion-thumbnail *ngIf="!isEmpty">
-                  <img [src]="base64Image">
-              </ion-thumbnail>
+            <ion-thumbnail *ngIf="isEmpty">
+              <img src="assets/image/panda-login.jpg">
+            </ion-thumbnail>
+            <ion-thumbnail *ngIf="!isEmpty">
+              <img [src]="base64Image">
+            </ion-thumbnail>
             <ion-button (click)="accessCamera()">Camera
               <ion-icon slot="start" name="camera"></ion-icon>
             </ion-button>
@@ -36,7 +37,8 @@
       <ion-col size-sm="6" offset-sm="3">
         <ion-card>
           <ion-card-header>
-            <ion-card-title style="font-weight: bold; font-size: 20px;">Dati personali</ion-card-title>
+            <ion-card-title color="warning" style="text-decoration: underline; font-weight: bold; font-size: 20px;">
+              Dati Personali</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-list>
@@ -50,25 +52,25 @@
                 <ion-label>Codice Fiscale: {{ id }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
-                  <ion-label>Id Albo: {{ id }}</ion-label>
-                </ion-item>
+                <ion-label>Id Albo: {{ id }}</ion-label>
+              </ion-item>
               <ion-item>
-                <ion-icon slot="end" name="share-alt"></ion-icon>
+                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onPswModify()">Password: ********</ion-label>
               </ion-item>
               <ion-item>
-                <ion-icon slot="end" name="share-alt"></ion-icon>
+                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onPhoneModify()">Telefono: {{ phone }}</ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>E-mail: {{ email }}</ion-label>
               </ion-item>
               <ion-item *ngIf="isUser">
-                <ion-icon slot="end" name="share-alt"></ion-icon>
-                <ion-label  (click)="onAgeModify()">Età: {{ age }}</ion-label>
+                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
+                <ion-label (click)="onAgeModify()">Età: {{ age }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
-                  <ion-icon slot="end" name="share-alt"></ion-icon>
+                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onAddrModify()">Indirizzo: {{ address }}</ion-label>
               </ion-item>
             </ion-list>

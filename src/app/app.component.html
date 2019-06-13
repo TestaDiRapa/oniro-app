@@ -1,43 +1,39 @@
 <ion-app>
   <ion-menu menuId="menu">
     <ion-header>
-      <ion-toolbar>
-        <ion-title>
-          <ion-item lines="none">
-             Hello, {{ identity.name }} {{ identity.surname}} 
-          </ion-item>
-        </ion-title>
+      <ion-toolbar color="light">
+        Hello, {{ identity.name }} {{ identity.surname}}
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
-      <ion-list>
-        <ion-item lines="none">
-          <ion-icon name="settings" slot="start"></ion-icon>
+      <ion-list lines="none">
+        <ion-item>
+          <ion-icon class="menu" name="settings" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onClickSettings()">Profilo Utente</ion-label>
         </ion-item>
-        <ion-item *ngIf="isUser" lines="none">
-          <ion-icon name="book" slot="start"></ion-icon>
+        <ion-item *ngIf="isUser">
+          <ion-icon class="menu" name="book" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onClickDiary()">Diario</ion-label>
         </ion-item>
-        <ion-item *ngIf="isUser" lines="none">
-          <ion-icon name="search" slot="start"></ion-icon>
+        <ion-item *ngIf="isUser">
+          <ion-icon class="menu" name="search" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onClickMaps()">Cerca Medico</ion-label>
         </ion-item>
-        <ion-item *ngIf="!isUser" lines="none">
-          <ion-icon name="search" slot="start"></ion-icon>
+        <ion-item *ngIf="!isUser">
+          <ion-icon class="menu" name="search" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onClickRequests()">Richieste Pazienti</ion-label>
         </ion-item>
-        <ion-item *ngIf="isUser" lines="none">
-          <ion-icon name="contacts" slot="start"></ion-icon>
+        <ion-item *ngIf="isUser">
+          <ion-icon class="menu" name="contacts" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onClickContacts()">Contatti</ion-label>
         </ion-item>
-        <ion-item lines="none">
-          <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+        <ion-item>
+          <ion-icon class="menu" name="information-circle-outline" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onClickInfo()">Info</ion-label>
         </ion-item>
-        <ion-item lines="none">
-          <ion-icon name="exit" slot="start"></ion-icon>
+        <ion-item>
+          <ion-icon class="menu" name="exit" slot="start"></ion-icon>
           <ion-label routerDirection="forward" (click)="onLogout()">Logout</ion-label>
         </ion-item>
       </ion-list>

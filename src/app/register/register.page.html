@@ -10,8 +10,8 @@
 <ion-content>
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <ion-segment (ionChange)="onChange($event, f)">
-      <ion-segment-button value="doc">Dottore</ion-segment-button>
-      <ion-segment-button value="user" checked>Paziente</ion-segment-button>
+      <ion-segment-button value="doc" style="color: white">Dottore</ion-segment-button>
+      <ion-segment-button value="user" style="color: white" checked>Paziente</ion-segment-button>
     </ion-segment>
     <ion-grid>
       <ion-row>
@@ -56,7 +56,8 @@
         <ion-col size-sm="6" offset-sm="3">
           <ion-card>
             <ion-card-header>
-              <ion-card-title style="font-weight: bold; font-size: 20px;">Indirizzo Studio</ion-card-title>
+              <ion-card-title color="warning" style="text-decoration: underline; font-weight: bold; font-size: 20px;">
+                Indirizzo Studio</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <ion-list>

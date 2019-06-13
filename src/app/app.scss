@@ -1,8 +1,18 @@
 ion-menu {
-  --background: var(--ion-color-primary) !important;
   ion-item {
-    --color: #000000 !important;
     font-style: oblique;
     font-weight: bold;
   }
 }
+
+.menu{
+  color: white;
+}
+
+ion-toolbar {
+  color: black;
+  --background: white;
+  border-bottom: 2px solid black;
+}
+
+

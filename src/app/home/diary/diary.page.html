@@ -1,18 +1,18 @@
 <ion-header>
-  <ion-toolbar color="dark" text-center>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-text color="light" style="font-size: 25px">Diario</ion-text>
-  </ion-toolbar>
-</ion-header>
+    <ion-toolbar color="light" text-center>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/home"></ion-back-button>
+      </ion-buttons>
+      <ion-text  style="font-size: 25px">Diario</ion-text>
+    </ion-toolbar>
+  </ion-header>
 
 <ion-content>
   <ion-grid>
     <ion-row>
       <ion-col>
         <ion-list>
-          <ion-item *ngFor="let p of preview" (click)="onclick([p._id])" detail>
+          <ion-item *ngFor="let p of preview" (click)="onclick([p._id])">
               <ion-grid>
                 <ion-row>
                   <ion-col>
