@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { GmapsPage } from './gmaps.page';
 
 
-
 const routes: Routes = [
   {
     path: '',
