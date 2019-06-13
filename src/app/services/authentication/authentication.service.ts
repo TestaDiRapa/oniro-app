@@ -106,19 +106,24 @@ export class AuthenticationService {
     get token() {
         return this.retrieveAuthToken().then(token => {
             if (token === null) {
+                console.log("AUTH NULL");
                 this.logout();
                 this.router.navigate(['/']);
             }
             if (token.expirationDate <= new Date()) {
+                console.log("AUTH EXPIRED");
                 return this.retrieveRefToken().then(refToken => {
                     if (refToken === null) {
+                        console.log("REF NULL");
                         this.logout();
                         this.router.navigate(['/']);
                     }
                     if (refToken.expirationDate <= new Date()) {
+                        console.log("REF EXPIRED");
                         this.logout();
                         this.router.navigate(['/']);
                     } else {
+                        console.log("REF OK")
                         return this.http.get<Respons>(
                             `http://${environment.serverIp}/refresh`,
                             {
@@ -127,7 +132,10 @@ export class AuthenticationService {
                                 })
                             }
                         ).toPromise().then(response => {
+                            console.log(response);
                             this.setAuthToken(response.access_token, response.access_token_exp);
+                            console.log("OLD TOKEN", token);
+                            console.log("NEW TOKEN", response.access_token);
                             return response.access_token;
                         })
                     }
@@ -135,6 +143,7 @@ export class AuthenticationService {
                 });
             }
             else {
+                console.log("AUTH OK");
                 return token.token;
             }
         });
