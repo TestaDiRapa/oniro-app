@@ -3,7 +3,7 @@ import { UserService } from '../../services/userService.service';
 import { MenuController, AlertController, Platform } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { File } from '@ionic-native/file/ngx';
+//import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-settings',
@@ -247,7 +247,7 @@ export class SettingsPage implements OnInit {
         }]
     }).then(alert => alert.present());
   }
-
+/*
   accessCamera() {
     const options: CameraOptions = {
       quality: 100,
@@ -312,7 +312,7 @@ export class SettingsPage implements OnInit {
           type: "image/jpeg"
         });
         const formData = new FormData();
-        formData.append('file', imgBlob, 'image.png');      
+        formData.append('file', imgBlob, 'image.png');
         this.userService.changeProfile(formData).subscribe(success => {
           success.subscribe(resData => {
             if (resData.status === 'ok') {
@@ -328,6 +328,6 @@ export class SettingsPage implements OnInit {
         });
       });
     }
-  }
+  }*/
 
 }
