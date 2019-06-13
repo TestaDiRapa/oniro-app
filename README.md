@@ -31,6 +31,8 @@ After cloning the project, add the following plugins and platforms:<br>
 `npm install --save @ionic-native/camera` <br>
 `ionic cordova plugin add cordova-plugin-background-mode ` <br>
 `npm install @ionic-native/background-mode ` <br>
+`npm install angular-google-charts` <br>
+
 
 ## Bug da fixare
 
