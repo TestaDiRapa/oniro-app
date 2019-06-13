@@ -1,65 +1,59 @@
-  import { Component, OnInit, ViewChild } from '@angular/core';
-  import { MenuController, ModalController } from '@ionic/angular';
-  import { GoogleChartComponent, ChartEvent, ChartErrorEvent } from 'angular-google-charts';
-  import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-  import { environment } from 'src/environments/environment';
-  import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
-  import { DiaryModalComponent } from './diary-modal/diary-modal.component';
+import { Component, OnInit, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
-  export interface Data {
-    _id: Date;
-    preview: Preview;
-  }
+export interface Aggregate {
+  apnea_events: number;
+  avg_duration: number;
+  avg_hr: number;
+  avg_spo2: number;
+  hr_spectra: HrSpectra;
+  plot_apnea_events: number [];
+  plot_hr: number [];
+  plot_movements: number [];
+  plot_spo2: number [];
+  spo2_spectra: Spo2Spectra;
+  total_movements: number;
+}
 
-  export interface Preview {
-    apnea_events: number;
-    avg_hr: number;
-    avg_spo2: number;
+export interface HrSpectra {
+  frequencies: number [];
+  spectral_density: number [];
+}
+
+export interface Spo2Spectra {
+  frequencies: number [];
+  spectral_density: number [];
+}
+
+@Component({
+  selector: 'app-diary-modal',
+  templateUrl: './diary-modal.component.html',
+  styleUrls: ['./diary-modal.component.scss'],
+})
+export class DiaryModalComponent implements OnInit {
+  @Input() data: Aggregate;
+  @Input() date: Date;
+
+  charts: Array<{
+    title: string;
     type: string;
-  }
+    data: Array<Array<string | number | {}>>;
+    roles: Array<{ type: string; role: string; index?: number }>;
+    columnNames?: Array<string>;
+    options?: {};
+  }> = [];
+  constructor(private modalCtrl: ModalController) { }
 
-  @Component({
-    selector: 'app-diary',
-    templateUrl: './diary.page.html',
-    styleUrls: ['./diary.page.scss'],
-  })
-  export class DiaryPage implements OnInit {
-    private url = 'http://' + environment.serverIp + '/user/my_recordings';
-    array: object [] = [];
-    preview: Data [] = [];
+  ngOnInit() {
 
-    @ViewChild('chart')
-    chart: GoogleChartComponent;
-
-    constructor(private menuCtrl: MenuController,
-                private http: HttpClient,
-                private authService: AuthenticationService,
-                private modalCtrl: ModalController) {}
-
-    ngOnInit() {
-      this.menuCtrl.toggle();
-      this.authService.token.then(token => {
-        this.http.get<Respons>(
-          this.url,
-          {
-            headers: new HttpHeaders({
-              Authorization: 'Bearer ' + token
-            })
-          }
-        ).subscribe(res => {
-            this.preview = res['payload'];
-            this.preview = this.preview.splice(0, 4);
-            console.log(this.preview);
-            });
-    });
-    }
-      /*
       this.charts.push({
-        title: 'Pie Chart',
+        title: 'Densità spettrale Hr',
         type: 'LineChart',
-        columnNames: ['Task', 'Hours per Day'],
-        data: [['Work', 11], ['Eat', 2], ['Commute', 2], ['Watch TV', 2], ['Sleep', 7]],
+        data: [this.data.hr_spectra[0], this.data.hr_spectra[1]],
         roles: []
+        // options:{
+
+        // }
       });
 
       this.charts.push({
@@ -113,7 +107,7 @@
           backgroundColor: '#ecd504'
         }
       });
-  /*
+
       this.charts.push({
         title: 'Styled Line Chart',
         type: 'LineChart',
@@ -163,7 +157,7 @@
         data: [['Hallo', 80, 167], ['', 79, 136], ['', 78, 184], ['', 72, 278], ['', 81, 200], ['', 72, 170], ['', 68, 477]],
         roles: []
       });
-  /*
+
       this.charts.push({
         title: 'Candlestick Chart',
         type: 'CandlestickChart',
@@ -171,7 +165,7 @@
         data: [['Mon', 20, 28, 38, 45], ['Tue', 31, 38, 55, 66], ['Wed', 50, 55, 77, 80], ['Thu', 77, 77, 66, 50], ['Fri', 68, 66, 22, 15]],
         roles: null
       });
-  /*
+
       this.charts.push({
         title: 'Combo Chart',
         type: 'ComboChart',
@@ -192,7 +186,7 @@
         }
       });
 
-      /*this.charts.push({
+      this.charts.push({
         title: 'Histogram',
         type: 'Histogram',
         columnNames: ['Dinosaur', 'Length'],
@@ -229,7 +223,7 @@
         roles: []
       });
 
-    /*  this.charts.push({
+      this.charts.push({
         title: 'Scatter Chart',
         type: 'ScatterChart',
         columnNames: ['Age', 'Weight'],
@@ -243,54 +237,7 @@
             zoomDelta: 1
           }
         }
-      });*/
-
-
-  /*
-  onReady() {
-      console.log('Chart ready');
-    }
-
-  onError(error: ChartErrorEvent) {
-      console.error('Error: ' + error.message.toString());
-    }
-
-  onSelect(event: ChartEvent) {
-      console.log('Selected: ' + event.toString());
-    }
-
-  onMouseEnter(event: ChartEvent) {
-      console.log('Hovering ' + event.toString());
-    }
-
-  onMouseLeave(event: ChartEvent) {
-      console.log('No longer hovering ' + event.toString());
-    }
-  */
-    onclick(id: Date) {
-      const params = new HttpParams();
-      let url = this.url+'?id='+ id.toString();
-      params.append('id', id.toString());
-      console.log('id.toString', id.toString());
-      this.authService.token.then(token => {
-        this.http.get<Respons>(
-          url,
-          {
-            headers: new HttpHeaders({
-              Authorization: 'Bearer ' + token
-            }),
-            params
-          }
-        ).subscribe(res => {
-          this.modalCtrl.create({
-            component: DiaryModalComponent,
-            componentProps: {data : res['payload'], date: id }
-        }).then(modalEl => {
-          modalEl.present();
-          });
-          console.log(res);
-        });
-        console.log(this.url);
       });
-    }
-  }
+
+}
+}

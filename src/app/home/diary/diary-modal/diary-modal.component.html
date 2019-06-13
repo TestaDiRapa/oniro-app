@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-toolbar>
+    <ion-title text-center>
+      Eventi avvenuti al giorno {{date | date}}
+    </ion-title>
+    </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-grid size-md="8" offset-md="2">
+        <ion-row>
+          <ion-col>
+            <ion-card>
+            Media della saturazione di ossigeno: {{data.avg_spo2 }}%
+          </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              Media Hr: {{ data.avg_hr}}
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+                <ion-item *ngFor="let chart of charts">
+                    <google-chart
+                    width="600"
+                    [title]="chart.title"
+                    [type]="chart.type"
+                    [data]="chart.data"
+                    [columnNames]="chart.columnNames"
+                    [roles]="chart.roles"
+                    [options]="chart.options"
+                  >
+                  </google-chart>
+                </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+    
