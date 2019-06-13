@@ -33,7 +33,6 @@ export class GmapsPage implements OnInit {
   myLoc;
 
   constructor(
-    private geolocation: Geolocation,
     private menuCtrl: MenuController,
     private getCoord: GetCoordService
   ) { }
@@ -57,7 +56,7 @@ export class GmapsPage implements OnInit {
       let marker: Marker
     }).catch((error) => {
       console.log('Error getting location', error);
-    });**/
+    });*/
 let options: GoogleMapOptions;
 LocationService.getMyLocation().then((myLocation: MyLocation) => {
   this.myLoc = myLocation;
@@ -89,7 +88,7 @@ LocationService.getMyLocation().then((myLocation: MyLocation) => {
 
   findDoctors() {
     Geocoder.geocode({
-          address: ['Rome,Italy' ]
+          address: this.addresses
         }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
           console.log('ehi');
           mvcArray.on('finish').subscribe(() => {
@@ -97,7 +96,7 @@ LocationService.getMyLocation().then((myLocation: MyLocation) => {
               const results: any[] =  mvcArray.getArray();
               results.forEach((result: GeocoderResult[]) => {
                 this.map.addMarkerSync({
-                  position: this.myLoc.latLng,
+                  position: result[0].position,
                   title:  JSON.stringify(result)
                 });
               });
