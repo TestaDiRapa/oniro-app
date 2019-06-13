@@ -293,9 +293,11 @@ export class AuthenticationService {
                 loggedUser.user = tmpUser;
                 this.setUserIdentity(loggedUser.user.name, loggedUser.user.surname);
                 this.loggedUser = loggedUser;
+                console.log("LOADED", this.loggedUser);
                 return loggedUser;
             } else {
                 this.loggedUser = new LoggedUser();
+                console.log("UNLOADED", this.loggedUser);
                 return null;
             }
         });

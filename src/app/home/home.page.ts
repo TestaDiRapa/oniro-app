@@ -44,7 +44,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.facts.init()
     this.facts.facts.subscribe(text => {
       this.fact = text;
     });
