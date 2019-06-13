@@ -72,7 +72,6 @@ export class RegisterPage implements OnInit {
 
         this.authService.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
-            this.authService.setUserIdentity(form.value['nome'], form.value['cognome']);
             this.loadingController.onDismiss();
 
             const authToken = resData.access_token;
