@@ -259,6 +259,7 @@ export class AuthenticationService {
         return this.storage.get('logged_user').then(JSONstring => {
             if (JSONstring) {
                 const tmp = JSON.parse(JSONstring);
+                console.log(tmp);
 
                 let tmpUser;
 
