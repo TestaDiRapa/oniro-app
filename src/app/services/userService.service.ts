@@ -38,7 +38,7 @@ export class UserService {
         JSON.stringify(abitudine),
         {
           headers: new HttpHeaders({
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: 'Bearer ' + token
           })
         });
