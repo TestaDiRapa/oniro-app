@@ -15,8 +15,8 @@
 <ion-content>
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <ion-segment (ionChange)="onChange($event, f)">
-      <ion-segment-button value="doc">Dottore</ion-segment-button>
-      <ion-segment-button value="user" checked>Paziente</ion-segment-button>
+      <ion-segment-button value="doc" style="color: white">Dottore</ion-segment-button>
+      <ion-segment-button value="user" style="color: white" checked>Paziente</ion-segment-button>
     </ion-segment>
     <ion-grid>
       <ion-row>
@@ -32,8 +32,7 @@
             </ion-item>
             <ion-item>
               <ion-label class="login-label" position="floating">Password</ion-label>
-              <ion-input type="password" ngModel name="password" required #passwordCtrl="ngModel">
-              </ion-input>
+              <ion-input type="password" ngModel name="password" required #passwordCtrl="ngModel"></ion-input>
             </ion-item>
           </ion-list>
         </ion-col>

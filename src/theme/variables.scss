@@ -76,21 +76,12 @@
   --ion-color-light-tint: #f5f6f9;
 
   /** background of the entire app**/
-  --ion-background-color: #ecd504;
-  --ion-text-color: rgb(0, 0, 0);
+  --ion-background-color: rgb(7, 48, 109);
+  --ion-text-color: white;
 
   /** Set the text of the entire app **/
   --ion-font-family: "Verdana";
   font-weight: bold;
 
-  ion-button {
-    --background: #000000;
-    --color: white;
-  }
-
-  ion-alert{
-    --background: #15165f;
-    --ion-text-color: white;
-  }
-
+ 
 }
