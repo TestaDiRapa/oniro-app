@@ -183,10 +183,22 @@ export class SettingsPage implements OnInit {
           handler: (inputs: { oldp: string, newp: string }) => {
             const oldp = inputs.oldp.trim();
             const newp = inputs.newp.trim();
-            if (newp.length > 0) {
+            if (newp.length >= 8) {
               const key = ['old_password', 'new_password'];
               const value = [oldp, newp];
               this.onSubmit(key, value, 'psw');
+            } else {
+              this.alertCtrl.create({
+                header: 'Error',
+                message: 'Inserire password corretta: almeno 8 caratteri',
+                buttons: [
+                  {
+                    text: 'OK'
+                  }
+                ]
+              }).then(alert => {
+                alert.present();
+              });
             }
           }
         },

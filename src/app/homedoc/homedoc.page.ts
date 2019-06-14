@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DoctorService } from '../services/doctorService.service';
 import { LoaderService } from '../services/loader-service.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-homedoc',
@@ -13,10 +14,11 @@ export class HomedocPage implements OnInit {
 
   constructor(
     private docService: DoctorService,
-    private loadingController: LoaderService) 
-    { }
+    private loadingController: LoaderService,
+    private alertCtrl: AlertController
+  ) { }
 
-ngOnInit() {
+  ngOnInit() {
   }
 
   ionViewWillEnter() {
@@ -29,6 +31,20 @@ ngOnInit() {
       });
     });
     this.loadingController.onDismiss();
+  }
+
+  onClickAlert(cf: string, date: string) {
+    this.loadingController.onCreate();
+    this.docService.deleteMessagePatient(date, cf).then(success => {
+      success.subscribe(resData => {
+        if (resData.status !== 'ok') {
+          this.alertCtrl.create({
+            header: resData.message,
+            buttons: ['OK']
+          }).then(alert => alert.present());
+        }
+      });
+    });
   }
 
 }
