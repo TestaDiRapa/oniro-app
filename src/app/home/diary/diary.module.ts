@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { DiaryPage } from './diary.page';
 import { GoogleChartsModule } from 'angular-google-charts';
-import { DiaryModalComponent } from './diary-modal/diary-modal.component';
 
 const routes: Routes = [
   {
@@ -24,7 +23,6 @@ const routes: Routes = [
     GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DiaryPage, DiaryModalComponent],
-  entryComponents: [DiaryModalComponent]
+  declarations: [DiaryPage]
 })
 export class DiaryPageModule {}
