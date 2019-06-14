@@ -60,22 +60,22 @@
                 <ion-label>Id Albo: {{ id }}</ion-label>
               </ion-item>
               <ion-item>
-                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
+                <ion-icon (click)="onPswModify()" color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onPswModify()">Password: ********</ion-label>
               </ion-item>
               <ion-item>
-                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
+                <ion-icon (click)="onPhoneModify()" color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onPhoneModify()">Telefono: {{ phone }}</ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>E-mail: {{ email }}</ion-label>
               </ion-item>
               <ion-item *ngIf="isUser">
-                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
+                <ion-icon (click)="onAgeModify()" color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onAgeModify()">Età: {{ age }}</ion-label>
               </ion-item>
               <ion-item *ngIf="!isUser">
-                <ion-icon color="light" slot="end" name="share-alt"></ion-icon>
+                <ion-icon (click)="onAddrModify()" color="light" slot="end" name="share-alt"></ion-icon>
                 <ion-label (click)="onAddrModify()">Indirizzo: {{ address }}</ion-label>
               </ion-item>
             </ion-list>
