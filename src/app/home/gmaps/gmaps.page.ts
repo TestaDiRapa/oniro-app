@@ -85,7 +85,7 @@ export class GmapsPage implements OnInit {
       this.map.animateCamera({
         target: myLocation.latLng,
         zoom: 17
-      }).then(() => {  
+      }).then(() => {
       });
     });
     this.findDoctors();
@@ -104,7 +104,7 @@ export class GmapsPage implements OnInit {
           results.forEach((result: GeocoderResult[]) => {
             console.log('Marker', i++);
             this.map.addMarkerSync({
-              position: result[0].position,
+              position: result[i++].position,
               title: JSON.stringify(result)
             });
           });
