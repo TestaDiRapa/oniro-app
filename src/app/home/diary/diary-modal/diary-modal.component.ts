@@ -46,7 +46,8 @@ export class DiaryModalComponent implements OnInit {
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
-    this.test();
+    this.chartHrSpectra();
+    this.chartSpO2Spectra()
       // this.charts.push({
       //   title: 'Densità spettrale Hr',
       //   type: 'LineChart',
@@ -243,30 +244,51 @@ export class DiaryModalComponent implements OnInit {
       // });
 
 }
-test() {
-for (let x = 0; x < this.data.hr_spectra['frequencies'].length ; x++) {
-    this.dat.push([this.data.hr_spectra['frequencies'][x],
-                  this.data.hr_spectra['spectral_density'][x]]);
+chartHrSpectra() {
+for (let x = 0; x < this.data.spo2_spectra['frequencies'].length ; x++) {
+    this.dat.push([this.data.spo2_spectra['frequencies'][x],
+                  this.data.spo2_spectra['spectral_density'][x]]);
   }
 this.charts.push({
-    title: 'Densità spettrale di Hr',
+    title: 'Densità spettrale di SPO2',
     type: 'LineChart',
     data: this.dat,
     roles: [],
     options: {
-          legend:{
-            display:false
-          },
-          vAxis:{
-            viewWindowMax:'auto'
-          },
-          hAxis:{
-            viewWindowMax:'auto'
+          legend: {
+            display: false
           }
+
            }
   });
 }
-onCloseModal(){
-  this.modalCtrl.dismiss(null,'close');
+
+chartSpO2Spectra() {
+  console.log(this.data);
+  for (let x = 0; x < this.data.hr_spectra['frequencies'].length ; x++) {
+      this.dat.push([this.data.hr_spectra['frequencies'][x],
+                    this.data.hr_spectra['spectral_density'][x]]);
+    }
+  this.charts.push({
+      title: 'Densità spettrale di Hr',
+      type: 'LineChart',
+      data: this.dat,
+      roles: [],
+      options: {
+            legend: {
+              display: false
+            },
+            vAxis: {
+              viewWindowMax: 'auto'
+            },
+            hAxis: {
+              viewWindowMax: 'auto'
+            }
+             }
+    });
+  }
+
+onCloseModal() {
+  this.modalCtrl.dismiss(null, 'close');
 }
 }
