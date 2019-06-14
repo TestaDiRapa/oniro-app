@@ -4,6 +4,7 @@ import { GoogleChartComponent, ChartEvent, ChartErrorEvent } from 'angular-googl
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
+import { DiaryModalComponent } from './diary-modal/diary-modal.component';
 import { ChartsService } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
 
