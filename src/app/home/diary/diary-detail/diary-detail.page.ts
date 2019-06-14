@@ -93,13 +93,43 @@ export class DiaryDetailPage implements OnInit {
           },
           total_movements: response['payload']['total_movements']
         };
-        this.prepareLineChart();
+        this.prepareLineChart('hr_spectra');
         this.charts.push({
           title: 'Densità spettrale di potenza del segnale Heart Rate',
           type: 'LineChart',
           data: this.aggregateData,
           roles: [],
+          options: {
+            legend: {
+              display: false
+            }
+          }
         });
+        this.prepareLineChart('spo2_spectra');
+        this.charts.push({
+          title: 'Densità spettrale di potenza del segnale SPO2',
+          type: 'LineChart',
+          data: this.aggregateData,
+          roles: [],
+          options: {
+            legend: {
+              display: false
+            }
+          }
+        });
+        this.prepareLineChartPlot('plot_spo2');
+        this.charts.push({
+          title: 'Plot SPO2',
+          type: 'LineChart',
+          data: this.aggregateData,
+          roles: [],
+          options: {
+            legend: {
+              display: false
+            }
+          }
+        });
+
 
         //QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
         this.loader.onDismiss();
@@ -138,10 +168,19 @@ export class DiaryDetailPage implements OnInit {
     });
   }
 
-  prepareLineChart() {
-    for (let x = 0; x < this.aggregate.hr_spectra['frequencies'].length; x++) {
-      this.aggregateData.push([this.aggregate.hr_spectra['frequencies'][x],
-      this.aggregate.hr_spectra['spectral_density'][x]]);
+  prepareLineChart(spectra: string) {
+    this.aggregateData=[];
+    for (let x = 0; x < this.aggregate[spectra]['frequencies'].length; x++) {
+      this.aggregateData.push([this.aggregate[spectra]['frequencies'][x],
+      this.aggregate[spectra]['spectral_density'][x]]);
+    }
+  }
+
+  prepareLineChartPlot(spectra: string) {
+    this.aggregateData=[];
+    for (let x = 0; x < this.aggregate[spectra].length; x++) {
+      this.aggregateData.push([this.aggregate[spectra][x],
+      x]);
     }
   }
 
