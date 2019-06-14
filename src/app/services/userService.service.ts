@@ -60,13 +60,14 @@ export class UserService {
 
   sendRequestToDoc(idDoc: string) {
     const path = 'http://' + environment.serverIp + '/user/my_doctors';
+    //let body = '{"doctor_id":' + '"' + idDoc + '"' + '}';
     let body = new HttpParams();
     body = body.append('doctor_id', idDoc);
-    console.log(body);
+    console.log("BODY - " + body);
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
         path,
-        body,
+        JSON.stringify(body),
         {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ export class UserService {
   sendRecordings(doctorId: string, dateID: string) {
     const path = 'http://' + environment.serverIp + '/user/my_recordings/send';
     let body = new HttpParams();
-    body = body.append('id', dateID)
+    body = body.append('id', dateID);
     body = body.append('doctor', doctorId);
     return this.authService.token.then(token => {
       return this.http.post<Respons>(

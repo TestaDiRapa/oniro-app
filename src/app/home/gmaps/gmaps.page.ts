@@ -85,13 +85,14 @@ export class GmapsPage implements OnInit {
       this.map.animateCamera({
         target: myLocation.latLng,
         zoom: 17
-      }).then(() => {
-        this.findDoctors();
+      }).then(() => {  
       });
     });
+    this.findDoctors();
   }
 
   private findDoctors() {
+    let i = 0;
     Geocoder.geocode({
       address: this.addresses
     }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
@@ -101,6 +102,7 @@ export class GmapsPage implements OnInit {
           console.log(mvcArray.getLength());
           const results: any[] = mvcArray.getArray();
           results.forEach((result: GeocoderResult[]) => {
+            console.log('Marker', i++);
             this.map.addMarkerSync({
               position: result[0].position,
               title: JSON.stringify(result)
@@ -118,7 +120,6 @@ export class GmapsPage implements OnInit {
       observable.subscribe(res => {
         // tslint:disable: no-string-literal
         this.doctors = res['payload'];
-
         console.log(res['payload']);
         for (const doctor of this.doctors) {
           this.addresses.push(doctor['address']);
@@ -139,6 +140,8 @@ export class GmapsPage implements OnInit {
                 text: 'OK',
               }
             ]
+          }).then(alert => {
+            alert.present();
           });
         } else {
           this.alertCtrl.create({
@@ -149,6 +152,8 @@ export class GmapsPage implements OnInit {
                 text: 'OK',
               }
             ]
+          }).then(alert => {
+            alert.present();
           });
         }
       });

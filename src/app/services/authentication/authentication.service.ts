@@ -57,6 +57,7 @@ export class AuthenticationService {
                 }
             });
         }
+        console.log("EXISTS", this.loggedUser);
         return new Promise<boolean>((resolve) => {
             resolve(true);
         })
