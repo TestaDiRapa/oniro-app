@@ -32,6 +32,10 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova plugin add cordova-plugin-background-mode ` <br>
 `npm install @ionic-native/background-mode ` <br>
 `npm install angular-google-charts` <br>
+`ionic cordova plugin add cordova-plugin-file` <br>
+`npm install @ionic-native/file` <br>
+`ionic cordova plugin add cordova-plugin-file-transfer` <br>
+`npm install @ionic-native/file-transfer` <br>
 
 
 ## Bug da fixare

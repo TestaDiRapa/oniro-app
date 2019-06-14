@@ -18,14 +18,6 @@
 
     <ion-row>
       <ion-col size-sm="6" offset-sm="3">
-        <ion-button (click)="findDoctors()">
-          Search Doctor
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
         <ion-list lines="none">
           <ion-card style="border: 2px solid white" *ngFor="let doctor of doctors">
             <ion-item>{{doctor['address']._id}} {{doctor['address'].address}}</ion-item>

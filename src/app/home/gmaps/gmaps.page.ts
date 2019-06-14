@@ -82,17 +82,19 @@ LocationService.getMyLocation().then((myLocation: MyLocation) => {
       target: myLocation.latLng,
      zoom: 17
     }).then(() => {
+      this.findDoctors();
     });
   });
   }
 
-  findDoctors() {
+  private findDoctors() {
     Geocoder.geocode({
           address: this.addresses
         }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
           console.log('ehi');
           mvcArray.on('finish').subscribe(() => {
             if (mvcArray.getLength() > 0) {
+              console.log(mvcArray.getLength());
               const results: any[] =  mvcArray.getArray();
               results.forEach((result: GeocoderResult[]) => {
                 this.map.addMarkerSync({
@@ -107,7 +109,7 @@ LocationService.getMyLocation().then((myLocation: MyLocation) => {
         });
   }
 
-  getCoordinates() {
+  private getCoordinates() {
     this.getCoord.getCoordinates().then(observable => {
       observable.subscribe(res => {
         // tslint:disable: no-string-literal
