@@ -58,6 +58,23 @@ export class UserService {
     }));
   }
 
+  sendRequestToDoc(idDoc: string) {
+    const path = 'http://' + environment.serverIp + '/user/my_doctors';
+    let body = new HttpParams();
+    body = body.append('doctor_id', idDoc);
+    return this.authService.token.then(token => {
+      return this.http.post<Respons>(
+        path,
+        body,
+        {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          }),
+        });
+    });
+  }
+
   sendRecordings(doctorId: string, dateID: string) {
     const path = 'http://' + environment.serverIp + '/user/my_recordings';
     let body = new HttpParams();
