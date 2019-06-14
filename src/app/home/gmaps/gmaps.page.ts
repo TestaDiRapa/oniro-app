@@ -131,7 +131,7 @@ export class GmapsPage implements OnInit {
   onSendRequest(idDoc: string) {
     this.userService.sendRequestToDoc(idDoc).then(success => {
       success.subscribe(resData => {
-        if (resData.message === 'ok') {
+        if (resData.status === 'ok') {
           this.alertCtrl.create({
             header: 'Success',
             message: 'Richiesta effettuata con successo!',
