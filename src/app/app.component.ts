@@ -76,4 +76,8 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl('/home/contacts');
   }
 
+  onClickDiaryPatient() {
+    //this.router.navigateByUrl(''); go to diary
+  }
+
 }

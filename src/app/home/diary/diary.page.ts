@@ -45,7 +45,7 @@ export class DiaryPage implements OnInit {
     this.menuCtrl.close();
     this.authService.token.then(token => {
       this.http.get<Respons>(
-        this.url,
+        this.url, 
         {
           headers: new HttpHeaders({
             Authorization: 'Bearer ' + token
