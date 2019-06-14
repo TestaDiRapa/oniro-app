@@ -58,4 +58,18 @@ export class DoctorService {
         });
     }
 
+    getMessagePatient(){
+        const path = 'http://' + environment.serverIp + '/doctor/my_alerts';
+        return this.authService.token.then(token => {
+            return this.http.get<Respons>(
+                path,
+                {
+                    headers: new HttpHeaders({
+                        Authorization: 'Bearer ' + token
+                    })
+                });
+        });
+
+    }
+
 }
