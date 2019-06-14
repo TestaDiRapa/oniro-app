@@ -62,6 +62,7 @@ export class UserService {
     const path = 'http://' + environment.serverIp + '/user/my_doctors';
     let body = new HttpParams();
     body = body.append('doctor_id', idDoc);
+    console.log(body);
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
         path,
@@ -76,14 +77,12 @@ export class UserService {
   }
 
   sendRecordings(doctorId: string, dateID: string) {
-    const path = 'http://' + environment.serverIp + '/user/my_recordings';
+    const path = 'http://' + environment.serverIp + '/user/my_recordings/send';
     let body = new HttpParams();
-
-    /* here the body append */
-
-    console.log("BODY OF SEND REQUEST -- " + body);
+    body = body.append('id', dateID)
+    body = body.append('doctor', doctorId);
     return this.authService.token.then(token => {
-      return this.http.put<Respons>(
+      return this.http.post<Respons>(
         path,
         body,
         {

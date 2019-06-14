@@ -140,6 +140,16 @@ export class GmapsPage implements OnInit {
               }
             ]
           });
+        } else {
+          this.alertCtrl.create({
+            header: 'Error',
+            message: resData.message,
+            buttons: [
+              {
+                text: 'OK',
+              }
+            ]
+          });
         }
       });
     });
