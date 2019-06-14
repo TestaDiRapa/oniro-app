@@ -68,7 +68,7 @@ export class DiaryDetailPage implements OnInit {
 
   ionViewWillEnter() {
     this.currentDate = this.chartsService.dataId;
-    console.log("data evento: " + this.currentDate);
+    console.log('data evento: ' + this.currentDate);
     this.loader.onCreate();
     this.chartsService.data.then(response => {
       console.log(response);
@@ -100,11 +100,13 @@ export class DiaryDetailPage implements OnInit {
           data: this.aggregateData,
           roles: [],
           options: {
-            legend: {
-              display: false
-            }
-          }
+            legend: 'none',
+            pieHole: 0.55,
+            width: 'auto',
+            height: 'auto',
+           },
         });
+
         this.prepareLineChart('spo2_spectra');
         this.charts.push({
           title: 'Densità spettrale di potenza del segnale SPO2',
@@ -112,11 +114,13 @@ export class DiaryDetailPage implements OnInit {
           data: this.aggregateData,
           roles: [],
           options: {
-            legend: {
-              display: false
-            }
-          }
+            legend: 'none',
+            pieHole: 0.55,
+            width: 'auto',
+            height: 'auto',
+           },
         });
+
         this.prepareLineChartPlot('plot_spo2');
         this.charts.push({
           title: 'Plot SPO2',
@@ -124,14 +128,29 @@ export class DiaryDetailPage implements OnInit {
           data: this.aggregateData,
           roles: [],
           options: {
-            legend: {
-              display: false
-            }
-          }
+            legend: 'none',
+            pieHole: 0.55,
+            width: 'auto',
+            height: 'auto',
+           },
+        });
+        this.prepareHistogram('plot_movements');
+        this.charts.push({
+          title: 'Movimenti',
+          type: 'Histogram',
+          data: this.aggregateData,
+          columnNames: ['Movimenti', 'Ora'],
+          roles: [],
+          options: {
+            legend: 'none',
+            pieHole: 0.55,
+            width: 'auto',
+            height: 'auto',
+           },
         });
 
 
-        //QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
+        // QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
         this.loader.onDismiss();
         this.isLoaded = true;
       } else {
@@ -148,7 +167,7 @@ export class DiaryDetailPage implements OnInit {
                   }
                 }
               ]
-            }).then(alert => { alert.present() });
+            }).then(alert => { alert.present(); });
           } else {
             this.alertCtrl.create({
               header: 'Error',
@@ -161,7 +180,7 @@ export class DiaryDetailPage implements OnInit {
                   }
                 }
               ]
-            }).then(alert => { alert.present() });
+            }).then(alert => { alert.present(); });
           }
         });
       }
@@ -169,7 +188,7 @@ export class DiaryDetailPage implements OnInit {
   }
 
   prepareLineChart(spectra: string) {
-    this.aggregateData=[];
+    this.aggregateData = [];
     for (let x = 0; x < this.aggregate[spectra]['frequencies'].length; x++) {
       this.aggregateData.push([this.aggregate[spectra]['frequencies'][x],
       this.aggregate[spectra]['spectral_density'][x]]);
@@ -177,12 +196,20 @@ export class DiaryDetailPage implements OnInit {
   }
 
   prepareLineChartPlot(spectra: string) {
-    this.aggregateData=[];
+    this.aggregateData = [];
     for (let x = 0; x < this.aggregate[spectra].length; x++) {
-      this.aggregateData.push([this.aggregate[spectra][x],
-      x]);
+      this.aggregateData.push([x, this.aggregate[spectra][x]]);
     }
   }
+
+  prepareHistogram(histogram: string) {
+    this.aggregateData = [];
+    for (let x = 0; x < this.aggregate[histogram].length; x++) {
+      this.aggregateData.push([x, this.aggregate[histogram][x]]);
+    }
+    console.log("YOOOOO",this.aggregateData);
+  }
+
 
   ngOnInit() {
   }
