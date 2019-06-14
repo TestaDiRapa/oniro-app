@@ -23,7 +23,7 @@ const routes: Routes = [
     GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DiaryPage, DiaryModalComponent],
-  entryComponents: [DiaryModalComponent]
+  declarations: [DiaryPage],
+  entryComponents: []
 })
 export class DiaryPageModule {}
