@@ -25,7 +25,7 @@ export class ChartsService {
 
   get data() {
     let url: string;
-    if(this.currentCf) {
+    if (this.currentCf) {
       url = `http://${environment.serverIp}/user/my_recordings?id=${this.currentId}&cf=${this.currentCf}`;
     } else {
       url = `http://${environment.serverIp}/user/my_recordings?id=${this.currentId}`;
@@ -39,7 +39,7 @@ export class ChartsService {
             Authorization: `Bearer ${token}`,
           })
         }
-      ).toPromise()
+      ).toPromise();
     });
 
   }

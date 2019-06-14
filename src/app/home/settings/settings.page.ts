@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService.service';
-import { MenuController, AlertController } from '@ionic/angular';
+import { MenuController, AlertController, Platform } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+//import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-settings',
@@ -24,16 +25,25 @@ export class SettingsPage implements OnInit {
   public age: string;
   public email: string;
   public address: string;
+  private DESTINATION_TYPE: number;
 
   constructor(
     private userService: UserService,
     private authService: AuthenticationService,
     private menuCtrl: MenuController,
     private alertCtrl: AlertController,
-    private camera: Camera
+    private camera: Camera,
+    private platform: Platform,
+    private file: File
   ) { }
 
   ngOnInit() {
+
+    if (this.platform.is('ios')) {
+      this.DESTINATION_TYPE = this.camera.DestinationType.NATIVE_URI;
+    } else {
+      this.DESTINATION_TYPE = this.camera.DestinationType.FILE_URI;
+    }
     this.authService.getUser().then(user => {
       if (user.image) {
         this.isEmpty = false;
@@ -73,7 +83,7 @@ export class SettingsPage implements OnInit {
             if (type === 'addr' && user.hasOwnProperty('address')) {
               user['address'] = formData.get('address').toString();
               this.address = formData.get('address').toString();
-            } else if (type === 'phone' ) {
+            } else if (type === 'phone') {
               user.phone_number = formData.get('phone_number').toString();
               this.phone = formData.get('phone_number').toString();
             } else if (type === 'age' && user.hasOwnProperty('age')) {
@@ -237,20 +247,20 @@ export class SettingsPage implements OnInit {
         }]
     }).then(alert => alert.present());
   }
-
+/*
   accessCamera() {
     const options: CameraOptions = {
       quality: 100,
       targetHeight: 350,
       targetWidth: 350,
       sourceType: this.camera.PictureSourceType.CAMERA,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.DESTINATION_TYPE,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
     this.camera.getPicture(options).then((imgData) => {
-      this.urlImgage = (<any> window).Ionic.WebView.convertFileSrc(imgData);
-      this.base64Image = this.urlImgage;
+      this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
+      this.uploadPhoto(imgData);
     }, (err) => {
       console.log(err);
     });
@@ -262,11 +272,19 @@ export class SettingsPage implements OnInit {
       targetHeight: 350,
       targetWidth: 350,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.DESTINATION_TYPE,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
+      this.uploadPhoto(imgData);
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  private uploadPhoto(imgData: string) {
+    if (imgData.length > 200) {
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
       let formData = new FormData();
       formData.append('image', this.base64Image);
@@ -283,8 +301,33 @@ export class SettingsPage implements OnInit {
           }
         });
       });
-    }, (err) => {
-      console.log(err);
-    });
-  }
+    }
+    else {
+      this.file.resolveLocalFilesystemUrl(imgData).then(fileEntry => {
+        let { name, nativeURL } = fileEntry;
+        let path = nativeURL.substring(0, nativeURL.lastIndexOf("/"));
+        return this.file.readAsArrayBuffer(path, name);
+      }).then(buffer => {
+        let imgBlob = new Blob([buffer], {
+          type: "image/jpeg"
+        });
+        const formData = new FormData();
+        formData.append('file', imgBlob, 'image.png');
+        this.userService.changeProfile(formData).subscribe(success => {
+          success.subscribe(resData => {
+            if (resData.status === 'ok') {
+              this.urlImgage = resData.message; // url dell'immagine
+              this.authService.getUser().then(user => {
+                user.image = this.urlImgage;
+                this.authService.setUser(user);
+              });
+            } else {
+              this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+            }
+          });
+        });
+      });
+    }
+  }*/
+
 }

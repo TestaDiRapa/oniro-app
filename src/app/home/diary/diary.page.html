@@ -1,11 +1,11 @@
 <ion-header>
-    <ion-toolbar color="light" text-center>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/home"></ion-back-button>
-      </ion-buttons>
-      <ion-text  style="font-size: 25px">Diario</ion-text>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar color="light" text-center>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-text style="font-size: 25px">Diario</ion-text>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
   <ion-grid>
@@ -13,24 +13,24 @@
       <ion-col>
         <ion-list>
           <ion-item *ngFor="let p of preview" (click)="onclick([p._id])">
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
-                    {{ p._id | date: 'EEE dd MMM yyyy'}}
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col>
-                      Apnea events: {{ p.preview.apnea_events | number }}
-                  </ion-col>
-                  <ion-col>
-                      Avg heart rate: {{ p.preview.avg_hr | number: '2.0-0'  }} bpm
-                  </ion-col>
-                  <ion-col>
-                      Avg SpO2: {{ p.preview.avg_spo2 | number:'2.2-3' }} %
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-text color="warning">{{ p._id | date: 'EEE dd MMM yyyy'}}</ion-text>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  Apnea events: {{ p.preview.apnea_events | number }}
+                </ion-col>
+                <ion-col>
+                  Avg heart rate: {{ p.preview.avg_hr | number: '2.0-0'  }} bpm
+                </ion-col>
+                <ion-col>
+                  Avg SpO2: {{ p.preview.avg_spo2 | number:'2.2-3' }} %
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </ion-item>
         </ion-list>
       </ion-col>

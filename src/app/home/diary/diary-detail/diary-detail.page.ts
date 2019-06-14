@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { AlertController } from '@ionic/angular';
 import { LoaderService } from 'src/app/services/loader-service.service';
+import { UserService } from 'src/app/services/userService.service';
 
 export interface Aggregate {
   apnea_events: number;
@@ -13,16 +14,16 @@ export interface Aggregate {
   avg_spo2: number;
   hr_spectra: Spectra;
   plot_apnea_events: ApneaEvent[];
-  plot_hr: number [];
-  plot_movements: number [];
-  plot_spo2: number [];
+  plot_hr: number[];
+  plot_movements: number[];
+  plot_spo2: number[];
   spo2_spectra: Spectra;
   total_movements: number;
 }
 
 export interface Spectra {
-  frequencies: number [];
-  spectral_density: number [];
+  frequencies: number[];
+  spectral_density: number[];
 }
 
 export interface ApneaEvent {
@@ -40,7 +41,8 @@ export class DiaryDetailPage implements OnInit {
 
   aggregate: Aggregate;
   isLoaded = false;
-  
+  currentDate: string;
+
   aggregateData: Array<Array<string | number | {}>> = [];
   charts: Array<{
     title: string;
@@ -57,17 +59,20 @@ export class DiaryDetailPage implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private auth: AuthenticationService,
+    private authService: AuthenticationService,
     private chartsService: ChartsService,
     private loader: LoaderService,
+    private userService: UserService,
     private router: Router
   ) { }
 
   ionViewWillEnter() {
+    this.currentDate = this.chartsService.dataId;
+    console.log("data evento: " + this.currentDate);
     this.loader.onCreate();
     this.chartsService.data.then(response => {
       console.log(response);
-      if (response['status'] == 'ok') {
+      if (response['status'] === 'ok') {
         this.aggregate = {
           apnea_events: response['payload']['apnea_events'],
           avg_duration: response['payload']['avg_duration'],
@@ -88,15 +93,19 @@ export class DiaryDetailPage implements OnInit {
           },
           total_movements: response['payload']['total_movements']
         };
-
-        // ATTENZIONE
-        // CONTINUA A LAVORARE DA QUI
+        this.prepareLineChart();
+        this.charts.push({
+          title: 'Densità spettrale di potenza del segnale Heart Rate',
+          type: 'LineChart',
+          data: this.aggregateData,
+          roles: [],
+        });
 
         //QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
         this.loader.onDismiss();
         this.isLoaded = true;
       } else {
-        this.auth.getUserType().then(isUser => {
+        this.authService.getUserType().then(isUser => {
           if (isUser) {
             this.alertCtrl.create({
               header: 'Error',
@@ -124,12 +133,58 @@ export class DiaryDetailPage implements OnInit {
               ]
             }).then(alert => { alert.present() });
           }
-        })
+        });
       }
     });
   }
 
+  prepareLineChart() {
+    for (let x = 0; x < this.aggregate.hr_spectra['frequencies'].length; x++) {
+      this.aggregateData.push([this.aggregate.hr_spectra['frequencies'][x],
+      this.aggregate.hr_spectra['spectral_density'][x]]);
+    }
+  }
+
   ngOnInit() {
+  }
+
+  // DA FINIRE
+  onSendRecToDoctor() {
+    this.userService.sendRecordings('', '').then(success => {
+      success.subscribe(resData => {
+        if (resData.message === 'ok') {
+          this.alertCtrl.create({
+            header: 'Success',
+            message: 'Parametri inviati con successo!',
+            buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                  this.router.navigate(['/home/diary']);
+                }
+              }
+            ]
+          }).then(alert => {
+            alert.present();
+          });
+        } else {
+          this.alertCtrl.create({
+            header: 'Error',
+            message: resData.message,
+            buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                  this.router.navigate(['/home/diary']);
+                }
+              }
+            ]
+          }).then(alert => {
+            alert.present();
+          });
+        }
+      });
+    });
   }
 
 }

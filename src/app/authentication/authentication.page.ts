@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoaderService } from '../services/loader-service.service';
 import { Router } from '@angular/router';
+import { UselessService } from '../services/useless.service';
 
 @Component({
   selector: 'app-authentication',
@@ -20,6 +21,7 @@ export class AuthenticationPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    console.log("AUTOLOGIN");
     this.loader.onCreate();
     this.auth.autologin().then(response => {
       this.loader.onDismiss();

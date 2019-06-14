@@ -2,6 +2,7 @@ import { MenuController, AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
 import { LoaderService } from 'src/app/services/loader-service.service';
+import { DoctorService } from 'src/app/services/doctorService.service';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class RichiestePazientiPage implements OnInit {
 
   constructor(
     private menuCtrl: MenuController,
-    private userService: UserService,
+    private docService: DoctorService,
     private alertCtrl: AlertController,
     private loadingController: LoaderService
 
@@ -27,7 +28,7 @@ export class RichiestePazientiPage implements OnInit {
 
   ionViewWillEnter() {
     this.loadingController.onCreate();
-    this.userService.getRequests().then(succes => {
+    this.docService.getRequests().then(succes => {
       succes.subscribe(resData => {
         console.log(resData);
         for (let i = 0; i < resData['results'].length; i++) {
@@ -46,7 +47,7 @@ export class RichiestePazientiPage implements OnInit {
   accept(cf: string) {
     const params = '{"user_cf":' + '"' + cf + '"' + '}';
     this.loadingController.onCreate();
-    this.userService.acceptPatient(params).then(success => {
+    this.docService.acceptPatient(params).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
           this.alertCtrl.create({
@@ -66,7 +67,7 @@ export class RichiestePazientiPage implements OnInit {
 
   reject(cf: string) {
     this.loadingController.onCreate();
-    this.userService.deletePatient(cf).then(success => {
+    this.docService.rejectPatient(cf).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
           this.alertCtrl.create({
@@ -83,11 +84,6 @@ export class RichiestePazientiPage implements OnInit {
       });
     });
   }
-
-
-
-
-
 
 
 }
