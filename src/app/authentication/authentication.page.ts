@@ -34,6 +34,14 @@ export class AuthenticationPage implements OnInit {
     });
   }
 
- 
+ ionViewWillEnter(){
+  console.log('LOGIN');
+  this.loader.onCreate();
+  this.auth.autologin().then(response => {
+    this.loader.onDismiss();
+    
+  });
+
+ }
 
 }
