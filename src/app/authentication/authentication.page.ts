@@ -18,23 +18,22 @@ export class AuthenticationPage implements OnInit {
   ) { }
 
   ngOnInit() {
-  }
-
-  ionViewWillEnter() {
-    console.log("AUTOLOGIN");
+    console.log('AUTOLOGIN');
     this.loader.onCreate();
     this.auth.autologin().then(response => {
       this.loader.onDismiss();
-      if(response) {
+      if (response) {
         this.auth.getUserType().then(isUser => {
-          if(isUser) {
+          if (isUser) {
             this.router.navigate(['/home']);
-          } else {
+          }  else  {
             this.router.navigate(['/homedoc']);
           }
         });
       }
     });
   }
+
+ 
 
 }
