@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
 import { MenuController } from '@ionic/angular';
 import { CallNumber } from '@ionic-native/call-number/ngx';
-import { LoaderService } from 'src/app/services/loader-service.service';
+import { ControllerService } from 'src/app/services/controllerService.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class ContactsPage implements OnInit {
 
     private userService: UserService,
     private menuCtrl: MenuController,
-    private loadingController: LoaderService,
+    private controlService: ControllerService,
     private call: CallNumber) {
   }
 
@@ -29,14 +29,14 @@ export class ContactsPage implements OnInit {
   }
 
   private getContact() {
-    this.loadingController.onCreate();
+    this.controlService.onCreateLoadingCtrl();
     this.userService.getMyDoctor().then(success => {
       success.subscribe(res => {
         this.contacts = res.message;
-        this.loadingController.onDismiss();
+        this.controlService.onDismissLoaderCtrl();
       });
     });
-    this.loadingController.onDismiss();
+    this.controlService.onDismissLoaderCtrl();
   }
 
   async callNumber(phone: string): Promise<any> {

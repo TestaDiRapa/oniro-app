@@ -6,7 +6,7 @@ import { Paziente } from './paziente.model';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Medico } from './medico.model';
 import { AlertController, MenuController } from '@ionic/angular';
-import { LoaderService } from '../services/loader-service.service';
+import { ControllerService } from '../services/controllerService.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +23,7 @@ export class RegisterPage implements OnInit {
     private authService: AuthenticationService,
     private alertCtrl: AlertController,
     private menuCtrl: MenuController,
-    public loadingController: LoaderService
+    public controllerService: ControllerService
   ) { }
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class RegisterPage implements OnInit {
         this.paziente = new Paziente(form.value['nome'], form.value['cognome'],
           form.value['password'], form.value['telefono'],
           form.value['email'], form.value['cf'], form.value['eta'], '');
-        this.loadingController.onCreate();
+        this.controllerService.onCreateLoadingCtrl();
         this.authService.register(this.paziente, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
             this.authService.isAuthenticated = true;
@@ -72,7 +72,7 @@ export class RegisterPage implements OnInit {
 
         this.authService.register(this.medico, this.isUser).subscribe(resData => {
           if (resData.status === 'ok') {
-            this.loadingController.onDismiss();
+            this.controllerService.onDismissLoaderCtrl();
 
             const authToken = resData.access_token;
             const authExp = resData.access_token_exp;
@@ -87,7 +87,7 @@ export class RegisterPage implements OnInit {
             this.presentAlert('Registrazione effettuata con successo!');
             this.router.navigateByUrl('/homedoc');
           } else {
-            this.loadingController.onDismiss();
+            this.controllerService.onDismissLoaderCtrl();
             this.presentAlert(resData.message);
           }
         });

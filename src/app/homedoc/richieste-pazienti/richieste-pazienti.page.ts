@@ -1,8 +1,8 @@
 import { MenuController, AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
-import { LoaderService } from 'src/app/services/loader-service.service';
 import { DoctorService } from 'src/app/services/doctorService.service';
+import { ControllerService } from 'src/app/services/controllerService.service';
 
 
 @Component({
@@ -18,8 +18,7 @@ export class RichiestePazientiPage implements OnInit {
     private menuCtrl: MenuController,
     private docService: DoctorService,
     private alertCtrl: AlertController,
-    private loadingController: LoaderService
-
+    private controllerService: ControllerService
   ) { }
 
   ngOnInit() {
@@ -27,7 +26,7 @@ export class RichiestePazientiPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.loadingController.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.docService.getRequests().then(succes => {
       succes.subscribe(resData => {
         console.log(resData);
@@ -41,12 +40,12 @@ export class RichiestePazientiPage implements OnInit {
         this.n_req = this.pazienti.length;
       });
     });
-    this.loadingController.onDismiss();
+    this.controllerService.onDismissLoaderCtrl();
   }
 
   accept(cf: string) {
     const params = '{"user_cf":' + '"' + cf + '"' + '}';
-    this.loadingController.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.docService.acceptPatient(params).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
@@ -66,7 +65,7 @@ export class RichiestePazientiPage implements OnInit {
   }
 
   reject(cf: string) {
-    this.loadingController.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.docService.rejectPatient(cf).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {

@@ -9,6 +9,7 @@ import { AuthenticationService } from './authentication/authentication.service';
 export class ChartsService {
   private currentId: string;
   private currentCf: string = null;
+  private currentDateToPrint: string;
 
   constructor(
     private auth: AuthenticationService,
@@ -21,6 +22,14 @@ export class ChartsService {
 
   set dataId(id: string) {
     this.currentId = id;
+  }
+
+  set currentDate(date: string) {
+    this.currentDateToPrint = date;
+  }
+
+  get currentDate() {
+    return this.currentDateToPrint;
   }
 
   get data() {

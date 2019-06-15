@@ -8,11 +8,11 @@ import { Bevanda } from './add-abitudini/bevanda.model';
 import { Abitudini } from './add-abitudini/abitudini.model';
 import { Router } from '@angular/router';
 
-import { LoaderService } from '../services/loader-service.service';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
 import { DataStoringService } from '../services/bluetooth/data-storage/data-storing.service';
 import { UselessService } from '../services/useless.service';
+import { ControllerService } from '../services/controllerService.service';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class HomePage implements OnInit, OnDestroy {
     private alertCtrl: AlertController,
     private dataMngr: DataStoringService,
     private facts: UselessService,
-    private loadingController: LoaderService,
+    private controllerService: ControllerService,
     private modalCtrl: ModalController,
     private network: Network,
     private router: Router,
@@ -99,15 +99,15 @@ export class HomePage implements OnInit, OnDestroy {
 
   onStartMonitoring() {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
-    this.loadingController.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.user.putMyHabits(abitudine).then(observable => {
       observable.subscribe(
         response => {
           if (response.status === 'ok') {
-            this.loadingController.onDismiss();
+            this.controllerService.onDismissLoaderCtrl();
             this.router.navigate(['/home/record']);
           } else {
-            this.loadingController.onDismiss();
+            this.controllerService.onDismissLoaderCtrl();
             this.alertCtrl.create({
               header: 'Si è verificato un errore!',
               message: response.message,
@@ -122,7 +122,7 @@ export class HomePage implements OnInit, OnDestroy {
           }
         },
         error => {
-          this.loadingController.onDismiss();
+          this.controllerService.onDismissLoaderCtrl();
           this.alertCtrl.create({
             header: 'Si è verificato un errore!',
             message: error.message,

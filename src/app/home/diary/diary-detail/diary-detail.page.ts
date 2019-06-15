@@ -3,8 +3,8 @@ import { ChartsService } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { AlertController } from '@ionic/angular';
-import { LoaderService } from 'src/app/services/loader-service.service';
 import { UserService } from 'src/app/services/userService.service';
+import { ControllerService } from 'src/app/services/controllerService.service';
 
 export interface Aggregate {
   apnea_events: number;
@@ -61,15 +61,15 @@ export class DiaryDetailPage implements OnInit {
     private alertCtrl: AlertController,
     private authService: AuthenticationService,
     private chartsService: ChartsService,
-    private loader: LoaderService,
+    private controllerService: ControllerService,
     private userService: UserService,
     private router: Router
   ) { }
 
   ionViewWillEnter() {
-    this.currentDate = this.chartsService.dataId;
+    this.currentDate = this.chartsService.currentDate;
     console.log('data evento: ' + this.currentDate);
-    this.loader.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.chartsService.data.then(response => {
       console.log(response);
       if (response['status'] === 'ok') {
@@ -151,7 +151,7 @@ export class DiaryDetailPage implements OnInit {
 
 
         // QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
-        this.loader.onDismiss();
+        this.controllerService.onDismissLoaderCtrl();
         this.isLoaded = true;
       } else {
         this.authService.getUserType().then(isUser => {

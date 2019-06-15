@@ -8,8 +8,8 @@ import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MenuController } from '@ionic/angular';
-import { LoaderService } from '../services/loader-service.service';
 import { environment } from 'src/environments/environment';
+import { ControllerService } from '../services/controllerService.service';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
     private authService: AuthenticationService,
     private http: HttpClient,
     private menuCtrl: MenuController,
-    public loadingController: LoaderService,
+    public controllerService: ControllerService,
     private alertCtrl: AlertController,
   ) { }
 
@@ -69,7 +69,7 @@ export class LoginPage implements OnInit {
       this.username = form.value.albo;
     }
     this.password = form.value.password;
-    this.loadingController.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
       if (res.status === 'ok') {
         const authToken = res.access_token;
@@ -100,12 +100,12 @@ export class LoginPage implements OnInit {
                 response.message['address'], imagePath));
               this.path = 'homedoc';
             }
-            this.loadingController.onDismiss();
+            this.controllerService.onDismissLoaderCtrl();
             this.router.navigateByUrl('/' + this.path);
           }
         });
       } else {
-        this.loadingController.onDismiss();
+        this.controllerService.onDismissLoaderCtrl();
         this.presentAlert(res.message);
       }
     });

@@ -272,7 +272,9 @@ export class DiaryPage implements OnInit {
     }
   */
   onclick(id: string) {
+    const date = id.toString().substr(0, 10);
     this.charts.dataId = id;
+    this.charts.currentDate = date;
     this.router.navigate(['/home/diary/diary-detail']);
   }
 }

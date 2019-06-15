@@ -13,6 +13,7 @@ import {
   BaseArrayClass
 } from '@ionic-native/google-maps';
 import { UserService } from 'src/app/services/userService.service';
+import { ControllerService } from 'src/app/services/controllerService.service';
 
 @Component({
   selector: 'app-gmaps',
@@ -31,6 +32,7 @@ export class GmapsPage implements OnInit {
     private menuCtrl: MenuController,
     private getCoord: GetCoordService,
     private alertCtrl: AlertController,
+    private controllerService: ControllerService,
     private userService: UserService
   ) { }
 
@@ -38,9 +40,11 @@ export class GmapsPage implements OnInit {
     this.menuCtrl.toggle();
     this.getCoordinates();
   }
-  ionViewWillEnter(){
+
+  ionViewWillEnter() {
     Environment.setBackgroundColor('#07306D');
   }
+
   loadMap() {
     // const myPosition = this.geolocation.getCurrentPosition();
     /*   this.geolocation.getCurrentPosition().then((resp) => {
@@ -127,29 +131,9 @@ export class GmapsPage implements OnInit {
     this.userService.sendRequestToDoc(idDoc).then(success => {
       success.subscribe(resData => {
         if (resData.status === 'ok') {
-          this.alertCtrl.create({
-            header: 'Success',
-            message: 'Richiesta effettuata con successo!',
-            buttons: [
-              {
-                text: 'OK',
-              }
-            ]
-          }).then(alert => {
-            alert.present();
-          });
+          this.controllerService.createAlertCtrl('Success', 'Richiesta effettuata con successo!');
         } else {
-          this.alertCtrl.create({
-            header: 'Error',
-            message: resData.message,
-            buttons: [
-              {
-                text: 'OK',
-              }
-            ]
-          }).then(alert => {
-            alert.present();
-          });
+          this.controllerService.createAlertCtrl('Error', resData.message);
         }
       });
     });

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication/authentication.service';
-import { LoaderService } from '../services/loader-service.service';
 import { Router } from '@angular/router';
 import { UselessService } from '../services/useless.service';
+import { ControllerService } from '../services/controllerService.service';
 
 @Component({
   selector: 'app-authentication',
@@ -13,20 +13,20 @@ export class AuthenticationPage implements OnInit {
 
   constructor(
     private auth: AuthenticationService,
-    private loader: LoaderService,
+    private controllerService: ControllerService,
     private router: Router
   ) { }
 
   ngOnInit() {
     console.log('AUTOLOGIN');
-    this.loader.onCreate();
+    this.controllerService.onCreateLoadingCtrl();
     this.auth.autologin().then(response => {
-      this.loader.onDismiss();
+      this.controllerService.onDismissLoaderCtrl();
       if (response) {
         this.auth.getUserType().then(isUser => {
           if (isUser) {
             this.router.navigate(['/home']);
-          }  else  {
+          } else {
             this.router.navigate(['/homedoc']);
           }
         });
@@ -34,14 +34,12 @@ export class AuthenticationPage implements OnInit {
     });
   }
 
- ionViewWillEnter(){
-  console.log('LOGIN');
-  this.loader.onCreate();
-  this.auth.autologin().then(response => {
-    this.loader.onDismiss();
-    
-  });
-
- }
+  ionViewWillEnter() {
+    console.log('LOGIN');
+    this.controllerService.onCreateLoadingCtrl();
+    this.auth.autologin().then(response => {
+      this.controllerService.onDismissLoaderCtrl();
+    });
+  }
 
 }
