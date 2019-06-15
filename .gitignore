@@ -34,7 +34,6 @@ e2e/
 node_modules/
 platforms/
 plugins/
-resources/
 www/
 config.xml
 angular.json

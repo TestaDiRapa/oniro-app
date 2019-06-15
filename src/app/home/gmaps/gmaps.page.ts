@@ -1,26 +1,18 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MenuController, AlertController } from '@ionic/angular';
 import { GetCoordService } from '../../services/get-coord.service';
 import {
   GoogleMaps,
   GoogleMap,
-  GoogleMapsEvent,
   GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
-  Marker,
   Environment,
   Geocoder,
   GeocoderResult,
   LocationService,
   MyLocation,
-  GoogleMapsMapTypeId,
   BaseArrayClass
 } from '@ionic-native/google-maps';
 import { UserService } from 'src/app/services/userService.service';
-import { observable } from 'rxjs';
-declare var google;
 
 @Component({
   selector: 'app-gmaps',
@@ -33,20 +25,22 @@ export class GmapsPage implements OnInit {
   doctors: any[];
   addresses: string[] = [];
   myLoc;
+  color = '#07306D';
 
   constructor(
     private menuCtrl: MenuController,
     private getCoord: GetCoordService,
-    private userService: UserService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
     this.menuCtrl.toggle();
     this.getCoordinates();
-    this.loadMap();
   }
-
+  ionViewWillEnter(){
+    Environment.setBackgroundColor('#07306D');
+  }
   loadMap() {
     // const myPosition = this.geolocation.getCurrentPosition();
     /*   this.geolocation.getCurrentPosition().then((resp) => {
@@ -69,7 +63,9 @@ export class GmapsPage implements OnInit {
           compass: true,
           myLocationButton: true,
           myLocation: true,   // (blue dot)
-          indoorPicker: true
+          indoorPicker: true,
+          mapToolbar: true,
+          zoom: true
         },
         gestures: {
           scroll: true,
@@ -79,7 +75,7 @@ export class GmapsPage implements OnInit {
         },
         camera: {
           target: myLocation.latLng
-        }
+        },
       };
       this.map = GoogleMaps.create('map', options);
       this.map.animateCamera({
@@ -88,23 +84,22 @@ export class GmapsPage implements OnInit {
       }).then(() => {
       });
     });
+    this.getCoordinates();
     this.findDoctors();
   }
 
   private findDoctors() {
-    let i = 0;
     Geocoder.geocode({
       address: this.addresses
     }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
       console.log('ehi');
       mvcArray.on('finish').subscribe(() => {
         if (mvcArray.getLength() > 0) {
-          console.log(mvcArray.getLength());
+          console.log('lunghezza ', mvcArray.getLength());
           const results: any[] = mvcArray.getArray();
           results.forEach((result: GeocoderResult[]) => {
-            console.log('Marker', i++);
             this.map.addMarkerSync({
-              position: result[i++].position,
+              position: result[0].position,
               title: JSON.stringify(result)
             });
           });
