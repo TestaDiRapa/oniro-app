@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
     this.facts.init();
     this.authService.user.subscribe(person => {
       this.identity = person;
-    })
+    });
     this.authService.type.subscribe(type => {
       this.isUser = type;
     });
@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   onClickDiaryPatient() {
-    //this.router.navigateByUrl(''); go to diary
+  this.router.navigateByUrl('/homedoc/lista-diario-pazienti');
   }
 
 }

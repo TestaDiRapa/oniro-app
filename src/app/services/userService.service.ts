@@ -60,7 +60,7 @@ export class UserService {
 
   sendRequestToDoc(idDoc: string) {
     const path = 'http://' + environment.serverIp + '/user/my_doctors';
-    let body =  JSON.stringify({doctor_id: idDoc});
+    const body =  JSON.stringify({doctor_id: idDoc});
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
         path,
@@ -87,5 +87,16 @@ export class UserService {
         });
     });
   }
-
+getMyPatients() {
+  const path = 'http://' + environment.serverIp + '/doctor/my_patients';
+  return this.authService.token.then(token => {
+    return this.http.get<Respons>(
+      path,
+      {
+        headers: new HttpHeaders({
+          Authorization: 'Bearer ' + token
+        })
+      });
+  });
+}
 }
