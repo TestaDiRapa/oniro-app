@@ -21,7 +21,14 @@ export class ChartsService {
   }
 
   set dataId(id: string) {
+    console.log("SET");
+    console.log(id);
     this.currentId = id;
+    console.log(this.currentId);
+  }
+
+  get dataId() {
+    return this.currentId;
   }
 
   set currentDate(date: string) {

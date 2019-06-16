@@ -52,8 +52,6 @@ export class DiaryPage implements OnInit {
         }
       ).subscribe(res => {
         this.preview = res['payload'];
-        this.preview = this.preview.splice(0, 4);
-        console.log(this.preview);
       });
     });
   }

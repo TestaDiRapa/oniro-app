@@ -32,7 +32,9 @@ const routes: Routes = [
     canLoad: [
       AuthGuard
     ]
-  }
+  },
+  { path: 'send-modal', loadChildren: './home/diary/diary-detail/send-modal/send-modal.module#SendModalPageModule' },
+  { path: 'info-popover', loadChildren: './home/diary/diary-detail/send-modal/info-popover/info-popover.module#InfoPopoverPageModule' }
 
 ];
 

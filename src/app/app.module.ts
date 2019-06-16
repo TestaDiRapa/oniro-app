@@ -17,6 +17,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { SendModalPageModule } from './home/diary/diary-detail/send-modal/send-modal.module';
 
 
 @NgModule({
@@ -26,8 +27,10 @@ import { File } from '@ionic-native/file/ngx';
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(),
+
     AppRoutingModule,
     SelectDevicePageModule,
+    SendModalPageModule,
     IonicStorageModule.forRoot()
   ],
   providers: [
