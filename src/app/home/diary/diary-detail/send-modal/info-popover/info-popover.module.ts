@@ -5,14 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { DiaryDetailPage } from './diary-detail.page';
-import { GoogleChartsModule } from 'angular-google-charts';
-import { SendModalPage } from './send-modal/send-modal.page';
+import { InfoPopoverPage } from './info-popover.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: DiaryDetailPage
+    component: InfoPopoverPage
   }
 ];
 
@@ -21,9 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DiaryDetailPage]
+  declarations: [InfoPopoverPage]
 })
-export class DiaryDetailPageModule {}
+export class InfoPopoverPageModule {}

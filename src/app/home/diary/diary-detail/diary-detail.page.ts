@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ChartsService } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
+import { Abitudini } from '../../add-abitudini/abitudini.model';
+import { SendModalPage } from './send-modal/send-modal.page';
 
 export interface Aggregate {
   apnea_events: number;
@@ -19,6 +21,7 @@ export interface Aggregate {
   plot_spo2: number[];
   spo2_spectra: Spectra;
   total_movements: number;
+  habit: Abitudini;
 }
 
 export interface Spectra {
@@ -62,18 +65,18 @@ export class DiaryDetailPage implements OnInit {
     private authService: AuthenticationService,
     private chartsService: ChartsService,
     private controllerService: ControllerService,
-    private userService: UserService,
-    private router: Router
+    private modalCtrl: ModalController,
+    private router: Router,
+    private userService: UserService
   ) { }
 
   ionViewWillEnter() {
     this.currentDate = this.chartsService.currentDate;
-    console.log('data evento: ' + this.currentDate);
     this.controllerService.onCreateLoadingCtrl();
     this.chartsService.data.then(response => {
-      console.log(response);
       if (response['status'] === 'ok') {
         this.aggregate = {
+          habit: response['payload']['habit'],
           apnea_events: response['payload']['apnea_events'],
           avg_duration: response['payload']['avg_duration'],
           sleep_duration: response['payload']['sleep_duration'],
@@ -214,9 +217,21 @@ export class DiaryDetailPage implements OnInit {
   ngOnInit() {
   }
 
-  // DA FINIRE
-  onSendRecToDoctor() {
-    this.userService.sendRecordings('', '').then(success => {
+  onChooseDoctor() {
+    this.modalCtrl.create({
+      component: SendModalPage
+    }).then(modal => {
+      modal.present();
+      modal.onDidDismiss().then(result => {
+        if(result.data && result.data.hasOwnProperty("_id")) {
+          this.sendRecToDoctor(result.data._id, this.chartsService.dataId);
+        }
+      });
+    })
+  }
+
+  private sendRecToDoctor(doctorId: string, recordId: string) {
+    this.userService.sendRecordings(doctorId, recordId).then(success => {
       success.subscribe(resData => {
         if (resData.message === 'ok') {
           this.alertCtrl.create({
