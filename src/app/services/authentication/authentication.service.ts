@@ -51,16 +51,15 @@ export class AuthenticationService {
             return this.loadUser().then<boolean>(user => {
                 if (user) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             });
         }
-        console.log("EXISTS", this.loggedUser);
+        console.log('EXISTS', this.loggedUser);
         return new Promise<boolean>((resolve) => {
             resolve(true);
-        })
+        });
     }
 
     login(username: string, password: string, isUser: boolean) {
@@ -127,24 +126,24 @@ export class AuthenticationService {
     get token() {
         return this.retrieveAuthToken().then(token => {
             if (token === null) {
-                console.log("AUTH NULL");
+                console.log('AUTH NULL');
                 this.logout();
                 this.router.navigate(['/']);
             }
             if (token.expirationDate <= new Date()) {
-                console.log("AUTH EXPIRED");
+                console.log('AUTH EXPIRED');
                 return this.retrieveRefToken().then(refToken => {
                     if (refToken === null) {
-                        console.log("REF NULL");
+                        console.log('REF NULL');
                         this.logout();
                         this.router.navigate(['/']);
                     }
                     if (refToken.expirationDate <= new Date()) {
-                        console.log("REF EXPIRED");
+                        console.log('REF EXPIRED');
                         this.logout();
                         this.router.navigate(['/']);
                     } else {
-                        console.log("REF OK")
+                        console.log('REF OK');
                         return this.http.get<Respons>(
                             `http://${environment.serverIp}/refresh`,
                             {
@@ -155,16 +154,15 @@ export class AuthenticationService {
                         ).toPromise().then(response => {
                             console.log(response);
                             this.setAuthToken(response.access_token, response.access_token_exp);
-                            console.log("OLD TOKEN", token);
-                            console.log("NEW TOKEN", response.access_token);
+                            console.log('OLD TOKEN', token);
+                            console.log('NEW TOKEN', response.access_token);
                             return response.access_token;
-                        })
+                        });
                     }
 
                 });
-            }
-            else {
-                console.log("AUTH OK");
+            } else {
+                console.log('AUTH OK');
                 return token.token;
             }
         });
@@ -176,7 +174,7 @@ export class AuthenticationService {
                 if (user) {
                     return user.refreshToken;
                 }
-            })
+            });
         }
         return new Promise<Token>((resolve) => {
             resolve(this.loggedUser.refreshToken);
@@ -189,7 +187,7 @@ export class AuthenticationService {
                 if (user) {
                     return user.accessToken;
                 }
-            })
+            });
         }
         return new Promise<Token>((resolve) => {
             resolve(this.loggedUser.accessToken);
@@ -274,7 +272,7 @@ export class AuthenticationService {
                         tmp.user.cf,
                         tmp.user.age,
                         tmp.user.image
-                    )
+                    );
                 } else {
                     tmpUser = new Medico(
                         tmp.user.name,
@@ -285,7 +283,7 @@ export class AuthenticationService {
                         tmp.user.id,
                         tmp.user.address,
                         tmp.user.image
-                    )
+                    );
                 }
 
                 const loggedUser = new LoggedUser();
@@ -295,11 +293,11 @@ export class AuthenticationService {
                 loggedUser.user = tmpUser;
                 this.setUserIdentity(loggedUser.user.name, loggedUser.user.surname);
                 this.loggedUser = loggedUser;
-                console.log("LOADED", this.loggedUser);
+                console.log('LOADED', this.loggedUser);
                 return loggedUser;
             } else {
                 this.loggedUser = new LoggedUser();
-                console.log("UNLOADED", this.loggedUser);
+                console.log('UNLOADED', this.loggedUser);
                 return null;
             }
         });

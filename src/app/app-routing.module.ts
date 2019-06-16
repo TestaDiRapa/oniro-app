@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'home/gmaps', loadChildren: 'src/app/home/gmaps/gmaps.module#GmapsPageModule', canLoad: [AuthGuard, IsUserGuard]},
   { path: 'home/info', loadChildren: 'src/app/home/info/info.module#InfoPageModule', canLoad: [AuthGuard]},
   { path: 'homedoc', loadChildren: 'src/app/homedoc/homedoc.module#HomedocPageModule', canLoad: [IsDocGuard, AuthGuard]},
-  { 
+  {
     path: 'homedoc/richieste-pazienti',
     loadChildren: './homedoc/richieste-pazienti/richieste-pazienti.module#RichiestePazientiPageModule',
     canLoad: [
@@ -26,15 +26,24 @@ const routes: Routes = [
       AuthGuard
     ]
   },
-  { 
+  {
     path: 'home/diary/diary-detail',
     loadChildren: './home/diary/diary-detail/diary-detail.module#DiaryDetailPageModule',
     canLoad: [
       AuthGuard
     ]
   },
+  {
+    path: 'homedoc/lista-diario-pazienti',
+    loadChildren: './homedoc/lista-diario-pazienti/lista-diario-pazienti.module#ListaDiarioPazientiPageModule',
+    canLoad: [
+      IsDocGuard,
+      AuthGuard
+    ]
+  }
   { path: 'send-modal', loadChildren: './home/diary/diary-detail/send-modal/send-modal.module#SendModalPageModule' },
   { path: 'info-popover', loadChildren: './home/diary/diary-detail/send-modal/info-popover/info-popover.module#InfoPopoverPageModule' }
+
 
 ];
 

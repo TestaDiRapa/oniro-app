@@ -90,8 +90,6 @@ export class GmapsPage implements OnInit {
     });
     this.getCoordinates();
     this.findDoctors();
-    
-    
   }
 
   private findDoctors() {
@@ -106,7 +104,7 @@ export class GmapsPage implements OnInit {
           results.forEach((result: GeocoderResult[]) => {
             this.map.addMarkerSync({
               position: result[0].position,
-              title: this.doctors[i]['name'] +' '+ this.doctors[i]['surname']
+              title: this.doctors[i]['name'] + ' ' + this.doctors[i]['surname']
             });
             i++;
           });
