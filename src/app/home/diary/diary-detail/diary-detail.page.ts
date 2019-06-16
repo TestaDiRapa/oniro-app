@@ -70,10 +70,8 @@ export class DiaryDetailPage implements OnInit {
 
   ionViewWillEnter() {
     this.currentDate = this.chartsService.currentDate;
-    console.log('data evento: ' + this.currentDate);
     this.controllerService.onCreateLoadingCtrl();
     this.chartsService.data.then(response => {
-      console.log(response);
       if (response['status'] === 'ok') {
         this.aggregate = {
           apnea_events: response['payload']['apnea_events'],
@@ -216,7 +214,6 @@ export class DiaryDetailPage implements OnInit {
   ngOnInit() {
   }
 
-  
   onChooseDoctor() {
     this.modalCtrl.create({
       component: SendModalPage

@@ -71,6 +71,10 @@ export class SettingsPage implements OnInit {
     this.menuCtrl.close();
   }
 
+  ionviewWillEnter(img: string) {
+    this.base64Image = img;
+  }
+
   private onSubmit(key: string[], value: string[], type: string) {
     const formData = new FormData();
     for (let i = 0; i < key.length; i++) {
@@ -270,9 +274,11 @@ export class SettingsPage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
-    this.camera.getPicture(options).then((imgData) => {
+    this.camera.getPicture(options).then((imgData) => {      
+      console.log('aggiornamento riuscito');
       this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
       this.uploadPhoto(imgData);
+      this.isEmpty = false;
     }, (err) => {
       console.log(err);
     });
@@ -289,7 +295,9 @@ export class SettingsPage implements OnInit {
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
+      console.log('aggiornamento riuscito');
       this.uploadPhoto(imgData);
+      this.isEmpty = false;
     }, (err) => {
       console.log(err);
     });
@@ -298,6 +306,7 @@ export class SettingsPage implements OnInit {
   private uploadPhoto(imgData: string) {
     if (imgData.length > 200) {
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      console.log(this.base64Image);
       let formData = new FormData();
       formData.append('image', this.base64Image);
       this.userService.changeProfile(formData).subscribe(success => {
@@ -307,21 +316,21 @@ export class SettingsPage implements OnInit {
             this.authService.getUser().then(user => {
               user.image = this.urlImgage;
               this.authService.setUser(user);
+              this.ionviewWillEnter('data:image/jpeg;base64,' + imgData);
             });
           } else {
             this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
           }
         });
       });
-    }
-    else {
+    } else {
       this.file.resolveLocalFilesystemUrl(imgData).then(fileEntry => {
         let { name, nativeURL } = fileEntry;
-        let path = nativeURL.substring(0, nativeURL.lastIndexOf("/"));
+        let path = nativeURL.substring(0, nativeURL.lastIndexOf('/'));
         return this.file.readAsArrayBuffer(path, name);
       }).then(buffer => {
         let imgBlob = new Blob([buffer], {
-          type: "image/jpeg"
+          type: 'image/jpeg'
         });
         const formData = new FormData();
         formData.append('file', imgBlob, 'image.png');
@@ -332,6 +341,7 @@ export class SettingsPage implements OnInit {
               this.authService.getUser().then(user => {
                 user.image = this.urlImgage;
                 this.authService.setUser(user);
+                this.ionviewWillEnter('data:image/jpeg;base64,' + imgData);
               });
             } else {
               this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());

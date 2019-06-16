@@ -36,9 +36,11 @@
       <ion-col size-sm="6" offset-sm="3">
         <ion-list lines="none">
           <ion-card style="border: 2px solid white" *ngFor="let doctor of doctors"
-            (click)="onSendRequest(doctor['address']._id)">
-            <ion-item>Id Albo: {{doctor['address']._id}} </ion-item>
-            <ion-item>Indirizzo: {{doctor['address'].address}}</ion-item>
+            (click)="onSendRequest(doctor['id'])">
+            <ion-item>Id Albo: {{doctor['id']}} </ion-item>
+            <ion-item>Nome: {{doctor['name']}}</ion-item>
+            <ion-item>Cognome: {{doctor['surname']}}</ion-item>
+            <ion-item>Indirizzo: {{doctor['address']}}</ion-item>
           </ion-card>
         </ion-list>
       </ion-col>
