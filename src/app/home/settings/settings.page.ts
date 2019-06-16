@@ -71,6 +71,10 @@ export class SettingsPage implements OnInit {
     this.menuCtrl.close();
   }
 
+  ionviewWillEnter(img: string) {
+    this.base64Image = img;
+  }
+
   private onSubmit(key: string[], value: string[], type: string) {
     const formData = new FormData();
     for (let i = 0; i < key.length; i++) {
@@ -307,21 +311,21 @@ export class SettingsPage implements OnInit {
             this.authService.getUser().then(user => {
               user.image = this.urlImgage;
               this.authService.setUser(user);
+              this.ionviewWillEnter('data:image/jpeg;base64,' + imgData);
             });
           } else {
             this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
           }
         });
       });
-    }
-    else {
+    } else {
       this.file.resolveLocalFilesystemUrl(imgData).then(fileEntry => {
         let { name, nativeURL } = fileEntry;
-        let path = nativeURL.substring(0, nativeURL.lastIndexOf("/"));
+        let path = nativeURL.substring(0, nativeURL.lastIndexOf('/'));
         return this.file.readAsArrayBuffer(path, name);
       }).then(buffer => {
         let imgBlob = new Blob([buffer], {
-          type: "image/jpeg"
+          type: 'image/jpeg'
         });
         const formData = new FormData();
         formData.append('file', imgBlob, 'image.png');
@@ -332,6 +336,7 @@ export class SettingsPage implements OnInit {
               this.authService.getUser().then(user => {
                 user.image = this.urlImgage;
                 this.authService.setUser(user);
+                this.ionviewWillEnter('data:image/jpeg;base64,' + imgData);
               });
             } else {
               this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());

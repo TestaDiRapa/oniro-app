@@ -11,72 +11,76 @@
 
 <ion-content>
   <ion-grid *ngIf="isLoaded">
-    <ion-row>
-      <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="moon"></ion-icon> Durata del sonno
-      </ion-col>
-      <ion-col pull="1" pull-sm="2" class="right">
-        {{ aggregate.sleep_duration }}
-      </ion-col>
-    </ion-row>
-    <ion-row margin-top="20px">
-      <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="warning"></ion-icon> Eventi di apnea
-      </ion-col>
-      <ion-col pull="1" pull-sm="2" class="right">
-        <div align-right>{{ aggregate.apnea_events }}</div>
-      </ion-col>
-    </ion-row>
-    <ion-row margin-top="20px">
-      <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="time"></ion-icon> Durata media eventi di apnea
-      </ion-col>
-      <ion-col pull="1" pull-sm="2" class="right">
-        {{ aggregate.avg_duration }} s
-      </ion-col>
-    </ion-row>
-    <ion-row margin-top="20px">
-      <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="pulse"></ion-icon> Valore medio Heart Rate
-      </ion-col>
-      <ion-col pull="1" pull-sm="2" class="right">
-        {{ aggregate.avg_hr | number:'2.0-0' }} bpm
-      </ion-col>
-    </ion-row>
-    <ion-row margin-top="20px">
-      <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="speedometer"></ion-icon>Valore medio SpO2
-      </ion-col>
-      <ion-col pull="1" pull-sm="2" class="right">
-        {{ aggregate.avg_spo2 | number:'2.2-3' }} %
-      </ion-col>
-    </ion-row>
-    <ion-row margin-top="20px">
-      <ion-col size-sm="8" offset="1" offset-sm="2">
-        <ion-icon name="body"></ion-icon> Numero di movimenti
-      </ion-col>
-      <ion-col pull="1" pull-sm="2" class="right">
-        {{ aggregate.total_movements }}
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
+    <ion-card>
+      <ion-row>
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="moon"></ion-icon> Durata del sonno
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.sleep_duration }}
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="warning"></ion-icon> Eventi di apnea
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          <div align-right>{{ aggregate.apnea_events }}</div>
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="time"></ion-icon> Durata media eventi di apnea
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.avg_duration }} s
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="pulse"></ion-icon> Valore medio Heart Rate
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.avg_hr | number:'2.0-0' }} bpm
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="speedometer"></ion-icon>Valore medio SpO2
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.avg_spo2 | number:'2.2-3' }} %
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="body"></ion-icon> Numero di movimenti
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.total_movements }}
+        </ion-col>
+      </ion-row>    
+    </ion-card>  
+    <ion-card>
+      <ion-row >
+      <ion-col style="margin:auto" size-sm="6" ofsset-sm="3">
         <ion-list lines="none">
-          <ion-item *ngFor="let chart of charts" >
-            <google-chart width="600" [title]="chart.title" [type]="chart.type" [data]="chart.data"
-              [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options">
+          <ion-item margin-top="10px" *ngFor="let chart of charts">
+            <google-chart class="chart" [title]="chart.title" [type]="chart.type"
+              [data]="chart.data" [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options">
             </google-chart>
           </ion-item>
         </ion-list>
       </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="8" offset="1" offset-sm="2" text-center>
-        <ion-button (click)="onSendRecToDoctor()">
-          Avvisa il medico
-          <ion-icon slot="end" name="medkit"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
+      </ion-row>
+    </ion-card>
+      <ion-row>
+        <ion-col size-sm="8" offset="1" offset-sm="2" text-center>
+          <ion-button (click)="onSendRecToDoctor()">
+            Avvisa il medico
+            <ion-icon slot="end" name="medkit"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
   </ion-grid>
 </ion-content>
