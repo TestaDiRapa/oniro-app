@@ -5,7 +5,7 @@ import { SegmentChangeEventDetail } from '@ionic/core';
 import { Paziente } from './paziente.model';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Medico } from './medico.model';
-import { AlertController, MenuController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 import { ControllerService } from '../services/controllerService.service';
 
 @Component({
@@ -21,19 +21,11 @@ export class RegisterPage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthenticationService,
-    private alertCtrl: AlertController,
     private menuCtrl: MenuController,
     public controllerService: ControllerService
   ) { }
 
   ngOnInit() {
-  }
-
-  presentAlert(mex: string) {
-    const alert = this.alertCtrl.create({
-      subHeader: mex,
-      buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
-    }).then(alert => alert.present());
   }
 
   onSubmit(form: NgForm) {
@@ -58,10 +50,10 @@ export class RegisterPage implements OnInit {
 
             this.authService.setUser(this.paziente);
 
-            this.presentAlert('Registrazione effettuata con successo!');
+            this.controllerService.createAlertCtrl('Success', 'Registrazione effettuata con successo!');
             this.router.navigateByUrl('/home');
           } else {
-            this.presentAlert(resData.status);
+            this.controllerService.createAlertCtrl('Error', resData.message);
           }
         });
       } else {
@@ -84,18 +76,18 @@ export class RegisterPage implements OnInit {
 
             this.authService.setUser(this.medico);
 
-            this.presentAlert('Registrazione effettuata con successo!');
+            this.controllerService.createAlertCtrl('Success', 'Registrazione effettuata con successo!');
             this.router.navigateByUrl('/homedoc');
           } else {
             this.controllerService.onDismissLoaderCtrl();
-            this.presentAlert(resData.message);
+            this.controllerService.createAlertCtrl('Error', resData.message);
           }
         });
 
 
       }
     } else {
-      this.presentAlert('Form non valido. Riprova');
+      this.controllerService.createAlertCtrl('Error', 'Form non valido!');
     }
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Paziente } from '../register/paziente.model';
@@ -30,21 +30,11 @@ export class LoginPage implements OnInit {
     private http: HttpClient,
     private menuCtrl: MenuController,
     public controllerService: ControllerService,
-    private alertCtrl: AlertController,
   ) { }
 
 
   ngOnInit() {
   }
-
-  presentAlert(mex: string) {
-    const alert = this.alertCtrl.create({
-      subHeader: mex,
-      buttons: [{ cssClass: 'ion-alert', text: 'OK' }],
-    }).then((alert) => alert.present());
-  }
-
-
 
   // check if the ion-segment value is changed or not
   onChange(event: CustomEvent<SegmentChangeEventDetail>, form: NgForm) {
@@ -106,7 +96,7 @@ export class LoginPage implements OnInit {
         });
       } else {
         this.controllerService.onDismissLoaderCtrl();
-        this.presentAlert(res.message);
+        this.controllerService.createAlertCtrl('', res.message);
       }
     });
   }

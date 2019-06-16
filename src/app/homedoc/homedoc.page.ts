@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DoctorService } from '../services/doctorService.service';
-import { AlertController } from '@ionic/angular';
 import { ControllerService } from '../services/controllerService.service';
 
 @Component({
@@ -15,7 +14,6 @@ export class HomedocPage implements OnInit {
   constructor(
     private docService: DoctorService,
     private controllerService: ControllerService,
-    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -38,10 +36,7 @@ export class HomedocPage implements OnInit {
     this.docService.deleteMessagePatient(date, cf).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
-          this.alertCtrl.create({
-            header: resData.message,
-            buttons: ['OK']
-          }).then(alert => alert.present());
+          this.controllerService.createAlertCtrl('', resData.message);;
         }
       });
     });

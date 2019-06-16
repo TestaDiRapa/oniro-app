@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Paziente } from '../register/paziente.model';
 import { UserService } from '../services/userService.service';
-import { Medico } from '../register/medico.model';
 import { ModalController, AlertController } from '@ionic/angular';
 import { AddAbitudiniComponent } from './add-abitudini/add-abitudini.component';
 import { Bevanda } from './add-abitudini/bevanda.model';
@@ -28,10 +26,9 @@ export class HomePage implements OnInit, OnDestroy {
   private isSport = false;
   public caffe = new Bevanda('', 0);
   public drink = new Bevanda('', 0);
-  public fact = "";
+  public fact = '';
 
   constructor(
-    private alertCtrl: AlertController,
     private dataMngr: DataStoringService,
     private facts: UselessService,
     private controllerService: ControllerService,
@@ -108,32 +105,12 @@ export class HomePage implements OnInit, OnDestroy {
             this.router.navigate(['/home/record']);
           } else {
             this.controllerService.onDismissLoaderCtrl();
-            this.alertCtrl.create({
-              header: 'Si è verificato un errore!',
-              message: response.message,
-              buttons: [
-                {
-                  text: 'Ok'
-                }
-              ]
-            }).then(alertEl => {
-              alertEl.present();
-            });
+            this.controllerService.createAlertCtrl('Error', response.message);
           }
         },
         error => {
           this.controllerService.onDismissLoaderCtrl();
-          this.alertCtrl.create({
-            header: 'Si è verificato un errore!',
-            message: error.message,
-            buttons: [
-              {
-                text: 'Ok!'
-              }
-            ]
-          }).then(alertEl => {
-            alertEl.present();
-          });
+          this.controllerService.createAlertCtrl('Error', error.message);
         });
     });
   }

@@ -1,6 +1,5 @@
-import { MenuController, AlertController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/userService.service';
 import { DoctorService } from 'src/app/services/doctorService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
 
@@ -17,7 +16,6 @@ export class RichiestePazientiPage implements OnInit {
   constructor(
     private menuCtrl: MenuController,
     private docService: DoctorService,
-    private alertCtrl: AlertController,
     private controllerService: ControllerService
   ) { }
 
@@ -49,15 +47,9 @@ export class RichiestePazientiPage implements OnInit {
     this.docService.acceptPatient(params).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
-          this.alertCtrl.create({
-            subHeader: resData.message,
-            buttons: ['OK']
-          }).then(alert => alert.present());
+          this.controllerService.createAlertCtrl('Error', resData.message);
         } else {
-          this.alertCtrl.create({
-            subHeader: 'Paziente accettato',
-            buttons: ['OK']
-          }).then(alert => alert.present());
+          this.controllerService.createAlertCtrl('Success', 'Paziente accettato');
           this.ionViewWillEnter();
         }
       });
@@ -69,15 +61,9 @@ export class RichiestePazientiPage implements OnInit {
     this.docService.rejectPatient(cf).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
-          this.alertCtrl.create({
-            subHeader: resData.message,
-            buttons: ['OK']
-          }).then(alert => alert.present());
+          this.controllerService.createAlertCtrl('Error', resData.message);
         } else {
-          this.alertCtrl.create({
-            subHeader: 'Paziente rifiutato',
-            buttons: ['OK']
-          }).then(alert => alert.present());
+          this.controllerService.createAlertCtrl('Success', 'Paziente rifiutato');
           this.ionViewWillEnter();
         }
       });
