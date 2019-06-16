@@ -9,4 +9,20 @@ export class Abitudini {
         private isCena: boolean,
     ) {}
 
+    getCaffe() {
+        return this.caffe;
+    }
+
+    getDrink() {
+        return this.drink;
+    }
+
+    getSport() {
+        return this.isSport;
+    }
+
+    getCena() {
+        return this.isCena;
+    }
+
 }

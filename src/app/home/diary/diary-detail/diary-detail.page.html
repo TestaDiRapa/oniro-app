@@ -59,28 +59,62 @@
         <ion-col pull="1" pull-sm="2" class="right">
           {{ aggregate.total_movements }}
         </ion-col>
-      </ion-row>    
-    </ion-card>  
-    <ion-card>
-      <ion-row >
-      <ion-col style="margin:auto" size-sm="6" ofsset-sm="3">
-        <ion-list lines="none">
-          <ion-item margin-top="10px" *ngFor="let chart of charts">
-            <google-chart class="chart" [title]="chart.title" [type]="chart.type"
-              [data]="chart.data" [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options">
-            </google-chart>
-          </ion-item>
-        </ion-list>
-      </ion-col>
       </ion-row>
     </ion-card>
+    <ion-card>
       <ion-row>
-        <ion-col size-sm="8" offset="1" offset-sm="2" text-center>
-          <ion-button (click)="onSendRecToDoctor()">
-            Avvisa il medico
-            <ion-icon slot="end" name="medkit"></ion-icon>
-          </ion-button>
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="cafe"></ion-icon> Caffè presi
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.habit.getCaffe().getTot().toString() }}
         </ion-col>
       </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="beer"></ion-icon> Drink bevuti
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.habit.getDrink().getTot().toString() }}
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="pizza"></ion-icon> Cenato tardi
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.habit.getCena() }}
+        </ion-col>
+      </ion-row>
+      <ion-row margin-top="20px">
+        <ion-col size-sm="8" offset="1" offset-sm="2">
+          <ion-icon name="football"></ion-icon> Praticato sport
+        </ion-col>
+        <ion-col pull="1" pull-sm="2" class="right">
+          {{ aggregate.habit.getSport() }}
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    <ion-card>
+      <ion-row>
+        <ion-col style="margin:auto" size-sm="6" ofsset-sm="3">
+          <ion-list lines="none">
+            <ion-item margin-top="10px" *ngFor="let chart of charts">
+              <google-chart class="chart" [title]="chart.title" [type]="chart.type" [data]="chart.data"
+                [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options">
+              </google-chart>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    <ion-row>
+      <ion-col size-sm="8" offset="1" offset-sm="2" text-center>
+        <ion-button (click)="onSendRecToDoctor()">
+          Avvisa il medico
+          <ion-icon slot="end" name="medkit"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>
