@@ -36,7 +36,7 @@ export class UserService {
         JSON.stringify(abitudine),
         {
           headers: new HttpHeaders({
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
             Authorization: 'Bearer ' + token
           })
         });
@@ -60,7 +60,7 @@ export class UserService {
 
   sendRequestToDoc(idDoc: string) {
     const path = 'http://' + environment.serverIp + '/user/my_doctors';
-    let body =  JSON.stringify({doctor_id: idDoc});
+    let body = JSON.stringify({ doctor_id: idDoc });
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
         path,
@@ -76,7 +76,7 @@ export class UserService {
 
   sendRecordings(doctorId: string, dateID: string) {
     const path = 'http://' + environment.serverIp + '/user/my_recordings/send';
-    const body = JSON.stringify({id: dateID, doctor: doctorId});
+    const body = JSON.stringify({ id: dateID, doctor: doctorId });
     console.log(body);
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
