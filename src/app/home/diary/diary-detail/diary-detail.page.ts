@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 import { AlertController, ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
+import { Abitudini } from '../../add-abitudini/abitudini.model';
 import { SendModalPage } from './send-modal/send-modal.page';
 
 export interface Aggregate {
@@ -20,6 +21,7 @@ export interface Aggregate {
   plot_spo2: number[];
   spo2_spectra: Spectra;
   total_movements: number;
+  habit: Abitudini;
 }
 
 export interface Spectra {
@@ -74,6 +76,7 @@ export class DiaryDetailPage implements OnInit {
     this.chartsService.data.then(response => {
       if (response['status'] === 'ok') {
         this.aggregate = {
+          habit: response['payload']['habit'],
           apnea_events: response['payload']['apnea_events'],
           avg_duration: response['payload']['avg_duration'],
           sleep_duration: response['payload']['sleep_duration'],
