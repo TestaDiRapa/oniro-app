@@ -1,0 +1,29 @@
+<ion-header>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col offset-sm="1" pull-sm="2" class="center">
+        <ion-avatar>
+          <img [src]="profile_picture ? profile_picture : 'assets/image/panda-login.jpg'">
+        </ion-avatar>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset-sm="1" pull-sm="2">
+        {{ name }} {{ surname }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset-sm="1" pull-sm="2">
+        {{ phone_number }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset-sm="1" pull-sm="2">
+        {{ address }}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
