@@ -67,7 +67,7 @@
           <ion-icon name="cafe"></ion-icon> Caffè presi
         </ion-col>
         <ion-col pull="1" pull-sm="2" class="right">
-          {{ aggregate.habit.getCaffe().getTot().toString() }}
+          {{ caffe.getTipo }}: {{ caffe.getTot }}
         </ion-col>
       </ion-row>
       <ion-row margin-top="20px">
@@ -75,7 +75,7 @@
           <ion-icon name="beer"></ion-icon> Drink bevuti
         </ion-col>
         <ion-col pull="1" pull-sm="2" class="right">
-          {{ aggregate.habit.getDrink().getTot().toString() }}
+          {{ drink.getTipo }}: {{ drink.getTot}}
         </ion-col>
       </ion-row>
       <ion-row margin-top="20px">
@@ -83,7 +83,7 @@
           <ion-icon name="pizza"></ion-icon> Cenato tardi
         </ion-col>
         <ion-col pull="1" pull-sm="2" class="right">
-          {{ aggregate.habit.getCena() }}
+          {{ cena }}
         </ion-col>
       </ion-row>
       <ion-row margin-top="20px">
@@ -91,7 +91,7 @@
           <ion-icon name="football"></ion-icon> Praticato sport
         </ion-col>
         <ion-col pull="1" pull-sm="2" class="right">
-          {{ aggregate.habit.getSport() }}
+          {{ sport }}
         </ion-col>
       </ion-row>
     </ion-card>

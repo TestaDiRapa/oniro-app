@@ -21,7 +21,7 @@ export interface Doctor {
   styleUrls: ['./send-modal.page.scss'],
 })
 export class SendModalPage implements OnInit {
-  private doctors;
+  public doctors;
 
   constructor(
     private alertCtrl: AlertController,
@@ -41,7 +41,7 @@ export class SendModalPage implements OnInit {
           if (this.doctors.length === 0) {
             this.alertCtrl.create({
               header: 'ERROR!',
-              message: 'Subscribe to a doctor first!',
+              message: 'Registrati prima ad un dottore!',
               buttons: [
                 {
                   text: 'Ok',

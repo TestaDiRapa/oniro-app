@@ -7,6 +7,7 @@ import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
 import { Abitudini } from '../../add-abitudini/abitudini.model';
 import { SendModalPage } from './send-modal/send-modal.page';
+import { Bevanda } from '../../add-abitudini/bevanda.model';
 
 export interface Aggregate {
   apnea_events: number;
@@ -45,6 +46,10 @@ export class DiaryDetailPage implements OnInit {
   aggregate: Aggregate;
   isLoaded = false;
   currentDate: string;
+  caffe: Bevanda;
+  drink: Bevanda;
+  cena: string;
+  sport: string;
 
   aggregateData: Array<Array<string | number | {}>> = [];
   charts: Array<{
@@ -96,6 +101,7 @@ export class DiaryDetailPage implements OnInit {
           },
           total_movements: response['payload']['total_movements']
         };
+        this.prepareHabits(this.aggregate.habit);
         this.prepareLineChart('hr_spectra');
         this.charts.push({
           title: 'Densità spettrale di potenza del segnale Heart Rate',
@@ -107,7 +113,7 @@ export class DiaryDetailPage implements OnInit {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-           },
+          },
         });
 
         this.prepareLineChart('spo2_spectra');
@@ -121,7 +127,7 @@ export class DiaryDetailPage implements OnInit {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-           },
+          },
         });
 
         this.prepareLineChartPlot('plot_spo2');
@@ -135,7 +141,7 @@ export class DiaryDetailPage implements OnInit {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-           },
+          },
         });
         this.prepareHistogram('plot_movements');
         this.charts.push({
@@ -149,7 +155,7 @@ export class DiaryDetailPage implements OnInit {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-           },
+          },
         });
 
 
@@ -190,6 +196,17 @@ export class DiaryDetailPage implements OnInit {
     });
   }
 
+  private prepareHabits(habit: Abitudini) {
+    this.caffe = habit.getCaffe();
+    this.drink = habit.getDrink();
+    if (habit.getCena()) {
+      this.cena = 'Pesante';
+    } else { this.cena = 'Leggero'; }
+    if (habit.getSport()) {
+      this.sport = 'Si';
+    } else { this.sport = 'No'; }
+  }
+
   prepareLineChart(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.aggregate[spectra]['frequencies'].length; x++) {
@@ -210,7 +227,7 @@ export class DiaryDetailPage implements OnInit {
     for (let x = 0; x < this.aggregate[histogram].length; x++) {
       this.aggregateData.push([x, this.aggregate[histogram][x]]);
     }
-    console.log("YOOOOO",this.aggregateData);
+    console.log("YOOOOO", this.aggregateData);
   }
 
 
@@ -223,11 +240,11 @@ export class DiaryDetailPage implements OnInit {
     }).then(modal => {
       modal.present();
       modal.onDidDismiss().then(result => {
-        if(result.data && result.data.hasOwnProperty("_id")) {
+        if (result.data && result.data.hasOwnProperty("_id")) {
           this.sendRecToDoctor(result.data._id, this.chartsService.dataId);
         }
       });
-    })
+    });
   }
 
   private sendRecToDoctor(doctorId: string, recordId: string) {

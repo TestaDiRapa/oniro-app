@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Bevanda } from './bevanda.model';
 
 @Component({
   selector: 'app-add-abitudini',
@@ -18,8 +19,9 @@ export class AddAbitudiniComponent implements OnInit {
     this.modalCtrl.dismiss(0, 'close');
   }
 
-  onSubmitModal(total: number) {
-    this.modalCtrl.dismiss(total, 'confirm');
+  onSubmitModal(total: number, tipo: string) {
+    const bevanda = new Bevanda(tipo, total);
+    this.modalCtrl.dismiss(bevanda, 'confirm');
   }
 
 }

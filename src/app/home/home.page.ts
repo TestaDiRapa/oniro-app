@@ -85,11 +85,9 @@ export class HomePage implements OnInit, OnDestroy {
       return modalEl.onDidDismiss();
     }).then(resData => {
       if (selectedBevanda === 'drink') {
-        this.drink.setTipo(selectedBevanda);
-        this.drink.setTotale(resData.data);
+        this.drink = resData.data;
       } else {
-        this.caffe.setTipo(selectedBevanda);
-        this.caffe.setTotale(resData.data);
+        this.caffe = resData.data;
       }
     });
   }
