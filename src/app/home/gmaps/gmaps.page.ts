@@ -23,10 +23,11 @@ import { ControllerService } from 'src/app/services/controllerService.service';
 export class GmapsPage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: GoogleMap;
-  doctors: any[];
+  doctors: object[] = [];
   addresses: string[] = [];
   myLoc;
   color = '#07306D';
+  google;
 
   constructor(
     private menuCtrl: MenuController,
@@ -38,7 +39,6 @@ export class GmapsPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.toggle();
-    this.getCoordinates();
   }
 
   ionViewWillEnter() {
@@ -69,7 +69,7 @@ export class GmapsPage implements OnInit {
           myLocation: true,   // (blue dot)
           indoorPicker: true,
           mapToolbar: true,
-          zoom: true
+          zoom: true,
         },
         gestures: {
           scroll: true,
@@ -90,6 +90,8 @@ export class GmapsPage implements OnInit {
     });
     this.getCoordinates();
     this.findDoctors();
+    
+    
   }
 
   private findDoctors() {
@@ -97,15 +99,16 @@ export class GmapsPage implements OnInit {
       address: this.addresses
     }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
       console.log('ehi');
+      let i = 0;
       mvcArray.on('finish').subscribe(() => {
         if (mvcArray.getLength() > 0) {
-          console.log('lunghezza ', mvcArray.getLength());
           const results: any[] = mvcArray.getArray();
           results.forEach((result: GeocoderResult[]) => {
             this.map.addMarkerSync({
               position: result[0].position,
-              title: JSON.stringify(result)
+              title: this.doctors[i]['name'] +' '+ this.doctors[i]['surname']
             });
+            i++;
           });
         } else {
           console.log('lunghezza zero');
@@ -118,10 +121,17 @@ export class GmapsPage implements OnInit {
     this.getCoord.getCoordinates().then(observable => {
       observable.subscribe(res => {
         // tslint:disable: no-string-literal
-        this.doctors = res['payload'];
-        console.log(res['payload']);
-        for (const doctor of this.doctors) {
-          this.addresses.push(doctor['address']);
+        const doctmp = res['payload'];
+        console.log('payload', res['payload']);
+        for (const doctor of doctmp) {
+          this.addresses.push(doctor['doctor']['address']);
+          let tmp = {
+            id: doctor['doctor']['_id'],
+            name: doctor['doctor']['name'],
+            surname: doctor['doctor']['surname'],
+            address: doctor['doctor']['address']
+          };
+          this.doctors.push(tmp);
         }
       });
     });

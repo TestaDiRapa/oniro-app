@@ -270,9 +270,11 @@ export class SettingsPage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
-    this.camera.getPicture(options).then((imgData) => {
+    this.camera.getPicture(options).then((imgData) => {      
+      console.log('aggiornamento riuscito');
       this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
       this.uploadPhoto(imgData);
+      this.isEmpty = false;
     }, (err) => {
       console.log(err);
     });
@@ -289,7 +291,9 @@ export class SettingsPage implements OnInit {
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
+      console.log('aggiornamento riuscito');
       this.uploadPhoto(imgData);
+      this.isEmpty = false;
     }, (err) => {
       console.log(err);
     });
@@ -298,6 +302,7 @@ export class SettingsPage implements OnInit {
   private uploadPhoto(imgData: string) {
     if (imgData.length > 200) {
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
+      console.log(this.base64Image);
       let formData = new FormData();
       formData.append('image', this.base64Image);
       this.userService.changeProfile(formData).subscribe(success => {
