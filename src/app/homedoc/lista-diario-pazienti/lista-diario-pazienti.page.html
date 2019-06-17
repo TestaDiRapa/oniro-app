@@ -1,9 +1,27 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>lista-diario-pazienti</ion-title>
+      <ion-buttons>
+          <ion-back-button defaultHref="/homedoc"></ion-back-button>
+          <ion-title style="font-weight: bold" text-center>
+              I Tuoi Pazienti
+          </ion-title>
+        </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
+</ion-header>
+<ion-grid>
+  <ion-row >
+    <ion-col >
+      <ion-list lines="none">
+      <ion-card *ngFor="let patient of registeredPatients"  size-md="8" offset-md="2"  (click)="showPatientDiary(patient.patient)">
+      <ion-item>  Nome: {{patient.name}} </ion-item>
+      <ion-item>  Cognome: {{ patient.surname }} </ion-item>
+      <ion-item>   Codice Fiscale: {{patient.patient }} </ion-item>
+      </ion-card>
+    </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 <ion-content>
 
 </ion-content>
