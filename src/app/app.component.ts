@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
     });
     this.authService.type.subscribe(type => {
       this.isUser = type;
+      console.log(this.isUser);
     });
   }
 

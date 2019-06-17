@@ -250,10 +250,6 @@ export class AuthenticationService {
         this.serialize();
     }
 
-    getTypeUser() {
-        return typeof (this.loggedUser.user) === typeof (Medico);
-    }
-
     private loadUser() {
         return this.storage.get('logged_user').then(JSONstring => {
             if (JSONstring) {
@@ -291,8 +287,9 @@ export class AuthenticationService {
                 loggedUser.accessToken = new Token(tmp.accessToken.token, new Date(tmp.accessToken.expirationDate));
                 loggedUser.refreshToken = new Token(tmp.refreshToken.token, new Date(tmp.refreshToken.expirationDate));
                 loggedUser.user = tmpUser;
-                this.setUserIdentity(loggedUser.user.name, loggedUser.user.surname);
                 this.loggedUser = loggedUser;
+                this.setUserIdentity(this.loggedUser.user.name, this.loggedUser.user.surname);
+                this.userType.next(this.loggedUser.isUser);
                 console.log('LOADED', this.loggedUser);
                 return loggedUser;
             } else {
