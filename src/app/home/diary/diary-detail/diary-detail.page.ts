@@ -1,40 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartsService } from 'src/app/services/charts.service';
+import { ChartsService, Aggregate } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { AlertController, ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
-import { Abitudini } from '../../add-abitudini/abitudini.model';
 import { SendModalPage } from './send-modal/send-modal.page';
 import { Bevanda } from '../../add-abitudini/bevanda.model';
 
-export interface Aggregate {
-  apnea_events: number;
-  avg_duration: number;
-  sleep_duration: number;
-  avg_hr: number;
-  avg_spo2: number;
-  hr_spectra: Spectra;
-  plot_apnea_events: ApneaEvent[];
-  plot_hr: number[];
-  plot_movements: number[];
-  plot_spo2: number[];
-  spo2_spectra: Spectra;
-  total_movements: number;
-  habit: Abitudini;
-}
-
-export interface Spectra {
-  frequencies: number[];
-  spectral_density: number[];
-}
-
-export interface ApneaEvent {
-  time: string;
-  duration: number;
-  type: string;
-}
 
 @Component({
   selector: 'app-diary-detail',
@@ -43,15 +16,14 @@ export interface ApneaEvent {
 })
 export class DiaryDetailPage implements OnInit {
 
-  aggregate: Aggregate;
   isLoaded = false;
   currentDate: string;
+  aggregate: Aggregate;
   caffe: Bevanda;
   drink: Bevanda;
   cena: string;
   sport: string;
 
-  aggregateData: Array<Array<string | number | {}>> = [];
   charts: Array<{
     title: string;
     type: string;
@@ -59,7 +31,7 @@ export class DiaryDetailPage implements OnInit {
     roles: Array<{
       type: string;
       role: string;
-      index?: number
+      index?: number;
     }>;
     columnNames?: Array<string>;
     options?: {};
@@ -67,7 +39,7 @@ export class DiaryDetailPage implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private authService: AuthenticationService,
+    private auth: AuthenticationService,
     private chartsService: ChartsService,
     private controllerService: ControllerService,
     private modalCtrl: ModalController,
@@ -78,157 +50,55 @@ export class DiaryDetailPage implements OnInit {
   ionViewWillEnter() {
     this.currentDate = this.chartsService.currentDate;
     this.controllerService.onCreateLoadingCtrl();
-    this.chartsService.data.then(response => {
-      if (response['status'] === 'ok') {
-        this.aggregate = {
-          habit: response['payload']['habit'],
-          apnea_events: response['payload']['apnea_events'],
-          avg_duration: response['payload']['avg_duration'],
-          sleep_duration: response['payload']['sleep_duration'],
-          avg_hr: response['payload']['avg_hr'],
-          avg_spo2: response['payload']['avg_spo2'],
-          hr_spectra: {
-            frequencies: response['payload']['hr_spectra']['frequencies'],
-            spectral_density: response['payload']['hr_spectra']['spectral_density']
-          },
-          plot_apnea_events: response['payload']['plot_apnea_events'],
-          plot_hr: response['payload']['plot_hr'],
-          plot_movements: response['payload']['plot_movements'],
-          plot_spo2: response['payload']['plot_spo2'],
-          spo2_spectra: {
-            frequencies: response['payload']['spo2_spectra']['frequencies'],
-            spectral_density: response['payload']['spo2_spectra']['spectral_density']
-          },
-          total_movements: response['payload']['total_movements']
-        };
-        this.prepareHabits(this.aggregate.habit);
-        this.prepareLineChart('hr_spectra');
-        this.charts.push({
-          title: 'Densità spettrale di potenza del segnale Heart Rate',
-          type: 'LineChart',
-          data: this.aggregateData,
-          roles: [],
-          options: {
-            legend: 'none',
-            pieHole: 0.55,
-            width: 'auto',
-            height: 'auto',
-          },
-        });
-
-        this.prepareLineChart('spo2_spectra');
-        this.charts.push({
-          title: 'Densità spettrale di potenza del segnale SPO2',
-          type: 'LineChart',
-          data: this.aggregateData,
-          roles: [],
-          options: {
-            legend: 'none',
-            pieHole: 0.55,
-            width: 'auto',
-            height: 'auto',
-          },
-        });
-
-        this.prepareLineChartPlot('plot_spo2');
-        this.charts.push({
-          title: 'Plot SPO2',
-          type: 'LineChart',
-          data: this.aggregateData,
-          roles: [],
-          options: {
-            legend: 'none',
-            pieHole: 0.55,
-            width: 'auto',
-            height: 'auto',
-          },
-        });
-        this.prepareLineChartMovements('plot_movements');
-        this.charts.push({
-          title: 'Movimenti',
-          type: 'LineChart',
-          data: this.aggregateData,
-          columnNames: ['Ora', 'Movimenti'],
-          roles: [],
-          options: {
-            legend: 'none',
-            pieHole: 0.55,
-            width: 'auto',
-            height: 'auto',
-          },
-        });
-
-
-        // QUESTA ISTRUZIONE DEVE RIMANERE ALLA FINE
-        this.controllerService.onDismissLoaderCtrl();
-        this.isLoaded = true;
-      } else {
-        this.authService.getUserType().then(isUser => {
+    this.aggregate = this.chartsService.aggregate;
+    this.caffe = this.chartsService.caffe;
+    this.cena = this.chartsService.cena;
+    this.drink = this.chartsService.drink;
+    this.sport = this.chartsService.sport;
+    this.chartsService.charts.then(charts =>{
+      this.charts = charts;
+      if(this.charts.length === 0){
+        this.auth.getUserType().then(isUser => {
           if (isUser) {
-            this.alertCtrl.create({
-              header: 'Error',
-              message: response['message'],
-              buttons: [
-                {
-                  text: 'Ok',
-                  handler: () => {
-                    this.router.navigate(['/home/diary']);
+            this.alertCtrl
+              .create({
+                header: 'Error',
+                message: 'Si è verificato un errore',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.router.navigate(['/home/diary']);
+                    }
                   }
-                }
-              ]
-            }).then(alert => { alert.present(); });
+                ]
+              })
+              .then(alert => {
+                alert.present();
+              });
           } else {
-            this.alertCtrl.create({
-              header: 'Error',
-              message: response['message'],
-              buttons: [
-                {
-                  text: 'Ok',
-                  handler: () => {
-                    this.router.navigate(['/home']);
+            this.alertCtrl
+              .create({
+                header: 'Error',
+                message: 'Si è verificato un errore',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.router.navigate(['/home']);
+                    }
                   }
-                }
-              ]
-            }).then(alert => { alert.present(); });
+                ]
+              })
+              .then(alert => {
+                alert.present();
+              });
           }
         });
       }
     });
+    this.isLoaded = true;
   }
-
-  private prepareHabits(habit: Abitudini) {
-    this.caffe = new Bevanda(habit['coffee']['type'], habit['coffee']['qty']);
-    this.drink = new Bevanda(habit['drink']['type'], habit['drink']['qty']);
-    if (habit['dinner']) {
-      this.cena = 'Pesante';
-    } else { this.cena = 'Leggero'; }
-    if (habit['sport']) {
-      this.sport = 'Si';
-    } else { this.sport = 'No'; }
-  }
-
-  prepareLineChart(spectra: string) {
-    this.aggregateData = [];
-    for (let x = 0; x < this.aggregate[spectra]['frequencies'].length; x++) {
-      this.aggregateData.push([this.aggregate[spectra]['frequencies'][x],
-      this.aggregate[spectra]['spectral_density'][x]]);
-    }
-  }
-
-  prepareLineChartPlot(spectra: string) {
-    this.aggregateData = [];
-    for (let x = 0; x < this.aggregate[spectra].length; x++) {
-      this.aggregateData.push([x, this.aggregate[spectra][x]]);
-    }
-  }
-
-  prepareLineChartMovements(lineChart: string) {
-    this.aggregateData = [];
-    for (let x = 1; x <= this.aggregate[lineChart].length; x++) {
-      this.aggregateData.push([x, this.aggregate[lineChart][x]]);
-    }
-  }
-
 
   ngOnInit() {
   }

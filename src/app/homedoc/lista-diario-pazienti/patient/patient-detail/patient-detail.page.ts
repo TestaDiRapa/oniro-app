@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartsService } from 'src/app/services/charts.service';
-import { SpawnSyncOptionsWithBufferEncoding } from 'child_process';
 
 @Component({
   selector: 'app-patient-detail',
