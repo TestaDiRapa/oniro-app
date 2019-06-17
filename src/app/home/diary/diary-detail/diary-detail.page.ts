@@ -143,12 +143,12 @@ export class DiaryDetailPage implements OnInit {
             height: 'auto',
           },
         });
-        this.prepareHistogram('plot_movements');
+        this.prepareLineChartMovements('plot_movements');
         this.charts.push({
           title: 'Movimenti',
-          type: 'Histogram',
+          type: 'LineChart',
           data: this.aggregateData,
-          columnNames: ['Movimenti', 'Ora'],
+          columnNames: ['Ora', 'Movimenti'],
           roles: [],
           options: {
             legend: 'none',
@@ -197,12 +197,12 @@ export class DiaryDetailPage implements OnInit {
   }
 
   private prepareHabits(habit: Abitudini) {
-    this.caffe = habit.getCaffe();
-    this.drink = habit.getDrink();
-    if (habit.getCena()) {
+    this.caffe = new Bevanda(habit['coffee']['type'], habit['coffee']['qty']);
+    this.drink = new Bevanda(habit['drink']['type'], habit['drink']['qty']);
+    if (habit['dinner']) {
       this.cena = 'Pesante';
     } else { this.cena = 'Leggero'; }
-    if (habit.getSport()) {
+    if (habit['sport']) {
       this.sport = 'Si';
     } else { this.sport = 'No'; }
   }
@@ -222,12 +222,11 @@ export class DiaryDetailPage implements OnInit {
     }
   }
 
-  prepareHistogram(histogram: string) {
+  prepareLineChartMovements(lineChart: string) {
     this.aggregateData = [];
-    for (let x = 0; x < this.aggregate[histogram].length; x++) {
-      this.aggregateData.push([x, this.aggregate[histogram][x]]);
+    for (let x = 1; x <= this.aggregate[lineChart].length; x++) {
+      this.aggregateData.push([x, this.aggregate[lineChart][x]]);
     }
-    console.log("YOOOOO", this.aggregateData);
   }
 
 
@@ -240,7 +239,7 @@ export class DiaryDetailPage implements OnInit {
     }).then(modal => {
       modal.present();
       modal.onDidDismiss().then(result => {
-        if (result.data && result.data.hasOwnProperty("_id")) {
+        if (result.data && result.data.hasOwnProperty('_id')) {
           this.sendRecToDoctor(result.data._id, this.chartsService.dataId);
         }
       });
