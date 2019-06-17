@@ -50,13 +50,14 @@ export class DiaryDetailPage implements OnInit {
   ionViewWillEnter() {
     this.currentDate = this.chartsService.currentDate;
     this.controllerService.onCreateLoadingCtrl();
-    this.aggregate = this.chartsService.aggregate;
-    this.caffe = this.chartsService.caffe;
-    this.cena = this.chartsService.cena;
-    this.drink = this.chartsService.drink;
-    this.sport = this.chartsService.sport;
+    this.chartsService.aggregate.subscribe(data => {this.aggregate = data});
+    this.chartsService.caffe.subscribe(data => {this.caffe = data});
+    this.chartsService.cena.subscribe(data => {this.cena = data});
+    this.chartsService.drink.subscribe(data => {this.drink = data});
+    this.chartsService.sport.subscribe(data => {this.sport = data});
     this.chartsService.charts.then(charts =>{
       this.charts = charts;
+      this.controllerService.onDismissLoaderCtrl();
       if(this.charts.length === 0){
         this.auth.getUserType().then(isUser => {
           if (isUser) {

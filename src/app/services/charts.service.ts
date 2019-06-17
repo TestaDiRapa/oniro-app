@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AuthenticationService } from './authentication/authentication.service';
 import { Abitudini } from '../home/add-abitudini/abitudini.model';
 import { Bevanda } from '../home/add-abitudini/bevanda.model';
-import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 export interface Aggregate {
   apnea_events: number;
@@ -50,17 +50,37 @@ export interface Chart{
 export class ChartsService {
   private currentId: string;
   private currentCf: string = null;
+  private receivedData: Aggregate;
 
   // tslint:disable-next-line: variable-name
-  private _aggregate: Aggregate;
+  private _aggregate = new BehaviorSubject<Aggregate>({
+    apnea_events: 0,
+    avg_duration: 0,
+    sleep_duration: 0,
+    avg_hr: 0,
+    avg_spo2: 0,
+    hr_spectra: {frequencies: [], spectral_density: []},
+    plot_apnea_events: [],
+    plot_hr: [],
+    plot_movements: [],
+    plot_spo2: [],
+    spo2_spectra: {frequencies: [], spectral_density: []},
+    total_movements: 0,
+    habit: new Abitudini(
+      new Bevanda("", 0),
+      new Bevanda("", 0),
+      false,
+      false
+    )
+  });
   // tslint:disable-next-line: variable-name
-  _caffe: Bevanda;
+  _caffe = new BehaviorSubject<Bevanda>(new Bevanda('', 0));
   // tslint:disable-next-line: variable-name
-  _drink: Bevanda;
+  _drink = new BehaviorSubject<Bevanda>(new Bevanda('', 0));
   // tslint:disable-next-line: variable-name
-  _cena: string;
+  _cena = new BehaviorSubject<string>("");
   // tslint:disable-next-line: variable-name
-  _sport: string;
+  _sport = new BehaviorSubject<string>("");
   private currentDateToPrint: string;
   aggregateData: Array<Array<string | number | {}>> = [];
 // tslint:disable-next-line: variable-name
@@ -68,8 +88,7 @@ export class ChartsService {
 
   constructor(
     private auth: AuthenticationService,
-    private http: HttpClient,
-    private router: Router
+    private http: HttpClient
   ) {}
 
   set cf(cf: string) {
@@ -77,7 +96,7 @@ export class ChartsService {
   }
 
   get aggregate() {
-    return this._aggregate;
+    return this._aggregate.asObservable();
   }
   set dataId(id: string) {
     console.log('SET');
@@ -90,16 +109,16 @@ export class ChartsService {
     return this.currentId;
   }
   get caffe() {
-    return this._caffe;
+    return this._caffe.asObservable();
   }
   get sport() {
-    return this._sport;
+    return this._sport.asObservable();
   }
   get drink() {
-    return this._drink;
+    return this._drink.asObservable();
   }
   get cena() {
-    return this._cena;
+    return this._cena.asObservable();
   }
   set currentDate(date: string) {
     this.currentDateToPrint = date;
@@ -136,7 +155,7 @@ export class ChartsService {
   return this.data.then(response => {
       if (response['status'] === 'ok') {
         console.log('Response ', response);
-        this._aggregate = {
+        this.receivedData = {
           habit: response['payload']['habit'],
           apnea_events: response['payload']['apnea_events'],
           avg_duration: response['payload']['avg_duration'],
@@ -159,7 +178,8 @@ export class ChartsService {
           },
           total_movements: response['payload']['total_movements']
         };
-        this.prepareHabits(this.aggregate.habit);
+        this._aggregate.next(this.receivedData);
+        this.prepareHabits(response['payload']['habit']);
         this.prepareLineChart('hr_spectra');
         this._charts.push({
           title: 'Densità spettrale di potenza del segnale Heart Rate',
@@ -220,41 +240,41 @@ export class ChartsService {
   }
 
   private prepareHabits(habit: Abitudini) {
-    this._caffe = new Bevanda(habit['coffee']['type'], habit['coffee']['qty']);
-    this._drink = new Bevanda(habit['drink']['type'], habit['drink']['qty']);
+    this._caffe.next(new Bevanda(habit['coffee']['type'], habit['coffee']['qty']));
+    this._drink.next(new Bevanda(habit['drink']['type'], habit['drink']['qty']));
     if (habit['dinner']) {
-      this._cena = 'Pesante';
+      this._cena.next('Pesante');
     } else {
-      this._cena = 'Leggero';
+      this._cena.next('Leggero');
     }
     if (habit['sport']) {
-      this._sport = 'Si';
+      this._sport.next('Si');
     } else {
-      this._sport = 'No';
+      this._sport.next('No');
     }
   }
 
   prepareLineChart(spectra: string) {
     this.aggregateData = [];
-    for (let x = 0; x < this.aggregate[spectra]['frequencies'].length; x++) {
+    for (let x = 0; x < this.receivedData[spectra]['frequencies'].length; x++) {
       this.aggregateData.push([
-        this.aggregate[spectra]['frequencies'][x],
-        this.aggregate[spectra]['spectral_density'][x]
+        this.receivedData[spectra]['frequencies'][x],
+        this.receivedData[spectra]['spectral_density'][x]
       ]);
     }
   }
 
   prepareLineChartPlot(spectra: string) {
     this.aggregateData = [];
-    for (let x = 0; x < this.aggregate[spectra].length; x++) {
-      this.aggregateData.push([x, this.aggregate[spectra][x]]);
+    for (let x = 0; x < this.receivedData[spectra].length; x++) {
+      this.aggregateData.push([x, this.receivedData[spectra][x]]);
     }
   }
 
   prepareLineChartMovements(lineChart: string) {
     this.aggregateData = [];
-    for (let x = 1; x <= this.aggregate[lineChart].length; x++) {
-      this.aggregateData.push([x, this.aggregate[lineChart][x]]);
+    for (let x = 1; x <= this.receivedData[lineChart].length; x++) {
+      this.aggregateData.push([x, this.receivedData[lineChart][x]]);
     }
   }
 }
