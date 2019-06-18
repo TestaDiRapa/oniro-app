@@ -48,6 +48,7 @@ export interface Chart{
   providedIn: 'root'
 })
 export class ChartsService {
+  private timestamp: Date;
   private currentId: string;
   private currentCf: string = null;
   private receivedData: Aggregate;
@@ -103,10 +104,7 @@ export class ChartsService {
     return this._aggregate.asObservable();
   }
   set dataId(id: string) {
-    console.log('SET');
-    console.log(id);
     this.currentId = id;
-    console.log(this.currentId);
   }
 
   get dataId() {
@@ -158,7 +156,7 @@ export class ChartsService {
   get charts() {
   return this.data.then(response => {
       if (response['status'] === 'ok') {
-        console.log('Response ', response);
+
         this.receivedData = {
           habit: response['payload']['habit'],
           apnea_events: response['payload']['apnea_events'],
@@ -184,6 +182,11 @@ export class ChartsService {
         };
         this._aggregate.next(this.receivedData);
         this.prepareHabits(response['payload']['habit']);
+
+        this.timestamp = new Date(this.currentId);
+
+        this._charts = [];
+
         this.prepareLineChart('hr_spectra');
         this._charts.push({
           title: 'Densità spettrale di potenza del segnale Heart Rate',
@@ -211,6 +214,7 @@ export class ChartsService {
             height: 'auto'
           }
         });
+
         this.prepareLineChartPlot('plot_spo2');
         this._charts.push({
           title: 'Plot SPO2',
@@ -224,6 +228,21 @@ export class ChartsService {
             height: 'auto'
           }
         });
+
+        this.prepareLineChartPlot('plot_hr');
+        this._charts.push({
+          title: 'Plot HR',
+          type: 'LineChart',
+          data: this.aggregateData,
+          roles: [],
+          options: {
+            legend: 'none',
+            pieHole: 0.55,
+            width: 'auto',
+            height: 'auto'
+          }
+        });
+
         this.prepareLineChartMovements('plot_movements');
         this._charts.push({
           title: 'Movimenti',
@@ -271,14 +290,16 @@ export class ChartsService {
   prepareLineChartPlot(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[spectra].length; x++) {
-      this.aggregateData.push([x, this.receivedData[spectra][x]]);
+      const time = new Date(this.timestamp.getTime() + x*60*60*1000);
+      this.aggregateData.push([time, this.receivedData[spectra][x]]);
     }
   }
 
   prepareLineChartMovements(lineChart: string) {
     this.aggregateData = [];
     for (let x = 1; x <= this.receivedData[lineChart].length; x++) {
-      this.aggregateData.push([x, this.receivedData[lineChart][x]]);
+      const time = new Date(this.timestamp.getTime() + x*60*60*1000);
+      this.aggregateData.push([time, this.receivedData[lineChart][x]]);
     }
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartsService, Aggregate } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { AlertController, ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';

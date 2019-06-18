@@ -141,6 +141,7 @@ export class RecordPage implements OnInit {
 
   onStop() {
     this.timerSubscription.unsubscribe();
+    this.dataMngr.stopTime = new Date();
     this.dataMngr.sendData(true);
     this.router.navigate(['/home']);
   }

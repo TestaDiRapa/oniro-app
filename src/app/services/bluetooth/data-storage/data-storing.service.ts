@@ -25,6 +25,7 @@ export interface RawBluetoothData {
 export class DataStoringService {
     private storedData: BluetoothData[] = [];
     private initInstant: string;
+    stopTime: Date;
 
     constructor(
         private authService: AuthenticationService,

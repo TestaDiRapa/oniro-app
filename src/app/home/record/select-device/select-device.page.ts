@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { AlertController, ModalController } from '@ionic/angular';
+import { ControllerService } from 'src/app/services/controllerService.service';
 
 @Component({
   selector: 'app-select-device',
@@ -14,10 +15,12 @@ export class SelectDevicePage implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private bluetooth: BluetoothSerial,
+    private controller: ControllerService,
     private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
+    this.controller.onCreateLoadingCtrl();
     this.isLoaded = false;
     this.bluetooth.list().then(
       results => {
@@ -35,6 +38,7 @@ export class SelectDevicePage implements OnInit {
           }
         }
         this.isLoaded = true;
+        this.controller.onDismissLoaderCtrl();
       },
       error => {
         this.alertCtrl

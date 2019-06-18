@@ -3,7 +3,6 @@ import { ChartsService, Aggregate } from 'src/app/services/charts.service';
 import { Bevanda } from 'src/app/home/add-abitudini/bevanda.model';
 import { ControllerService } from 'src/app/services/controllerService.service';
 import { AlertController } from '@ionic/angular';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -43,7 +42,7 @@ export class PatientDetailPage implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
   ionViewWillEnter() {
     this.cf = this.chartsService.cf;
