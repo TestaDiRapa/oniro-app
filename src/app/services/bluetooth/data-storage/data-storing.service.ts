@@ -97,7 +97,7 @@ export class DataStoringService {
                             this.storage.remove('sleep_data');
                             if (terminate) {
                                 this.http.get(
-                                    `http://${environment.serverIp}/user/my_recordings/process?id=${this.initInstant}`,
+                                    `http://${environment.serverIp}/user/my_recordings/process?id=${this.initInstant}&stop=${this.stopTime.toISOString()}`,
                                     {
                                         headers: new HttpHeaders({
                                             'Content-Type': 'application/json',
