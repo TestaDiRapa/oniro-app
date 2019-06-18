@@ -16,7 +16,6 @@ export class ContactsPage implements OnInit {
   public contacts: any;
 
   constructor(
-
     private userService: UserService,
     private menuCtrl: MenuController,
     private controlService: ControllerService,

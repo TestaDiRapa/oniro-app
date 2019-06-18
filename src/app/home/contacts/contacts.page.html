@@ -11,7 +11,7 @@
   <ion-list>
     <ion-card style="border: 2px solid white;" *ngFor="let contact of contacts">
       <ion-item lines="none" *ngIf="contact['type'] === 'subscribed'">
-        {{contact.name}} {{contact._id}}
+        {{contact.name}} {{contact.surname}}
         <ion-icon text-right name="call" slot="end" color="success" (click)="callNumber(contact.phone_number)">
         </ion-icon>
       </ion-item>

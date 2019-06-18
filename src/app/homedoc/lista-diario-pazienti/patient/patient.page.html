@@ -1,45 +1,43 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons>
-          <ion-back-button defaultHref="/homedoc"></ion-back-button>
-          <ion-title style="font-weight: bold">Codice Fiscale del paziente: {{cf}}</ion-title>
-        </ion-buttons>
-    
+    <ion-buttons>
+      <ion-back-button defaultHref="/homedoc"></ion-back-button>
+      <ion-title style="font-weight: bold; font-size: 20px">CF: {{cf}}</ion-title>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-list>
-                <ion-item *ngFor="let p of patientRecords" (click)="getMoreDetails(p._id)">
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col>
-                        <ion-text color="warning">{{ p._id | date: 'EEE dd MMM yyyy'}}</ion-text>
-                      </ion-col>
-                      <ion-col *ngIf="p.signaled" class="right">
-                        <ion-icon name="alert" color="danger"></ion-icon>
-                       </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col>
-                        Apnea events: {{ p.preview.apnea_events | number }}
-                      </ion-col>
-                      <ion-col>
-                        Avg heart rate: {{ p.preview.avg_hr | number: '2.0-0'  }} bpm
-                      </ion-col>
-                      <ion-col>
-                        Avg SpO2: {{ p.preview.avg_spo2 | number:'2.2-3' }} %
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-item>
-              </ion-list>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      
-</ion-content>
+  <ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-list>
+            <ion-item *ngFor="let p of patientRecords" (click)="getMoreDetails(p._id)">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-text color="warning">{{ p._id | date: 'EEE dd MMM yyyy'}}</ion-text>
+                  </ion-col>
+                  <ion-col *ngIf="p.signaled" class="right">
+                    <ion-icon name="alert" color="danger"></ion-icon>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    Apnea events: {{ p.preview.apnea_events | number }}
+                  </ion-col>
+                  <ion-col>
+                    Avg heart rate: {{ p.preview.avg_hr | number: '2.0-0'  }} bpm
+                  </ion-col>
+                  <ion-col>
+                    Avg SpO2: {{ p.preview.avg_spo2 | number:'2.2-3' }} %
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
