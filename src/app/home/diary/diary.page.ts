@@ -6,6 +6,10 @@ import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
 import { ChartsService } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
+import { SendPopoverComponent } from './send-popover/send-popover.component';
+
+import 'hammerjs';
+
 
 export interface Data {
   _id: Date;
@@ -36,6 +40,7 @@ export class DiaryPage implements OnInit {
     private charts: ChartsService,
     private http: HttpClient,
     private menuCtrl: MenuController,
+    private popoverCtrl: PopoverController,
     private router: Router
   ) { }
 
@@ -72,6 +77,18 @@ export class DiaryPage implements OnInit {
     this.charts.dataId = id;
     this.charts.currentDate = date;
     this.router.navigate(['/home/diary/diary-detail']);
+  }
+
+  onPress() {
+    this.popoverCtrl.create({
+      component: SendPopoverComponent
+    }).then(popover => {
+      popover.present();
+    });
+  }
+
+  onRelease() {
+    this.popoverCtrl.dismiss();
   }
 
 }
