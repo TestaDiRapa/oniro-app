@@ -268,7 +268,7 @@ export class ChartsService {
     if (habit['dinner']) {
       this._cena.next('Pesante');
     } else {
-      this._cena.next('Leggero');
+      this._cena.next('Leggera');
     }
     if (habit['sport']) {
       this._sport.next('Si');
@@ -297,7 +297,7 @@ export class ChartsService {
 
   prepareLineChartMovements(lineChart: string) {
     this.aggregateData = [];
-    for (let x = 1; x <= this.receivedData[lineChart].length; x++) {
+    for (let x = 0; x < this.receivedData[lineChart].length; x++) {
       const time = new Date(this.timestamp.getTime() + x*60*60*1000);
       this.aggregateData.push([time, this.receivedData[lineChart][x]]);
     }

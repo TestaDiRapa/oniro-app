@@ -58,7 +58,7 @@ export class DiaryPage implements OnInit {
           if (a._id < b._id) {
           return 1;
           }
-          if (a._id.getTime === b._id.getTime) {
+          if (a._id === b._id) {
           return 0;
           }
           return -1;

@@ -45,6 +45,9 @@ export class PatientDetailPage implements OnInit {
   ngOnInit() { }
 
   ionViewWillEnter() {
+    if(!this.chartsService.dataId) {
+      this.router.navigate(['/homedoc']);
+    }
     this.cf = this.chartsService.cf;
     this.date = this.chartsService.dataId.toString().substr(0, 10);
     this.controllerService.onCreateLoadingCtrl();

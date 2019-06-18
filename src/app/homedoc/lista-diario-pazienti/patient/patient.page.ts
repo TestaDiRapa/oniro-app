@@ -39,6 +39,15 @@ export class PatientPage implements OnInit {
           })
           .subscribe(res => {
             this.patientRecords = res['payload'];
+            this.patientRecords.sort((a: Data, b: Data) => {
+              if (a._id < b._id) {
+              return 1;
+              }
+              if (a._id === b._id) {
+              return 0;
+              }
+              return -1;
+            });
           });
       });
     });

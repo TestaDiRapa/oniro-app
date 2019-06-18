@@ -46,6 +46,9 @@ export class DiaryDetailPage implements OnInit {
   ) { }
 
   ionViewWillEnter() {
+    if(!this.chartsService.dataId) {
+      this.router.navigate(['/home/diary']);
+    }
     this.currentDate = this.chartsService.currentDate;
     this.controllerService.onCreateLoadingCtrl();
     this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
