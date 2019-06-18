@@ -26,7 +26,6 @@ export interface Preview {
 })
 export class DiaryPage implements OnInit {
   private url = 'http://' + environment.serverIp + '/user/my_recordings';
-  array: object[] = [];
   preview: Data[] = [];
 
   @ViewChild('chart')
@@ -55,6 +54,15 @@ export class DiaryPage implements OnInit {
       ).subscribe(res => {
         console.log(res);
         this.preview = res['payload'];
+        this.preview.sort((a: Data, b: Data) => {
+          if (a._id < b._id) {
+          return 1;
+          }
+          if (a._id.getTime === b._id.getTime) {
+          return 0;
+          }
+          return -1;
+        });
       });
     });
   }

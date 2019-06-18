@@ -36,7 +36,6 @@ export class ListaDiarioPazientiPage implements OnInit {
     this.userService.getMyPatients().then(observable => {
       observable.subscribe(res => {
         if (res['status'] === 'ok') {
-          console.log('pre', res['results']);
           this.allPatients = res['results'];
           for (let patient of this.allPatients) {
             if (patient.type === 'registered') {
@@ -48,8 +47,6 @@ export class ListaDiarioPazientiPage implements OnInit {
     });
   }
   showPatientDiary(cf: string) {
-    console.log('cliccato');
     this.router.navigate(['/homedoc/lista-diario-pazienti/pazienti/', cf]);
-    console.log('dopo il salto');
   }
 }

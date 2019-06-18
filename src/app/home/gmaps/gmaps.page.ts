@@ -96,7 +96,6 @@ export class GmapsPage implements OnInit {
     Geocoder.geocode({
       address: this.addresses
     }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
-      console.log('ehi');
       let i = 0;
       mvcArray.on('finish').subscribe(() => {
         if (mvcArray.getLength() > 0) {
