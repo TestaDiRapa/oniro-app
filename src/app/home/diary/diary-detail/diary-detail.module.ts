@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { DiaryDetailPage } from './diary-detail.page';
 import { GoogleChartsModule } from 'angular-google-charts';
-import { SendModalPage } from './send-modal/send-modal.page';
 
 const routes: Routes = [
   {

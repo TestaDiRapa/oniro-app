@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { PatientDetailPage } from './patient-detail.page';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [PatientDetailPage]

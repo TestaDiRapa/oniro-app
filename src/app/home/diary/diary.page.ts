@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuController, ModalController } from '@ionic/angular';
-import { GoogleChartComponent, ChartEvent, ChartErrorEvent } from 'angular-google-charts';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { MenuController } from '@ionic/angular';
+import { GoogleChartComponent } from 'angular-google-charts';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
 import { ChartsService } from 'src/app/services/charts.service';

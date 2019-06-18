@@ -95,6 +95,10 @@ export class ChartsService {
     this.currentCf = cf;
   }
 
+  get cf() {
+    return this.currentCf;
+  }
+
   get aggregate() {
     return this._aggregate.asObservable();
   }

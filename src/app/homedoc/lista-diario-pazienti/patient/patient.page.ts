@@ -42,6 +42,7 @@ export class PatientPage implements OnInit {
       });
     });
   }
+
   getMoreDetails(id: string) {
     const date = id.toString().substr(0, 10);
     this.charts.cf = this.cf;
@@ -49,4 +50,5 @@ export class PatientPage implements OnInit {
     this.charts.currentDate = date;
     this.router.navigate(['/homedoc/lista-diario-pazienti/pazienti/', this.cf, id]);
   }
+
 }

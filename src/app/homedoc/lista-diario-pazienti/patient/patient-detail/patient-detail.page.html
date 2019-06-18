@@ -1,12 +1,110 @@
 <ion-header>
     <ion-toolbar>
         <ion-buttons>
-            <ion-back-button></ion-back-button>
-            <ion-title style="font-weight: bold">Cf: {{cf}}  DATA: {{date}}</ion-title>
-          </ion-buttons>
-          </ion-toolbar>
+            <ion-back-button defaultHref="/homedoc/lista-diario-pazienti"></ion-back-button>
+            <ion-title style="font-weight: bold">Paziente: {{cf}} Data: {{date}}</ion-title>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+    <ion-grid *ngIf="isLoaded">
+        <ion-card>
+            <ion-row>
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="moon"></ion-icon> Durata del sonno
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ aggregate.sleep_duration }}
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="warning"></ion-icon> Eventi di apnea
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    <div align-right>{{ aggregate.apnea_events }}</div>
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="time"></ion-icon> Durata media eventi di apnea
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ aggregate.avg_duration }} s
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="pulse"></ion-icon> Valore medio Heart Rate
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ aggregate.avg_hr | number:'2.0-0' }} bpm
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="speedometer"></ion-icon>Valore medio SpO2
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ aggregate.avg_spo2 | number:'2.2-3' }} %
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="body"></ion-icon> Numero di movimenti
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ aggregate.total_movements }}
+                </ion-col>
+            </ion-row>
+        </ion-card>
+        <ion-card>
+            <ion-row>
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="cafe"></ion-icon> Caffè presi
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ caffe.getTipo() }}: {{ caffe.getTot() }}
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="beer"></ion-icon> Drink bevuti
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ drink.getTipo() }}: {{ drink.getTot()}}
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="pizza"></ion-icon> Cenato tardi
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ cena }}
+                </ion-col>
+            </ion-row>
+            <ion-row margin-top="20px">
+                <ion-col size-sm="8" offset="1" offset-sm="2">
+                    <ion-icon name="football"></ion-icon> Praticato sport
+                </ion-col>
+                <ion-col pull="1" pull-sm="2" class="right">
+                    {{ sport }}
+                </ion-col>
+            </ion-row>
+        </ion-card>
+        <ion-card>
+            <ion-row>
+                <ion-col style="margin:auto" size-sm="6" ofsset-sm="3">
+                    <ion-list lines="none">
+                        <ion-item margin-top="10px" *ngFor="let chart of charts">
+                            <google-chart class="chart" [title]="chart.title" [type]="chart.type" [data]="chart.data"
+                                [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options">
+                            </google-chart>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </ion-grid>
 </ion-content>

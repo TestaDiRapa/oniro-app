@@ -39,7 +39,6 @@ export class DiaryDetailPage implements OnInit {
 
   constructor(
     private alertCtrl: AlertController,
-    private auth: AuthenticationService,
     private chartsService: ChartsService,
     private controllerService: ControllerService,
     private modalCtrl: ModalController,
@@ -50,52 +49,31 @@ export class DiaryDetailPage implements OnInit {
   ionViewWillEnter() {
     this.currentDate = this.chartsService.currentDate;
     this.controllerService.onCreateLoadingCtrl();
-    this.chartsService.aggregate.subscribe(data => {this.aggregate = data});
-    this.chartsService.caffe.subscribe(data => {this.caffe = data});
-    this.chartsService.cena.subscribe(data => {this.cena = data});
-    this.chartsService.drink.subscribe(data => {this.drink = data});
-    this.chartsService.sport.subscribe(data => {this.sport = data});
-    this.chartsService.charts.then(charts =>{
+    this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
+    this.chartsService.caffe.subscribe(data => { this.caffe = data });
+    this.chartsService.cena.subscribe(data => { this.cena = data });
+    this.chartsService.drink.subscribe(data => { this.drink = data });
+    this.chartsService.sport.subscribe(data => { this.sport = data });
+    this.chartsService.charts.then(charts => {
       this.charts = charts;
       this.controllerService.onDismissLoaderCtrl();
-      if(this.charts.length === 0){
-        this.auth.getUserType().then(isUser => {
-          if (isUser) {
-            this.alertCtrl
-              .create({
-                header: 'Error',
-                message: 'Si è verificato un errore',
-                buttons: [
-                  {
-                    text: 'Ok',
-                    handler: () => {
-                      this.router.navigate(['/home/diary']);
-                    }
-                  }
-                ]
-              })
-              .then(alert => {
-                alert.present();
-              });
-          } else {
-            this.alertCtrl
-              .create({
-                header: 'Error',
-                message: 'Si è verificato un errore',
-                buttons: [
-                  {
-                    text: 'Ok',
-                    handler: () => {
-                      this.router.navigate(['/home']);
-                    }
-                  }
-                ]
-              })
-              .then(alert => {
-                alert.present();
-              });
-          }
-        });
+      if (this.charts.length === 0) {
+        this.alertCtrl
+          .create({
+            header: 'Error',
+            message: 'Si è verificato un errore',
+            buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                  this.router.navigate(['/home/diary']);
+                }
+              }
+            ]
+          })
+          .then(alert => {
+            alert.present();
+          });
       }
     });
     this.isLoaded = true;

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DoctorService } from '../services/doctorService.service';
 import { ControllerService } from '../services/controllerService.service';
+import { Router } from '@angular/router';
+import { ChartsService } from '../services/charts.service';
 
 @Component({
   selector: 'app-homedoc',
@@ -12,8 +14,10 @@ export class HomedocPage implements OnInit {
   public n_req: number;
 
   constructor(
-    private docService: DoctorService,
+    private charts: ChartsService,
     private controllerService: ControllerService,
+    private docService: DoctorService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -23,7 +27,6 @@ export class HomedocPage implements OnInit {
     this.controllerService.onCreateLoadingCtrl();
     this.docService.getMessagePatient().then(succes => {
       succes.subscribe(resData => {
-        console.log(resData);
         this.alerts = resData['signals'];
         this.n_req = this.alerts.length;
       });
@@ -36,7 +39,11 @@ export class HomedocPage implements OnInit {
     this.docService.deleteMessagePatient(date, cf).then(success => {
       success.subscribe(resData => {
         if (resData.status !== 'ok') {
-          this.controllerService.createAlertCtrl('', resData.message);;
+          this.controllerService.createAlertCtrl('Error!', resData.message);;
+        } else {
+          this.charts.cf = cf;
+          this.charts.dataId = date;
+          this.router.navigate(['/homedoc/lista-diario-pazienti/pazienti/', cf, date]);
         }
       });
     });
