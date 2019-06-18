@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ChartsService } from 'src/app/services/charts.service';
 
+
 @Component({
   selector: 'app-patient',
   templateUrl: './patient.page.html',

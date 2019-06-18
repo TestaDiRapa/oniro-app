@@ -18,6 +18,9 @@
                 <ion-col>
                   <ion-text color="warning">{{ p._id | date: 'EEE dd MMM yyyy'}}</ion-text>
                 </ion-col>
+                <ion-col *ngIf="p.signaled" class="right">
+                 <ion-icon name="folder" color="success"></ion-icon>
+                </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col>
