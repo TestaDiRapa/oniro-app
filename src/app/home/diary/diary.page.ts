@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController, PopoverController } from '@ionic/angular';
 import { GoogleChartComponent } from 'angular-google-charts';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';
 import { ChartsService } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
-import { ControllerService } from 'src/app/services/controllerService.service';
 
 export interface Data {
   _id: Date;
@@ -36,7 +35,6 @@ export class DiaryPage implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private charts: ChartsService,
-    private controller: ControllerService,
     private http: HttpClient,
     private menuCtrl: MenuController,
     private router: Router

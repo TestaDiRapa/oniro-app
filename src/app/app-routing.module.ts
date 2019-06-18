@@ -98,8 +98,7 @@ const routes: Routes = [
     path: 'info-popover',
     loadChildren:
       './home/diary/diary-detail/send-modal/info-popover/info-popover.module#InfoPopoverPageModule'
-  },
-  { path: 'signaled-popover', loadChildren: './home/diary/signaled-popover/signaled-popover.module#SignaledPopoverPageModule' }
+  }
 ];
 
 @NgModule({
