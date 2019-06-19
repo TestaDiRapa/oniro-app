@@ -25,7 +25,7 @@ export class RichiestePazientiPage implements OnInit {
 
   ionViewWillEnter() {
     this.controllerService.onCreateLoadingCtrl();
-    this.docService.getRequests().then(succes => {
+    this.docService.getPatientRequests().then(succes => {
       succes.subscribe(resData => {
         console.log(resData);
         for (let i = 0; i < resData['results'].length; i++) {

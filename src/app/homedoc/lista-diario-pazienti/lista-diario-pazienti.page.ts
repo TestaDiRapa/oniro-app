@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/userService.service';
 import { MenuController } from '@ionic/angular';
-import { observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { DoctorService } from 'src/app/services/doctorService.service';
 
 @Component({
   selector: 'app-lista-diario-pazienti',
@@ -22,18 +21,20 @@ export class ListaDiarioPazientiPage implements OnInit {
     patient: string;
     type: string;
   }> = [];
+
   constructor(
-    private userService: UserService,
+    private doctorService: DoctorService,
     private menuCtrl: MenuController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.menuCtrl.close();
     this.findPatients();
   }
+
   private findPatients() {
-    this.userService.getMyPatients().then(observable => {
+    this.doctorService.getPatientRequests().then(observable => {
       observable.subscribe(res => {
         if (res['status'] === 'ok') {
           this.allPatients = res['results'];
@@ -46,7 +47,9 @@ export class ListaDiarioPazientiPage implements OnInit {
       });
     });
   }
+
   showPatientDiary(cf: string) {
     this.router.navigate(['/homedoc/lista-diario-pazienti/pazienti/', cf]);
   }
+
 }

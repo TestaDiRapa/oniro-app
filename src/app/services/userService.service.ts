@@ -87,16 +87,5 @@ export class UserService {
         });
     });
   }
-getMyPatients() {
-  const path = 'http://' + environment.serverIp + '/doctor/my_patients';
-  return this.authService.token.then(token => {
-    return this.http.get<Respons>(
-      path,
-      {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token
-        })
-      });
-  });
-}
+
 }

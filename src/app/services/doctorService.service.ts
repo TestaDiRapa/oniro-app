@@ -14,7 +14,7 @@ export class DoctorService {
         private http: HttpClient,
     ) { }
 
-    getRequests() {
+    getPatientRequests() {
         const path = 'http://' + environment.serverIp + '/doctor/my_patients';
         return this.authService.token.then(token => {
             return this.http.get<Respons>(
