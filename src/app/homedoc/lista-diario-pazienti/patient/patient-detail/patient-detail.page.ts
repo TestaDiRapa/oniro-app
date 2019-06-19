@@ -90,11 +90,11 @@ export class PatientDetailPage implements OnInit {
     this.popoverCtrl.create({
       component: ApneaPopoverComponent,
       componentProps: {
-        events: events
+        'events': events
       }
     }).then(popover => {
       popover.present();
-    })
+    });
   }
 
   onRelease() {
