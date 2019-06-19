@@ -9,6 +9,7 @@ import { PatientDetailPage } from './patient-detail.page';
 import { GoogleChartsModule } from 'angular-google-charts';
 
 import 'hammerjs';
+import { ApneaPopoverComponent } from 'src/app/home/diary/diary-detail/apnea-popover/apnea-popover.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [PatientDetailPage, PopoverController],
-  entryComponents: [PopoverController]
+  entryComponents: [ApneaPopoverComponent]
 })
 export class PatientDetailPageModule {}

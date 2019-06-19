@@ -82,7 +82,7 @@ export class DiaryDetailPage implements OnInit {
           });
       }
     });
-    this.isLoaded = true;   
+    this.isLoaded = true;
   }
 
   ngOnInit() {
@@ -143,11 +143,11 @@ export class DiaryDetailPage implements OnInit {
     this.popoverCtrl.create({
       component: ApneaPopoverComponent,
       componentProps: {
-        events: events
+        'events': events
       }
     }).then(popover => {
       popover.present();
-    })
+    });
   }
 
   onRelease() {

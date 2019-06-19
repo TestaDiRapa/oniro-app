@@ -83,12 +83,12 @@ export class SendModalPage implements OnInit {
         }
       }
     ).then(popover => {
-      popover.present()
+      popover.present();
     });
   }
 
   onDoctorRelease() {
-    this.popoverCtrl.dismiss()
+    this.popoverCtrl.dismiss();
   }
 
   onCancel() {
