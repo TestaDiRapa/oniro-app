@@ -4,9 +4,10 @@ import { Bevanda } from 'src/app/home/add-abitudini/bevanda.model';
 import { ControllerService } from 'src/app/services/controllerService.service';
 import { AlertController, PopoverController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { ApneaPopoverComponent } from 'src/app/home/diary/diary-detail/apnea-popover/apnea-popover.component';
 
 import 'hammerjs';
+import { ApneaPopoverComponent } from './apnea-popover/apnea-popover.component';
+
 
 @Component({
   selector: 'app-patient-detail',

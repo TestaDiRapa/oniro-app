@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
-import { IonicModule, PopoverController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 
 import { PatientDetailPage } from './patient-detail.page';
 import { GoogleChartsModule } from 'angular-google-charts';
 
 import 'hammerjs';
+import { ApneaPopoverComponent } from './apnea-popover/apnea-popover.component';
 
 const routes: Routes = [
   {
@@ -25,7 +26,7 @@ const routes: Routes = [
     GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [PatientDetailPage, PopoverController],
-  entryComponents: [PopoverController]
+  declarations: [PatientDetailPage, ApneaPopoverComponent],
+  entryComponents: [ApneaPopoverComponent]
 })
 export class PatientDetailPageModule {}
