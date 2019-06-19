@@ -1,0 +1,9 @@
+<ion-list>
+  <ion-item *ngFor="let event of events">
+    <ion-text>
+      <ion-icon name="time"></ion-icon> {{ event.time }}<br>
+      <ion-icon name="stopwatch"></ion-icon> {{ event.duration }} s<br>
+      <ion-icon name="information-circle-outline"></ion-icon> {{ event.type }}
+    </ion-text>
+  </ion-item>
+</ion-list>

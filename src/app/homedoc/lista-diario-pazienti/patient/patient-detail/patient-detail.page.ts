@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartsService, Aggregate } from 'src/app/services/charts.service';
+import { ChartsService, Aggregate, ApneaEvent } from 'src/app/services/charts.service';
 import { Bevanda } from 'src/app/home/add-abitudini/bevanda.model';
 import { ControllerService } from 'src/app/services/controllerService.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ApneaPopoverComponent } from 'src/app/home/diary/diary-detail/apnea-popover/apnea-popover.component';
+
+import 'hammerjs';
 
 @Component({
   selector: 'app-patient-detail',
@@ -39,6 +42,7 @@ export class PatientDetailPage implements OnInit {
     private alertCtrl: AlertController,
     private chartsService: ChartsService,
     private controllerService: ControllerService,
+    private popoverCtrl: PopoverController,
     private router: Router
   ) { }
 
@@ -79,5 +83,20 @@ export class PatientDetailPage implements OnInit {
       }
     });
     this.isLoaded = true;
+  }
+
+  onPress(events: ApneaEvent[]) {
+    this.popoverCtrl.create({
+      component: ApneaPopoverComponent,
+      componentProps: {
+        events: events
+      }
+    }).then(popover => {
+      popover.present();
+    })
+  }
+
+  onRelease() {
+    this.popoverCtrl.dismiss();
   }
 }

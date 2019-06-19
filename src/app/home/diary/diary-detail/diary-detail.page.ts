@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartsService, Aggregate } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
 import { SendModalPage } from './send-modal/send-modal.page';
 import { Bevanda } from '../../add-abitudini/bevanda.model';
 
+import 'hammerjs';
+import { ApneaEvent } from 'src/app/services/bluetooth/data-storage/apnea-event.model';
+import { ApneaPopoverComponent } from './apnea-popover/apnea-popover.component';
 
 @Component({
   selector: 'app-diary-detail',
@@ -41,6 +44,7 @@ export class DiaryDetailPage implements OnInit {
     private chartsService: ChartsService,
     private controllerService: ControllerService,
     private modalCtrl: ModalController,
+    private popoverCtrl: PopoverController,
     private router: Router,
     private userService: UserService
   ) { }
@@ -49,8 +53,8 @@ export class DiaryDetailPage implements OnInit {
     if(!this.chartsService.dataId) {
       this.router.navigate(['/home/diary']);
     }
-    this.currentDate = this.chartsService.currentDate;
     this.controllerService.onCreateLoadingCtrl();
+    this.currentDate = this.chartsService.currentDate;
     this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
     this.chartsService.caffe.subscribe(data => { this.caffe = data });
     this.chartsService.cena.subscribe(data => { this.cena = data });
@@ -78,7 +82,7 @@ export class DiaryDetailPage implements OnInit {
           });
       }
     });
-    this.isLoaded = true;
+    this.isLoaded = true;   
   }
 
   ngOnInit() {
@@ -133,6 +137,21 @@ export class DiaryDetailPage implements OnInit {
         }
       });
     });
+  }
+
+  onPress(events: ApneaEvent[]) {
+    this.popoverCtrl.create({
+      component: ApneaPopoverComponent,
+      componentProps: {
+        events: events
+      }
+    }).then(popover => {
+      popover.present();
+    })
+  }
+
+  onRelease() {
+    this.popoverCtrl.dismiss();
   }
 
 }

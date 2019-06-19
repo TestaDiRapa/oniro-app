@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { DiaryDetailPage } from './diary-detail.page';
 import { GoogleChartsModule } from 'angular-google-charts';
 
+import 'hammerjs';
+import { ApneaPopoverComponent } from './apnea-popover/apnea-popover.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -23,6 +26,7 @@ const routes: Routes = [
     GoogleChartsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DiaryDetailPage]
+  declarations: [DiaryDetailPage, ApneaPopoverComponent],
+  entryComponents: [ApneaPopoverComponent]
 })
 export class DiaryDetailPageModule {}
