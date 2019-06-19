@@ -19,7 +19,7 @@
                   <ion-text color="warning">{{ p._id | date: 'EEE dd MMM yyyy'}}</ion-text>
                 </ion-col>
                 <ion-col *ngIf="p.signaled" class="right">
-                 <ion-icon name="folder" color="success" (press)="onPress()" (pressup)="onRelease()"></ion-icon>
+                 <ion-icon name="folder" color="success" (press)="onPress(p.signaled)" (pressup)="onRelease()"></ion-icon>
                 </ion-col>
               </ion-row>
               <ion-row>

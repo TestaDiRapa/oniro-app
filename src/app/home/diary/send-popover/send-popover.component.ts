@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SendPopoverComponent implements OnInit {
 
+  doctors: string[];
+
   constructor() { }
 
   ngOnInit() {}

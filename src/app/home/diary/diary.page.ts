@@ -79,9 +79,12 @@ export class DiaryPage implements OnInit {
     this.router.navigate(['/home/diary/diary-detail']);
   }
 
-  onPress() {
+  onPress(doctors: string[]) {
     this.popoverCtrl.create({
-      component: SendPopoverComponent
+      component: SendPopoverComponent,
+      componentProps: {
+        doctors: doctors
+      }
     }).then(popover => {
       popover.present();
     });
