@@ -1,3 +1,6 @@
+/*
+ *This service is used to use the 'Loader' and controll it
+ */
 import { Injectable } from '@angular/core';
 import { LoadingController, AlertController } from '@ionic/angular';
 
@@ -10,6 +13,7 @@ export class ControllerService {
 
   constructor(private loadingController: LoadingController, private alertCtrl: AlertController) { }
 
+  // Start a loader
   async onCreateLoadingCtrl() {
     return await this.loadingController.create({
       message: 'Attendi...',
@@ -24,11 +28,15 @@ export class ControllerService {
 
   }
 
+   // Stop a loader
+
   onDismissLoaderCtrl() {
     this.isLoading = false;
     this.loadingController.dismiss();
   }
 
+   // Create an Alert inside the loader
+   
   createAlertCtrl(head: string, mess: string) {
       this.alertCtrl.create({
           header: head,

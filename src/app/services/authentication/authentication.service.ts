@@ -46,6 +46,7 @@ export class AuthenticationService {
         this.storage.remove('logged_user');
     }
 
+
     autologin() {
         if (!this.loggedUser) {
             return this.loadUser().then<boolean>(user => {
@@ -62,6 +63,13 @@ export class AuthenticationService {
         });
     }
 
+    /**Get the response by the server for login relating to the data entered
+     * 
+     * @param username the username used for login
+     * @param password the password used for login
+     * @param isUser true=patient, false=doctor
+     * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
+     */
     login(username: string, password: string, isUser: boolean) {
         let params = new HttpParams();
         let path = 'http://' + environment.serverIp + '/login/';
@@ -79,6 +87,12 @@ export class AuthenticationService {
         return this.http.get<Respons>(path, { params });
     }
 
+    /**Register a patient or a doctor
+     *
+     * @param user the user could be a 'Medico' or a 'Paziente 
+     * @param isUser true=patient, false=doctor
+     * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
+     */
     register(user: Medico | Paziente, isUser: boolean) {
         let path = 'http://' + environment.serverIp + '/register/';
         if (isUser) {
