@@ -1,3 +1,7 @@
+/**
+ * This is the page associated to the daily information of the patient about his sleep.
+ * It contains all the information recorded during the night.
+ */
 import { Component, OnInit } from '@angular/core';
 import { ChartsService, Aggregate } from 'src/app/services/charts.service';
 import { Router } from '@angular/router';
@@ -49,8 +53,13 @@ export class DiaryDetailPage implements OnInit {
     private userService: UserService
   ) { }
 
+  /**
+   * This method is called every time the page is shown. 
+   * It allows to retrieve all the information about the data recorded during the night.
+   * It also allows to plot some charts to better evaluate the events occured in the night.
+   */
   ionViewWillEnter() {
-    if(!this.chartsService.dataId) {
+    if (!this.chartsService.dataId) {
       this.router.navigate(['/home/diary']);
     }
     this.controllerService.onCreateLoadingCtrl();
@@ -85,9 +94,10 @@ export class DiaryDetailPage implements OnInit {
     this.isLoaded = true;
   }
 
-  ngOnInit() {
-  }
-
+  /**
+   * This method is called every time the patient clicks on the "Avvida il medico" button.
+   * It allows to show a model in order to chose the doctor to send the request to.
+   */
   onChooseDoctor() {
     this.modalCtrl.create({
       component: SendModalPage
@@ -101,6 +111,13 @@ export class DiaryDetailPage implements OnInit {
     });
   }
 
+  /**
+   * This method allows to send an alert to the doctor with all the information recorded in
+   * the current Date.
+   * 
+   * @param doctorId The id of the doctor we want to alert.
+   * @param recordId The id of the date we want to send to the doctor.
+   */
   private sendRecToDoctor(doctorId: string, recordId: string) {
     this.userService.sendRecordings(doctorId, recordId).then(success => {
       success.subscribe(resData => {
@@ -139,6 +156,11 @@ export class DiaryDetailPage implements OnInit {
     });
   }
 
+  /**
+   * This method is called when the patient keeps pressed the apnoea event.
+   * It allows to show the PopOver with all the information of the event.
+   * @param events The information about the apnoea event: duration and time.
+   */
   onPress(events: ApneaEvent[]) {
     this.popoverCtrl.create({
       component: ApneaPopoverComponent,
@@ -150,6 +172,9 @@ export class DiaryDetailPage implements OnInit {
     });
   }
 
+  /**
+   * This method allows to close the PopOver once it is released.
+   */
   onRelease() {
     this.popoverCtrl.dismiss();
   }

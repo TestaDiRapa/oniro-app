@@ -1,3 +1,6 @@
+/**
+ * This PopOver is shown every time the patient wants to know the notified doctors.
+ */
 import { Component, OnInit } from '@angular/core';
 
 @Component({

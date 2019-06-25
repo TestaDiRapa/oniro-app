@@ -1,3 +1,7 @@
+/**
+ * This class represents the PopOver that describes the doctor. Information allows to know:
+ * name, surname, address, phone number and the picture profile of the doctor.
+ */
 import { Component, OnInit } from '@angular/core';
 
 @Component({

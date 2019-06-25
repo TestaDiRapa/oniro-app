@@ -1,3 +1,7 @@
+/**
+ * This class represents the PopOver that describes the apnea event
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { ApneaEvent } from 'src/app/services/bluetooth/data-storage/apnea-event.model';
 

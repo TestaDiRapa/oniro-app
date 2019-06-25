@@ -1,3 +1,6 @@
+/**
+ * This page represents a summary of all the nights monitored.
+ */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuController, PopoverController } from '@ionic/angular';
 import { GoogleChartComponent } from 'angular-google-charts';
@@ -9,7 +12,6 @@ import { Router } from '@angular/router';
 import { SendPopoverComponent } from './send-popover/send-popover.component';
 
 import 'hammerjs';
-
 
 export interface Data {
   _id: Date;
@@ -28,6 +30,7 @@ export interface Preview {
   templateUrl: './diary.page.html',
   styleUrls: ['./diary.page.scss'],
 })
+
 export class DiaryPage implements OnInit {
   private url = 'http://' + environment.serverIp + '/user/my_recordings';
   preview: Data[] = [];
@@ -46,6 +49,11 @@ export class DiaryPage implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * This method is called every time the page is shown. 
+   * It allows to initialize the page with a summary of all the recorded nights.
+   * The information are sorted according to the Date and retrieved thanks to HttpClientModule.
+   */
   ionViewWillEnter() {
     this.menuCtrl.close();
     this.authService.token.then(token => {
@@ -72,6 +80,11 @@ export class DiaryPage implements OnInit {
     });
   }
 
+  /**
+   * This method allows the patient to view more details about the night.
+   * It allows to go on diary-detail page thanks to the Router.
+   * @param id The Date the patient wants to view
+   */
   onclick(id: string) {
     const date = id.toString().substr(0, 10);
     this.charts.dataId = id;
@@ -79,6 +92,11 @@ export class DiaryPage implements OnInit {
     this.router.navigate(['/home/diary/diary-detail']);
   }
 
+  /**
+   * This method is called when the patient keeps pressed on the Date.
+   * It allows the patient to see who the alert request was sent to. 
+   * @param doctors The doctors who was notified by the patient.
+   */
   onPress(doctors: string[]) {
     this.popoverCtrl.create({
       component: SendPopoverComponent,
@@ -90,6 +108,9 @@ export class DiaryPage implements OnInit {
     });
   }
 
+  /**
+   * This method closes the PopOver once the Date item was released.
+   */
   onRelease() {
     this.popoverCtrl.dismiss();
   }
