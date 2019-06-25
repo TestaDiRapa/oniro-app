@@ -1,3 +1,6 @@
+/**
+ * This is the PopOver that is shown when the doctor keeps pressed on an apnoea event.
+ */
 import { Component, OnInit } from '@angular/core';
 import { ApneaEvent } from 'src/app/services/bluetooth/data-storage/apnea-event.model';
 

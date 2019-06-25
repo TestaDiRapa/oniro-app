@@ -1,3 +1,7 @@
+/**
+ * This is the page that represents all the requests of the patients. Here the doctor can see all the
+ * subscription requests of the patients. He can choose if accept or reject the requests.
+ */
 import { MenuController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { DoctorService } from 'src/app/services/doctorService.service';
@@ -23,6 +27,10 @@ export class RichiestePazientiPage implements OnInit {
     this.menuCtrl.toggle();
   }
 
+  /**
+   * This method is called every time the page is loaded. Thanks to DoctorService it is possible
+   * to retrieve all the subscription requests from the server
+   */
   ionViewWillEnter() {
     this.controllerService.onCreateLoadingCtrl();
     this.docService.getPatientRequests().then(succes => {
@@ -41,6 +49,11 @@ export class RichiestePazientiPage implements OnInit {
     this.controllerService.onDismissLoaderCtrl();
   }
 
+  /**
+   * This method allows to the doctor to accept a subscription, thanks to DoctorService.
+   * 
+   * @param cf The cf of the patient that asks for a subscription
+   */
   accept(cf: string) {
     const params = '{"user_cf":' + '"' + cf + '"' + '}';
     this.controllerService.onCreateLoadingCtrl();
@@ -56,6 +69,11 @@ export class RichiestePazientiPage implements OnInit {
     });
   }
 
+  /** 
+   * This method allows to the doctor to rejcet a subscription, thanks to DoctorService.
+   * 
+   * @param cf The cf of the patient that asks for a subscription
+   */
   reject(cf: string) {
     this.controllerService.onCreateLoadingCtrl();
     this.docService.rejectPatient(cf).then(success => {
@@ -69,6 +87,5 @@ export class RichiestePazientiPage implements OnInit {
       });
     });
   }
-
 
 }

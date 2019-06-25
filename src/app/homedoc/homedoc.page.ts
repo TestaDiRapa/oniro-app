@@ -1,3 +1,7 @@
+/**
+ * This is the main page of the doctor application. In this view the doctor can see all the alerts
+ * sent by the linked patients. The doctor can also navigate thanks to the side menu bar.
+ */
 import { Component, OnInit } from '@angular/core';
 import { DoctorService } from '../services/doctorService.service';
 import { ControllerService } from '../services/controllerService.service';
@@ -20,9 +24,12 @@ export class HomedocPage implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
+  /**
+   * This method is called every time the doctor enters in this page.
+   * It allows to retrieve from the server all the alerts sent by the patients thanks to DoctorService.
+   */
   ionViewWillEnter() {
     this.controllerService.onCreateLoadingCtrl();
     this.docService.getMessagePatient().then(succes => {
@@ -34,6 +41,14 @@ export class HomedocPage implements OnInit {
     this.controllerService.onDismissLoaderCtrl();
   }
 
+  /**
+   * This method allows the doctor to see the details about the alert message of the patient.
+   * He can navigate to the "lista-diario-pazienti/pazienti" view thanks to the Router. In this view
+   * there are all the information recorder during the night that date.
+   * 
+   * @param cf The cf of the patient that sent the request.
+   * @param date The date corresponding to the request.
+   */
   onClickAlert(cf: string, date: string) {
     this.controllerService.onCreateLoadingCtrl();
     this.docService.deleteMessagePatient(date, cf).then(success => {

@@ -53,6 +53,8 @@ export class DiaryDetailPage implements OnInit {
     private userService: UserService
   ) { }
 
+  ngOnInit() { }
+
   /**
    * This method is called every time the page is shown. 
    * It allows to retrieve all the information about the data recorded during the night.
