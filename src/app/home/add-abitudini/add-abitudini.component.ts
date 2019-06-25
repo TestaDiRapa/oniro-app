@@ -1,3 +1,6 @@
+/**
+ * This component 
+ */
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Bevanda } from './bevanda.model';

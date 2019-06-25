@@ -1,7 +1,11 @@
+/** This module represent the business logic behind the authentication page.
+ * This component can check if the user has made the login to the app in order to
+ * allow the user to not put again login credentials.
+ *
+ */
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Router } from '@angular/router';
-import { UselessService } from '../services/useless.service';
 import { ControllerService } from '../services/controllerService.service';
 
 @Component({
@@ -16,15 +20,16 @@ export class AuthenticationPage implements OnInit {
     private controllerService: ControllerService,
     private router: Router
   ) { }
-
+/**
+ * This method checks if the login has been made in order to navigate to the correct page.
+ */
   ngOnInit() {
-    console.log('AUTOLOGIN');
     this.controllerService.onCreateLoadingCtrl();
     this.auth.autologin().then(response => {
       this.controllerService.onDismissLoaderCtrl();
-      if (response) {
+      if (response) { //check if the login has been made
         this.auth.getUserType().then(isUser => {
-          if (isUser) {
+          if (isUser) { //check if the user is a patient or a doctor
             this.router.navigate(['/home']);
           } else {
             this.router.navigate(['/homedoc']);
@@ -33,11 +38,12 @@ export class AuthenticationPage implements OnInit {
       }
     });
   }
-
+/**
+ * This method is used to make a personalised animation while the user waits
+ */
   ionViewWillEnter() {
-    console.log('LOGIN');
     this.controllerService.onCreateLoadingCtrl();
-    this.auth.autologin().then(response => {
+    this.auth.autologin().then(() => {
       this.controllerService.onDismissLoaderCtrl();
     });
   }
