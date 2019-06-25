@@ -1,3 +1,6 @@
+/**
+ * This is the main class of the application.
+ */
 import { Component, OnInit } from '@angular/core';
 import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -28,6 +31,9 @@ export class AppComponent implements OnInit {
     this.initializeApp();
   }
 
+  /**
+   * This method initialize the user thanks to AuthenticationService
+   */
   ngOnInit() {
     this.facts.init();
     this.authService.user.subscribe(person => {
@@ -35,7 +41,6 @@ export class AppComponent implements OnInit {
     });
     this.authService.type.subscribe(type => {
       this.isUser = type;
-      console.log(this.isUser);
     });
   }
 
@@ -46,7 +51,10 @@ export class AppComponent implements OnInit {
       this.background.enable();
     });
   }
-
+  /**
+   * ######################### EVENTS ON THE SIDE MENU ITEMS #########################
+   * These methods allow to navigate among different pages of the App thanks to the Router.
+    */
   onLogout() {
     this.authService.logout();
     this.router.navigateByUrl('/');
@@ -78,7 +86,8 @@ export class AppComponent implements OnInit {
   }
 
   onClickDiaryPatient() {
-  this.router.navigateByUrl('/homedoc/lista-diario-pazienti');
+    this.router.navigateByUrl('/homedoc/lista-diario-pazienti');
   }
+  //###########################################################################
 
 }
