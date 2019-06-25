@@ -1,3 +1,7 @@
+/**
+ * This is the page associated to the daily information of the patient about his sleep.
+ * It contains all the information recorded during the night.
+ */
 import { Component, OnInit } from '@angular/core';
 import { ChartsService, Aggregate, ApneaEvent } from 'src/app/services/charts.service';
 import { Bevanda } from 'src/app/home/add-abitudini/bevanda.model';
@@ -49,8 +53,13 @@ export class PatientDetailPage implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * This method is called every time the page is shown.
+   * It allows to retrieve all the information about the data recorded during the night.
+   * It also allows to plot some charts to better evaluate the events occured in the night.
+   */
   ionViewWillEnter() {
-    if(!this.chartsService.dataId) {
+    if (!this.chartsService.dataId) {
       this.router.navigate(['/homedoc']);
     }
     this.cf = this.chartsService.cf;
@@ -86,6 +95,11 @@ export class PatientDetailPage implements OnInit {
     this.isLoaded = true;
   }
 
+  /**
+   * This method is called when the patient keeps pressed the apnoea event.
+   * It allows to show the PopOver with all the information of the event.
+   * @param events The information about the apnoea event: duration and time.
+   */
   onPress(events: ApneaEvent[]) {
     this.popoverCtrl.create({
       component: ApneaPopoverComponent,
@@ -97,6 +111,9 @@ export class PatientDetailPage implements OnInit {
     });
   }
 
+  /**
+   * This method allows to close the PopOver once it is released.
+   */
   onRelease() {
     this.popoverCtrl.dismiss();
   }

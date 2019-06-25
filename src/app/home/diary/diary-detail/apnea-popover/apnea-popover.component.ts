@@ -1,5 +1,5 @@
 /**
- * This class represents the PopOver that describes the apnea event
+ * This is the PopOver that is shown when the doctor keeps pressed on an apnoea event.
  */
 
 import { Component, OnInit } from '@angular/core';
