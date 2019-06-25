@@ -1,3 +1,6 @@
+/*
+* This service is used to get the address of doctor
+*/
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService, Respons } from 'src/app/services/authentication/authentication.service';

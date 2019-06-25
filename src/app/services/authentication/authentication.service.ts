@@ -1,3 +1,9 @@
+/**
+ * This service allows to take all the information related to the user,
+ * including token and to carry out the autologin if the user has been saved in the storage,
+ * moreover it allows to login and register an user.
+ */
+
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Paziente } from '../../register/paziente.model';
