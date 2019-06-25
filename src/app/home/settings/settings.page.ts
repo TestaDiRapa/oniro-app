@@ -1,9 +1,18 @@
+/**
+ * This is the settings page that allows the user to modify some information, such as:
+ * profile picture;
+ * password;
+ * address (if the user is a doctor);
+ * phone number;
+ * age.
+ */
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService.service';
 import { MenuController, AlertController, Platform } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { ControllerService } from 'src/app/services/controllerService.service';
 
 @Component({
   selector: 'app-settings',
@@ -31,14 +40,18 @@ export class SettingsPage implements OnInit {
     private userService: UserService,
     private authService: AuthenticationService,
     private menuCtrl: MenuController,
+    private controllerService: ControllerService,
     private alertCtrl: AlertController,
     private camera: Camera,
     private platform: Platform,
     private file: File
   ) { }
 
+  /**
+   * This method allows to initialize the settings page. It retrieves the user information thanks to
+   * the AuthenticationService. The information is displayed on the page.
+   */
   ngOnInit() {
-
     if (this.platform.is('ios')) {
       this.DESTINATION_TYPE = this.camera.DestinationType.NATIVE_URI;
     } else {
@@ -71,10 +84,22 @@ export class SettingsPage implements OnInit {
     this.menuCtrl.close();
   }
 
+  /**
+   * This methods allows to update the picture profile of the user, if it changes.
+   * @param img The url of the Image as a string.
+   */
   ionviewWillEnter(img: string) {
     this.base64Image = img;
   }
 
+  /**
+   * This is a private method called every time the user changes his personal information.
+   * All the changes are reflected on the dabatase thanks to the UserService, and on the
+   * storage thanks to the AuthenticationService.
+   * @param key An array of keys corresponding to the user information he wants to change.
+   * @param value The value associated with the key.
+   * @param type The type about the user information changed.
+   */
   private onSubmit(key: string[], value: string[], type: string) {
     const formData = new FormData();
     for (let i = 0; i < key.length; i++) {
@@ -95,15 +120,18 @@ export class SettingsPage implements OnInit {
               this.age = formData.get('age').toString();
             }
             this.authService.setUser(user);
-            this.alertCtrl.create({ header: 'Cambiamento effettuato!' }).then(alert => alert.present());
+            this.controllerService.createAlertCtrl('Success', 'Cambiamento effettuato!');
           });
         } else {
-          this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+          this.controllerService.createAlertCtrl('Error', resData.message);
         }
       });
     });
   }
 
+  /**
+   * This method is called every time a user wants to modify his age.
+   */
   onAgeModify() {
     this.alertCtrl.create({
       header: 'Vuoi cambiare la tua età?',
@@ -134,6 +162,9 @@ export class SettingsPage implements OnInit {
     }).then(alert => alert.present());
   }
 
+  /**
+   * This method is called every time a user wants to modify his phone number.
+   */
   onPhoneModify() {
     this.authService.getUser().then(user => {
       this.alertCtrl.create({
@@ -166,6 +197,9 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  /**
+   * This method is called every time a user wants to modify his password.
+   */
   onPswModify() {
     this.alertCtrl.create({
       header: 'Vuoi cambiare la password?',
@@ -214,6 +248,9 @@ export class SettingsPage implements OnInit {
     }).then(alert => alert.present());
   }
 
+  /**
+   * This method is called every time a user wants to modify his address.
+   */
   onAddrModify() {
     this.alertCtrl.create({
       header: 'Vuoi cambiare indirizzo?',
@@ -264,6 +301,10 @@ export class SettingsPage implements OnInit {
     }).then(alert => alert.present());
   }
 
+  /**
+   * This method is called when the user clicks on the Camera button.
+   * It allows the user to takes a photo in order to update the profile picture.
+   */
   accessCamera() {
     const options: CameraOptions = {
       quality: 100,
@@ -274,9 +315,8 @@ export class SettingsPage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     };
-    this.camera.getPicture(options).then((imgData) => {      
-      console.log('aggiornamento riuscito');
-      this.urlImgage = (<any>window).Ionic.WebView.convertFileSrc(imgData);
+    this.camera.getPicture(options).then((imgData) => {
+      this.urlImgage = (window as any).Ionic.WebView.convertFileSrc(imgData);
       this.uploadPhoto(imgData);
       this.isEmpty = false;
     }, (err) => {
@@ -284,6 +324,10 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  /**
+   * This method is called when the user clicks on the Gallery button.
+   * It allows to choose a new image in the phone gallery, to update the profile picture.
+   */
   accessGallery() {
     const options: CameraOptions = {
       quality: 100,
@@ -295,7 +339,6 @@ export class SettingsPage implements OnInit {
       correctOrientation: true,
     };
     this.camera.getPicture(options).then(imgData => {
-      console.log('aggiornamento riuscito');
       this.uploadPhoto(imgData);
       this.isEmpty = false;
     }, (err) => {
@@ -303,10 +346,17 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  /**
+   * This method allows to udate the profile picture in real-time in the page, in the server
+   * thanks to UserService, and in the storage thanks to AuthenticationService.
+   * The method check if the imgData is a path or a base64 Image.
+   * The Image is updated in the storage if and only if the server has updated it before.
+   *
+   * @param imgData The url of the Image as a string.
+   */
   private uploadPhoto(imgData: string) {
     if (imgData.length > 200) {
       this.base64Image = 'data:image/jpeg;base64,' + imgData;
-      console.log(this.base64Image);
       let formData = new FormData();
       formData.append('image', this.base64Image);
       this.userService.changeProfile(formData).subscribe(success => {
@@ -319,7 +369,7 @@ export class SettingsPage implements OnInit {
               this.ionviewWillEnter('data:image/jpeg;base64,' + imgData);
             });
           } else {
-            this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+            this.controllerService.createAlertCtrl('Error', resData.message);
           }
         });
       });
@@ -344,7 +394,7 @@ export class SettingsPage implements OnInit {
                 this.ionviewWillEnter('data:image/jpeg;base64,' + imgData);
               });
             } else {
-              this.alertCtrl.create({ header: resData.message }).then(alert => alert.present());
+              this.controllerService.createAlertCtrl('Error', resData.message);
             }
           });
         });
