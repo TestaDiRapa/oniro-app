@@ -47,12 +47,13 @@ export class AuthenticationService {
         private storage: Storage
     ) { }
 
+    // Set the loggedUser a null to avoid the autologin
     logout() {
         this.loggedUser = null;
         this.storage.remove('logged_user');
     }
 
-
+    // This method allows to perform the autologin if the loggedUser is set
     autologin() {
         if (!this.loggedUser) {
             return this.loadUser().then<boolean>(user => {
@@ -118,13 +119,23 @@ export class AuthenticationService {
             });
     }
 
+    // Save the loggeduser value in the storage
     private serialize() {
         this.storage.set('logged_user', JSON.stringify(this.loggedUser));
     }
 
+    /** Get the isAuthenticated value
+     * @returns {boolean} 
+     */
     getAuthentication() {
         return this.isAuthenticated;
     }
+
+    /** Set the name and surname of user
+     * 
+     * @param name the name of user
+     * @param surname the surname of user
+     */
 
     private setUserIdentity(name: string, surname: string) {
         this.userIdentity.next(
@@ -135,14 +146,24 @@ export class AuthenticationService {
         );
     }
 
+    /** Get the user name and surname
+     * @returns {Observable<Person>} return the user
+     */
     get user() {
         return this.userIdentity.asObservable();
     }
 
+    /** Get the user type
+     * @returns {Observable<boolean>} return the type of user
+     */
     get type() {
         return this.userType.asObservable();
     }
 
+    /** Get the token of user, if the token is not set then you logout otherwise check if the token still has validity,
+     *  if it is false you logout otherwise you set a new token
+     * @returns {Promise<Token>} 
+     */
     get token() {
         return this.retrieveAuthToken().then(token => {
             if (token === null) {
@@ -238,6 +259,11 @@ export class AuthenticationService {
         });
     }
 
+    /** Get the doc type
+     * @returns {boolean}
+     * 
+     */
+
     getDocType() {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
@@ -250,6 +276,11 @@ export class AuthenticationService {
             resolve(!this.loggedUser.isUser);
         });
     }
+
+     /** Get the patient type
+     * @returns {boolean}
+     * 
+     */
 
     getUser() {
         if (!this.loggedUser) {
@@ -264,12 +295,18 @@ export class AuthenticationService {
         });
     }
 
+    /** Set the user
+     */
+
     setUser(user: Paziente | Medico) {
         this.loggedUser.user = user;
         this.setUserIdentity(user.name, user.surname);
         this.serialize();
     }
 
+    /** This method load all the information of user
+     * @returns {Promise<any>}
+     */
     private loadUser() {
         return this.storage.get('logged_user').then(JSONstring => {
             if (JSONstring) {
