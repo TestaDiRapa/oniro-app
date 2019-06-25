@@ -1,3 +1,6 @@
+/** This component allows the user to
+ *
+ */
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MenuController, AlertController } from '@ionic/angular';
 import { GetCoordService } from '../../services/get-coord.service';
@@ -10,8 +13,10 @@ import {
   GeocoderResult,
   LocationService,
   MyLocation,
-  BaseArrayClass
-} from '@ionic-native/google-maps';
+  BaseArrayClass,
+  Marker,
+  GeocoderRequest
+} from '@ionic-native/google-maps/ngx';
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
 
@@ -28,37 +33,25 @@ export class GmapsPage implements OnInit {
   myLoc;
   color = '#07306D';
   google;
+  add: string [] = [];
 
   constructor(
     private menuCtrl: MenuController,
     private getCoord: GetCoordService,
-    private alertCtrl: AlertController,
     private controllerService: ControllerService,
     private userService: UserService
   ) { }
 
   ngOnInit() {
-    this.menuCtrl.toggle();
+    this.menuCtrl.close();
   }
 
   ionViewWillEnter() {
     Environment.setBackgroundColor('#07306D');
+    this.loadMap();
   }
 
   loadMap() {
-    // const myPosition = this.geolocation.getCurrentPosition();
-    /*   this.geolocation.getCurrentPosition().then((resp) => {
-         const latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-         const mapOptions = {
-           center: latLng,
-           zoom: 15,
-           mapTypeId: google.maps.MapTypeId.ROADMAP
-         };
-         this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-         let marker: Marker
-       }).catch((error) => {
-         console.log('Error getting location', error);
-       });*/
     let options: GoogleMapOptions;
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
       this.myLoc = myLocation;
@@ -89,49 +82,55 @@ export class GmapsPage implements OnInit {
       });
     });
     this.getCoordinates();
-    this.findDoctors();
   }
 
-  private findDoctors() {
-    Geocoder.geocode({
-      address: this.addresses
-    }).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
-      let i = 0;
-      mvcArray.on('finish').subscribe(() => {
-        if (mvcArray.getLength() > 0) {
-          const results: any[] = mvcArray.getArray();
-          results.forEach((result: GeocoderResult[]) => {
-            this.map.addMarkerSync({
-              position: result[0].position,
-              title: this.doctors[i]['name'] + ' ' + this.doctors[i]['surname']
-            });
-            i++;
+  findDoctors() {
+let opt: GeocoderRequest = {
+  address: this.addresses
+}
+
+Geocoder.geocode(opt).then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
+    mvcArray.on('finish').subscribe(() => {
+      if (mvcArray.getLength() > 0) {
+        const results = mvcArray.getArray();
+        console.log('mvcArray lenght ',mvcArray.getLength());
+        console.log('result lenght ', results.length);
+        let i = 0;
+        results.forEach((result: GeocoderResult[]) => {
+          this.map.addMarkerSync({
+            position: result[0].position,
+            title: this.doctors[i]['name'] + ' ' + this.doctors[i]['surname']
           });
-        } else {
-          console.log('lunghezza zero');
-        }
-      });
+          i++;
+        });
+      }
+      else{
+        console.log('non sei capace');
+      }
     });
+  });
   }
 
-  private getCoordinates() {
-    this.getCoord.getCoordinates().then(observable => {
-      observable.subscribe(res => {
-        // tslint:disable: no-string-literal
-        const doctmp = res['payload'];
-        console.log('payload', res['payload']);
-        for (const doctor of doctmp) {
-          this.addresses.push(doctor['doctor']['address']);
-          let tmp = {
-            id: doctor['doctor']['_id'],
-            name: doctor['doctor']['name'],
-            surname: doctor['doctor']['surname'],
-            address: doctor['doctor']['address']
-          };
-          this.doctors.push(tmp);
-        }
+    private getCoordinates() {
+      this.getCoord.getCoordinates().then(observable => {
+        observable.subscribe(res => {
+          // tslint:disable: no-string-literal
+          const doctmp = res['payload'];
+          for (const doctor of doctmp) {
+            console.log(doctor['doctor']['address']);
+            this.addresses.push(doctor['doctor']['address']);
+            let tmp = {
+              id: doctor['doctor']['_id'],
+              name: doctor['doctor']['name'],
+              surname: doctor['doctor']['surname'],
+              address: doctor['doctor']['address']
+            };
+            this.doctors.push(tmp);
+          }
+          for(let addr of this.addresses)
+          this.add.push(addr);
+        });
       });
-    });
   }
 
   onSendRequest(idDoc: string) {
