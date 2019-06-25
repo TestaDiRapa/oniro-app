@@ -107,7 +107,6 @@ export class UserService {
   sendRecordings(doctorId: string, dateID: string) {
     const path = 'http://' + environment.serverIp + '/user/my_recordings/send';
     const body = JSON.stringify({ id: dateID, doctor: doctorId });
-    console.log(body);
     return this.authService.token.then(token => {
       return this.http.post<Respons>(
         path,
