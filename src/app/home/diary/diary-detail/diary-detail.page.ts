@@ -56,7 +56,7 @@ export class DiaryDetailPage implements OnInit {
   ngOnInit() { }
 
   /**
-   * This method is called every time the page is shown. 
+   * This method is called every time the page is shown.
    * It allows to retrieve all the information about the data recorded during the night.
    * It also allows to plot some charts to better evaluate the events occured in the night.
    */
@@ -116,7 +116,7 @@ export class DiaryDetailPage implements OnInit {
   /**
    * This method allows to send an alert to the doctor with all the information recorded in
    * the current Date.
-   * 
+   *
    * @param doctorId The id of the doctor we want to alert.
    * @param recordId The id of the date we want to send to the doctor.
    */

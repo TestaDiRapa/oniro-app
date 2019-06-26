@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { GmapsPage } from './gmaps.page';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 
 const routes: Routes = [
@@ -20,6 +21,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [GmapsPage],
-  providers: []
+  providers: [Diagnostic]
 })
 export class GmapsPageModule {}
