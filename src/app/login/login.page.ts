@@ -1,7 +1,10 @@
+/**
+ * This page represents the login. Here the user can choose between doctor and patient and he can
+ * insert his credentials (cf or id, and password) to navigate in the home.
+ */
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Paziente } from '../register/paziente.model';
@@ -33,10 +36,15 @@ export class LoginPage implements OnInit {
   ) { }
 
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  // check if the ion-segment value is changed or not
+  /**
+   * This method is called every time he ion-segment value changes.
+   * It allows to reset the form every time the selected value is changed.
+   *
+   * @param event The event linked to the ion-segment tag.
+   * @param form The current form of the page.
+   */
   onChange(event: CustomEvent<SegmentChangeEventDetail>, form: NgForm) {
     if (event.detail.value === 'user') {
       this.isUser = true;
@@ -47,7 +55,14 @@ export class LoginPage implements OnInit {
     }
   }
 
-  // the event called on form submission
+  /**
+   * This method is called when the form is submitted.
+   * It allows to create a new token for the user or to refresh an existing one.
+   * Thanks to AuthenticationService, all the user information are retrieved and stored in
+   * the Paziente (or Medico) model.
+   *
+   * @param form The current form of the page.
+   */
   onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
