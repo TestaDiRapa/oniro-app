@@ -19,7 +19,6 @@ import {
 import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { text } from '@angular/core/src/render3';
 import { Router } from '@angular/router';
 
 @Component({
