@@ -1,3 +1,8 @@
+/**
+ * This is the view associated to the sign up behaviour. Here the user can choose between patient or
+ * doctor, in order to sign up correctly. The doctor has more information, like the address, while the
+ * patient can also set his age.
+ */
 import { Component, OnInit, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,6 +33,15 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * This method is called when the form is submitted.
+   * It allows the user to set all his credentials and personal details. This method distinguishes
+   * between doctor or patient user, in order to register the correct information according to the
+   * user type. The user is registered on the server thanks to AuthenticationService.
+   * The method set also a new token for the user and its refresh token.
+   * 
+   * @param form The submitted form on the page.
+   */
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.menuCtrl.enable(true);
@@ -91,6 +105,13 @@ export class RegisterPage implements OnInit {
     }
   }
 
+  /**
+   * This method is called every time he ion-segment value changes.
+   * It allows to reset the form every time the selected value is changed.
+   *
+   * @param event The event linked to the ion-segment tag.
+   * @param form The current form of the page.
+   */
   onChange(event: CustomEvent<SegmentChangeEventDetail>, form: NgForm) {
     if (event.detail.value === 'user') {
       this.isUser = true;
