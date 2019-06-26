@@ -37,7 +37,8 @@ After cloning the project, add the following plugins and platforms:<br>
 `ionic cordova plugin add cordova-plugin-file-transfer` <br>
 `npm install @ionic-native/file-transfer` <br>
 `npm install hammerjs`<br>
-
+`cordova plugin add cordova.plugins.diagnostic` <br>
+`ionic cordova plugin add cordova.plugins.diagnostic` <br>
 ## Bug da fixare
 
 
