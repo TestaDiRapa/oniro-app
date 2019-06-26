@@ -21,7 +21,7 @@ import { ControllerService } from '../services/controllerService.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit, OnDestroy {
+export class HomePage implements OnInit {
   public currentDate: Date;
   public isValid = false;
   private bevanda: string;

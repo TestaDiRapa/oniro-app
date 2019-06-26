@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './login/auth.guard';
-import { IsUserGuard } from './is-user.guard';
-import { IsDocGuard } from './is-doc.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { IsUserGuard } from './guards/is-user.guard';
+import { IsDocGuard } from './guards/is-doc.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'authentication', pathMatch: 'full' },
