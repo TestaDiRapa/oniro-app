@@ -1,3 +1,6 @@
+/*
+ * This service is used to prepare all Charts and habit relating to a specific date
+ */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -92,44 +95,86 @@ export class ChartsService {
     private http: HttpClient
   ) {}
 
+  /** Set the cf
+   * @param cf the current cf
+   */
   set cf(cf: string) {
     this.currentCf = cf;
   }
 
+  /**Get the current cf
+   *  @returns {string} the current cf
+   */
   get cf() {
     return this.currentCf;
   }
 
+  /** Get the aggregate data
+   * @returns {Observable<Aggregate>} the aggregate
+   */
   get aggregate() {
     return this._aggregate.asObservable();
   }
+
+  /**Set the id of data
+   * @param id the current id
+   */
   set dataId(id: string) {
     this.currentId = id;
   }
 
+  /** Get the id of data
+   * @return {string} the current id 
+   */
   get dataId() {
     return this.currentId;
   }
+
+  /** Get the caffe data
+   * @returns {Observable<Bevanda>} the caffe data
+   */
   get caffe() {
     return this._caffe.asObservable();
   }
+
+  /** Get the sport data
+   * @returns {Observable<string>} the type of sport
+   */
   get sport() {
     return this._sport.asObservable();
   }
+  
+  /** Get the drink data
+   * @returns {Observable<Bevanda>} the drink data
+   */
   get drink() {
     return this._drink.asObservable();
   }
+
+  /** Get the dinner data
+   * @returns {Observable<string>} the dinner data
+   */
   get cena() {
     return this._cena.asObservable();
   }
+
+  /**Set the current date
+   * @param date the current date
+   */
   set currentDate(date: string) {
     this.currentDateToPrint = date;
   }
 
+  /** Get the current date
+   * @returns {string} the current date
+   */
   get currentDate() {
     return this.currentDateToPrint;
   }
 
+  /** Get data using cf and the date of data
+   * @returns {Promise<Object>} the data of relative id and cf
+   */
   get data() {
     let url: string;
     if (this.currentCf) {
@@ -153,6 +198,9 @@ export class ChartsService {
     });
   }
 
+  /** This method prepare all charts and habits of patient
+   * @returns {Promise<Object>} set all informtations about charts
+   */
   get charts() {
   return this.data.then(response => {
       if (response['status'] === 'ok') {
@@ -262,6 +310,10 @@ export class ChartsService {
     });
   }
 
+  /** Set information about the patient habits
+   * 
+   * @param habit the habit of patient
+   */
   private prepareHabits(habit: Abitudini) {
     this._caffe.next(new Bevanda(habit['coffee']['type'], habit['coffee']['qty']));
     this._drink.next(new Bevanda(habit['drink']['type'], habit['drink']['qty']));
@@ -277,6 +329,9 @@ export class ChartsService {
     }
   }
 
+  /** Prepare the chart relative to 'spectra' using two parameters
+   * @param spectra it is the specified spectra that you want to graph
+   */
   prepareLineChart(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[spectra]['frequencies'].length; x++) {
@@ -287,6 +342,9 @@ export class ChartsService {
     }
   }
 
+  /** Prepare the chart relative to 'spectra' using one parameter
+   * @param spectra it is the specified spectra that you want to graph
+   */
   prepareLineChartPlot(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[spectra].length; x++) {
@@ -295,6 +353,9 @@ export class ChartsService {
     }
   }
 
+  /** Prepare the movements chart
+   *  @param lineChart it specifies which parameter you want to graph
+   */
   prepareLineChartMovements(lineChart: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[lineChart].length; x++) {
