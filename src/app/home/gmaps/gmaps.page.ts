@@ -1,4 +1,5 @@
-/** This component allows the patient to see, on the map, where are the doctors near him
+/** This component allows the patient to see, on the map, where are the doctors near him.
+ * It allows also to contanct them, sending a request to become a new patient.
 *
 */
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
@@ -49,17 +50,20 @@ export class GmapsPage implements OnInit {
     ngOnInit() {
       this.menuCtrl.close();
     }
-
+/**
+ * Each time the page is loaded the map is load.
+ */
     ionViewWillEnter() {
       Environment.setBackgroundColor('#07306D');
+      //check if the location is enabled
       this.diagnostic.isGpsLocationEnabled().then((enabled) => {
         if (enabled) {
           this.diagnostic.isLocationEnabled().then((enb) => {
             if (enb) {
-              this.loadMap();
+              this.loadMap(); //show the map
             }
           });
-        } else {
+        } else { //show an alert error
           this.alertCtrl.create({
             header: 'Errore',
             message: 'Abilita la localizzazione se vuoi vedere la mappa',
@@ -75,9 +79,12 @@ export class GmapsPage implements OnInit {
         }
       });
     }
-
+/** Create the map, find my position and center the map on my position
+ * 
+ */
     loadMap() {
       let options: GoogleMapOptions;
+      //get my position
       LocationService.getMyLocation().then((myLocation: MyLocation) => {
         this.myLoc = myLocation;
         options = {
@@ -99,6 +106,7 @@ export class GmapsPage implements OnInit {
             target: myLocation.latLng
           },
         };
+        //create the map and center it
         this.map = GoogleMaps.create('map', options);
         this.map.animateCamera({
           target: myLocation.latLng,
@@ -106,9 +114,12 @@ export class GmapsPage implements OnInit {
         }).then(() => {
         });
       });
+      // get doctor addresses
       this.getCoordinates();
     }
-
+/**This method convert addresses in coordinates and add marker to each address
+ * 
+ */
     findDoctors() {
       let opt: GeocoderRequest = {
         address: this.addresses
@@ -117,23 +128,21 @@ export class GmapsPage implements OnInit {
         mvcArray.on('finish').subscribe(() => {
           if (mvcArray.getLength() > 0) {
             const results = mvcArray.getArray();
-            console.log('mvcArray lenght ', mvcArray.getLength());
-            console.log('result lenght ', results.length);
             let i = 0;
             results.forEach((result: GeocoderResult[]) => {
               this.map.addMarkerSync({
                 position: result[0].position,
-                title: this.doctors[i]['name'] + ' ' + this.doctors[i]['surname']
+                title: this.doctors[i]['name'] + ' ' + this.doctors[i]['surname'] //the text of the marker
               });
               i++;
             });
-          } else {
-            console.log('non sei capace');
           }
         });
       });
     }
-
+/**
+ * Make a server request to obtain addresses and store the information
+ */
     private getCoordinates() {
       this.getCoord.getCoordinates().then(observable => {
         observable.subscribe(res => {
@@ -156,7 +165,10 @@ export class GmapsPage implements OnInit {
         });
       });
     }
-
+/** This method allows a patient to send a 'request to become patient' to the doctor.
+ * 
+ * @param idDoc the doctor identifier to whom the patient make the request
+ */
     onSendRequest(idDoc: string) {
       this.userService.sendRequestToDoc(idDoc).then(success => {
         success.subscribe(resData => {

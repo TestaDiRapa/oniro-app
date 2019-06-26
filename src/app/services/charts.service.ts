@@ -1,5 +1,6 @@
-/*
- * This service is used to prepare all Charts and habit relating to a specific date
+/** This method allows to retrive information from the server about data recorded during the night
+ * in order to draw charts those are shown to the patient and the doctor
+ *
  */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -7,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { AuthenticationService } from './authentication/authentication.service';
 import { Abitudini } from '../home/add-abitudini/abitudini.model';
 import { Bevanda } from '../home/add-abitudini/bevanda.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface Aggregate {
   apnea_events: number;
@@ -35,7 +36,7 @@ export interface ApneaEvent {
   duration: number;
   type: string;
 }
-export interface Chart{
+export interface Chart {
     title: string;
     type: string;
     data: Array<Array<string | number | {}>>;
@@ -71,8 +72,8 @@ export class ChartsService {
     spo2_spectra: {frequencies: [], spectral_density: []},
     total_movements: 0,
     habit: new Abitudini(
-      new Bevanda("", 0),
-      new Bevanda("", 0),
+      new Bevanda('', 0),
+      new Bevanda('', 0),
       false,
       false
     )
@@ -82,9 +83,9 @@ export class ChartsService {
   // tslint:disable-next-line: variable-name
   _drink = new BehaviorSubject<Bevanda>(new Bevanda('', 0));
   // tslint:disable-next-line: variable-name
-  _cena = new BehaviorSubject<string>("");
+  _cena = new BehaviorSubject<string>('');
   // tslint:disable-next-line: variable-name
-  _sport = new BehaviorSubject<string>("");
+  _sport = new BehaviorSubject<string>('');
   private currentDateToPrint: string;
   aggregateData: Array<Array<string | number | {}>> = [];
 // tslint:disable-next-line: variable-name
@@ -95,86 +96,86 @@ export class ChartsService {
     private http: HttpClient
   ) {}
 
-  /** Set the cf
-   * @param cf the current cf
-   */
+/**This method sets the cf.
+ * 
+ * @param cf the cf to set.
+ */
   set cf(cf: string) {
     this.currentCf = cf;
   }
-
-  /**Get the current cf
-   *  @returns {string} the current cf
-   */
+/**This method retrieve the cf.
+ * 
+ * @returns {string} the cf.
+ */
   get cf() {
     return this.currentCf;
   }
-
-  /** Get the aggregate data
-   * @returns {Observable<Aggregate>} the aggregate
-   */
+/**This method retrieve aggregate data.
+ * 
+ * @returns {Observable<Aggregate>} which represents  aggregate data.
+ */
   get aggregate() {
     return this._aggregate.asObservable();
   }
-
-  /**Set the id of data
-   * @param id the current id
-   */
+  /**This method sets the identifier.
+ * 
+ * @param id the id to set.
+ */
   set dataId(id: string) {
     this.currentId = id;
   }
-
-  /** Get the id of data
-   * @return {string} the current id 
-   */
+/**This method retrieves the identifier.
+ * 
+ * @returns {string} which represents the identifier.
+ */
   get dataId() {
     return this.currentId;
   }
-
-  /** Get the caffe data
-   * @returns {Observable<Bevanda>} the caffe data
-   */
+  /**This method retrieves how many coffee the patient has drunk.
+ * 
+ * @returns {Observable<Bevanda>} which represents how many coffee the patient has drunk.
+ */
   get caffe() {
     return this._caffe.asObservable();
   }
-
-  /** Get the sport data
-   * @returns {Observable<string>} the type of sport
-   */
+  /**This method retrieves the information if the patient has done sport.
+ * 
+ * @returns {Observable<string>} which represents if the patient has done sport.
+ */
   get sport() {
     return this._sport.asObservable();
   }
-  
-  /** Get the drink data
-   * @returns {Observable<Bevanda>} the drink data
-   */
+  /**This method retrieves information about how many alchool the patient has drunk.
+ * 
+ * @returns {Observable<Bevanda>} which represents how manu drinks the patient has drunk.
+ */
   get drink() {
     return this._drink.asObservable();
   }
-
-  /** Get the dinner data
-   * @returns {Observable<string>} the dinner data
-   */
+  /**This method retrieves information if the patient has had a late dinner.
+ * 
+ * @returns {Observable} which represents information about patient's dinner.
+ */
   get cena() {
     return this._cena.asObservable();
   }
-
-  /**Set the current date
-   * @param date the current date
-   */
+  /**This method sets the date.
+ * 
+ * @param date  the date to set.
+ */
   set currentDate(date: string) {
     this.currentDateToPrint = date;
   }
-
-  /** Get the current date
-   * @returns {string} the current date
-   */
+/** This method retrives information about the date to print.
+ * 
+ * @returns {string} the current date.
+ */
   get currentDate() {
     return this.currentDateToPrint;
   }
-
-  /** Get data using cf and the date of data
-   * @returns {Promise<Object>} the data of relative id and cf
-   */
+/** This method retrives information about data stored in the server.
+ * @returns {Promise<Object>} data with the specified id and cf.
+ */
   get data() {
     let url: string;
     if (this.currentCf) {
@@ -197,10 +198,10 @@ export class ChartsService {
         .toPromise();
     });
   }
-
-  /** This method prepare all charts and habits of patient
-   * @returns {Promise<Object>} set all informtations about charts
-   */
+/** This method prepare all charts and habits of patient.
+*
+* @returns {Promise<Object>} set all informtations about charts.
+*/
   get charts() {
   return this.data.then(response => {
       if (response['status'] === 'ok') {
@@ -309,8 +310,7 @@ export class ChartsService {
       }
     });
   }
-
-  /** Set information about the patient habits
+/** Set information about the patient habits
    * 
    * @param habit the habit of patient
    */
@@ -328,8 +328,7 @@ export class ChartsService {
       this._sport.next('No');
     }
   }
-
-  /** Prepare the chart relative to 'spectra' using two parameters
+/** Prepare the chart relative to 'spectra' using two parameters
    * @param spectra it is the specified spectra that you want to graph
    */
   prepareLineChart(spectra: string) {
@@ -341,8 +340,7 @@ export class ChartsService {
       ]);
     }
   }
-
-  /** Prepare the chart relative to 'spectra' using one parameter
+ /** Prepare the chart relative to 'spectra' using one parameter
    * @param spectra it is the specified spectra that you want to graph
    */
   prepareLineChartPlot(spectra: string) {
@@ -352,8 +350,7 @@ export class ChartsService {
       this.aggregateData.push([time, this.receivedData[spectra][x]]);
     }
   }
-
-  /** Prepare the movements chart
+/** Prepare the movements chart
    *  @param lineChart it specifies which parameter you want to graph
    */
   prepareLineChartMovements(lineChart: string) {

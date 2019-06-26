@@ -6,8 +6,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from '../../authentication/authentication.service';
 import { ApneaEvent } from './apnea-event.model';
-import { AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
 
 export interface RawBluetoothData {
     spo2: number;
@@ -97,6 +95,7 @@ export class DataStoringService {
                             this.storage.remove('sleep_data');
                             if (terminate) {
                                 this.http.get(
+// tslint:disable-next-line: max-line-length
                                     `http://${environment.serverIp}/user/my_recordings/process?id=${this.initInstant}&stop=${this.stopTime.toISOString()}`,
                                     {
                                         headers: new HttpHeaders({
