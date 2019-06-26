@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class UselessService {
+export class FunFactService {
   private factSubject = new BehaviorSubject<string>('');
   private factsList: string[];
 

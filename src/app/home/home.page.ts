@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
 import { DataStoringService } from '../services/bluetooth/data-storage/data-storing.service';
-import { UselessService } from '../services/useless.service';
+import { FunFactService } from '../services/funfact.service';
 import { ControllerService } from '../services/controllerService.service';
 
 
@@ -33,7 +33,7 @@ export class HomePage implements OnInit {
 
   constructor(
     private dataMngr: DataStoringService,
-    private facts: UselessService,
+    private facts: FunFactService,
     private controllerService: ControllerService,
     private modalCtrl: ModalController,
     private network: Network,
