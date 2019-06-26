@@ -132,7 +132,7 @@ export class AuthenticationService {
     }
 
     /** Set the name and surname of user
-     * 
+     *
      * @param name the name of user
      * @param surname the surname of user
      */
@@ -209,6 +209,7 @@ export class AuthenticationService {
         });
     }
 
+    // If loggedUser is true, refresh the token of user
     private retrieveRefToken() {
         if (!this.loggedUser) {
             return this.loadUser().then<Token>(user => {
@@ -222,6 +223,7 @@ export class AuthenticationService {
         });
     }
 
+    // If loggedUser is true, retrieve the token
     private retrieveAuthToken() {
         if (!this.loggedUser) {
             return this.loadUser().then<Token>(user => {
@@ -235,17 +237,30 @@ export class AuthenticationService {
         });
     }
 
+    /** Set the validation iterval of token
+     * 
+     * @param token the new token
+     * @param interval the interval of validation
+     */
     setAuthToken(token: string, interval: number) {
 
         this.loggedUser.accessToken = new Token(token, new Date(interval * 1000));
         this.serialize();
     }
 
+    /**Refresh the token and set a new validation iterval
+     * 
+     * @param token the token thah is refreshed
+     * @param interval the interval of validation
+     */
     setRefreshToken(token: string, interval: number) {
         this.loggedUser.refreshToken = new Token(token, new Date(interval * 1000));
         this.serialize();
     }
 
+    /** Get the user type
+     * @returns {boolean} the type of user
+     */
     getUserType() {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
@@ -260,7 +275,7 @@ export class AuthenticationService {
     }
 
     /** Get the doc type
-     * @returns {boolean}
+     * @returns {boolean} the type of doctor
      * 
      */
 
@@ -277,8 +292,8 @@ export class AuthenticationService {
         });
     }
 
-     /** Get the patient type
-     * @returns {boolean}
+     /** Get the user 
+     * @returns {Medico | Paziente} all information about the user
      * 
      */
 
@@ -305,7 +320,7 @@ export class AuthenticationService {
     }
 
     /** This method load all the information of user
-     * @returns {Promise<any>}
+     * @returns {Promise<any>} all the information about user if logged_user is set
      */
     private loadUser() {
         return this.storage.get('logged_user').then(JSONstring => {
