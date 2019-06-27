@@ -124,9 +124,13 @@ export class DataStoringService {
                             this.storedData = this.storedData.slice(len, this.storedData.length);
                             this.storage.remove('sleep_data');
                             if (terminate) {
-                                this.http.get(
+                                this.http.post(
 // tslint:disable-next-line: max-line-length
-                                    `http://${environment.serverIp}/user/my_recordings/process?id=${this.initInstant}&stop=${this.stopTime.toISOString()}`,
+                                    `http://${environment.serverIp}/user/my_recordings/process`,
+                                    JSON.stringify({
+                                        id: this.initInstant,
+                                        stop:this.stopTime.toISOString()
+                                    }),
                                     {
                                         headers: new HttpHeaders({
                                             'Content-Type': 'application/json',
