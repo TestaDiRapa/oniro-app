@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Associate the device</ion-title>
+    <ion-title>Seleziona il dispositivo</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onCancel()"><ion-icon name="close"></ion-icon></ion-button>
     </ion-buttons>
@@ -13,6 +13,12 @@
       <ion-label>
         <h5>{{ device.name }}</h5>
         <p>{{ device.address }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h5>Non vedi il tuo dispositivo?</h5>
+        <p>Associalo al tuo smarpthone nelle impostazioni Bluetooth</p>
       </ion-label>
     </ion-item>
   </ion-list>

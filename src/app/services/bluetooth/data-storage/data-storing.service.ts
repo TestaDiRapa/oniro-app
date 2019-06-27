@@ -7,6 +7,9 @@ import { environment } from 'src/environments/environment';
 import { AuthenticationService, Respons } from '../../authentication/authentication.service';
 import { ApneaEvent } from './apnea-event.model';
 
+/**
+ * This interface represent a raw packet sent by the Bluetooth device
+ */
 export interface RawBluetoothData {
     spo2: number;
     spo2_rate: number;
@@ -17,6 +20,10 @@ export interface RawBluetoothData {
     movements_count: number;
 }
 
+/**
+ * This service manages the data received from the Bluetooth device, aggregating them in memory
+ * and sending them to the server
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -32,12 +39,20 @@ export class DataStoringService {
         private storage: Storage
     ) { }
 
+    /**
+     * When the service starts, it removes any previously stored data
+     */
     init() {
         this.initInstant = new Date().toISOString();
         this.storage.remove('sleep_data');
         this.storedData = [];
     }
 
+    /**
+     * This method receives a raw data packet (sent by the Bluetooth device) and stores it 
+     * in a list
+     * @param raw 
+     */
     addRawData(raw: RawBluetoothData) {
         let oxyEvent = null;
         let diaEvent = null;
@@ -59,6 +74,9 @@ export class DataStoringService {
         ));
     }
 
+    /**
+     * This method loads the data stored in memory and sends them to the server
+     */
     recoverAndSend() {
         this.storage.get('sleep_data').then(data => {
             this.storedData = JSON.parse(data).data;
@@ -67,6 +85,12 @@ export class DataStoringService {
         });
     }
 
+    /**
+     * The method checks if the device is connected to the Internet. If it's not, then it will 
+     * store the sleep data in memory, otherwise it sends them to the server
+     * @param terminate an optional parameter, true only when has to send the last packet of
+     * the recording
+     */
     sendData(terminate = false) {
         if (this.network.type !== this.network.Connection.NONE) {
             this.sendToServer(terminate);
@@ -75,6 +99,12 @@ export class DataStoringService {
         }
     }
 
+    /**
+     * This method sends all the packet in the list to the server. If the response is successful,
+     * then the sent packet are removed from the list. In addition, if the terminate parameter is true,
+     * the method asks the server to elaboorate the data.
+     * @param terminate a boolean parameter
+     */
     private sendToServer(terminate: boolean) {
         if (this.storedData.length > 0) {
             const len = this.storedData.length;
@@ -113,6 +143,9 @@ export class DataStoringService {
         }
     }
 
+    /**
+     * This method serializes the sleep packets list into the local storage of the device.
+     */
     serialize() {
         this.storage.set('sleep_data', JSON.stringify({
             id: this.initInstant,
