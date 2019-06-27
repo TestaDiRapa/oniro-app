@@ -1,4 +1,4 @@
-# oniro-app
+# Oniro
 Let's start throwing blood
 
 

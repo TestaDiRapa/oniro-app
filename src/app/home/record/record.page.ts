@@ -19,7 +19,7 @@ export class RecordPage implements OnInit {
   private timerSubscription: Subscription;
   private currIndex = 0;
   private totalFrames = 4;
-  public imagePath = `/src/assets/image/panda-animation/${this.currIndex}.png`;
+  public imagePath = `assets/image/panda-animation/${this.currIndex}.png`;
 
   constructor(
     private alertCtrl: AlertController,
@@ -33,7 +33,7 @@ export class RecordPage implements OnInit {
   ngOnInit() {
     this.animationTimer.subscribe(() => {
       this.currIndex = (this.currIndex+1)%this.totalFrames;
-      this.imagePath = `/src/assets/image/panda-animation/${this.currIndex}.png`;
+      this.imagePath = `assets/image/panda-animation/${this.currIndex}.png`;
     })
     this.timerSubscription = this.timer.subscribe(() => {
       this.dataMngr.sendData();
