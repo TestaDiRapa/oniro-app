@@ -97,77 +97,77 @@ export class ChartsService {
   ) {}
 
 /**This method sets the cf.
- * 
+ *
  * @param cf the cf to set.
  */
   set cf(cf: string) {
     this.currentCf = cf;
   }
 /**This method retrieve the cf.
- * 
+ *
  * @returns {string} the cf.
  */
   get cf() {
     return this.currentCf;
   }
 /**This method retrieve aggregate data.
- * 
+ *
  * @returns {Observable<Aggregate>} which represents  aggregate data.
  */
   get aggregate() {
     return this._aggregate.asObservable();
   }
   /**This method sets the identifier.
- * 
+ *
  * @param id the id to set.
  */
   set dataId(id: string) {
     this.currentId = id;
   }
 /**This method retrieves the identifier.
- * 
+ *
  * @returns {string} which represents the identifier.
  */
   get dataId() {
     return this.currentId;
   }
   /**This method retrieves how many coffee the patient has drunk.
- * 
+ *
  * @returns {Observable<Bevanda>} which represents how many coffee the patient has drunk.
  */
   get caffe() {
     return this._caffe.asObservable();
   }
   /**This method retrieves the information if the patient has done sport.
- * 
+ *
  * @returns {Observable<string>} which represents if the patient has done sport.
  */
   get sport() {
     return this._sport.asObservable();
   }
   /**This method retrieves information about how many alchool the patient has drunk.
- * 
+ *
  * @returns {Observable<Bevanda>} which represents how manu drinks the patient has drunk.
  */
   get drink() {
     return this._drink.asObservable();
   }
   /**This method retrieves information if the patient has had a late dinner.
- * 
+ *
  * @returns {Observable} which represents information about patient's dinner.
  */
   get cena() {
     return this._cena.asObservable();
   }
   /**This method sets the date.
- * 
+ *
  * @param date  the date to set.
  */
   set currentDate(date: string) {
     this.currentDateToPrint = date;
   }
 /** This method retrives information about the date to print.
- * 
+ *
  * @returns {string} the current date.
  */
   get currentDate() {
@@ -310,8 +310,8 @@ export class ChartsService {
       }
     });
   }
-/** Set information about the patient habits
-   * 
+  /** Set information about the patient habits
+   *
    * @param habit the habit of patient
    */
   private prepareHabits(habit: Abitudini) {
@@ -346,7 +346,7 @@ export class ChartsService {
   prepareLineChartPlot(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[spectra].length; x++) {
-      const time = new Date(this.timestamp.getTime() + x*60*60*1000);
+      const time = new Date(this.timestamp.getTime() + x * 60 * 60 * 1000);
       this.aggregateData.push([time, this.receivedData[spectra][x]]);
     }
   }
@@ -356,7 +356,7 @@ export class ChartsService {
   prepareLineChartMovements(lineChart: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[lineChart].length; x++) {
-      const time = new Date(this.timestamp.getTime() + x*60*60*1000);
+      const time = new Date(this.timestamp.getTime() + x * 60 * 60 * 1000);
       this.aggregateData.push([time, this.receivedData[lineChart][x]]);
     }
   }
