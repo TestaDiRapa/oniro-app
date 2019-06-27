@@ -27,7 +27,7 @@ export class FunFactService {
               this.factsList = response['payload'];
               this.storage.set('facts', JSON.stringify(this.factsList));
             }
-          })
+          });
         } else {
           this.factsList = JSON.parse(data);
         }

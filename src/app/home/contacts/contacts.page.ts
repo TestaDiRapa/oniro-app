@@ -57,7 +57,6 @@ export class ContactsPage implements OnInit {
 
   /**
    * This method is called every time the patient wants to call a doctor.
-   * 
    * @param phone The phone number to call as string.
    * @returns {Promise<any>}
    */

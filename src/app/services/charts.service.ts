@@ -246,7 +246,13 @@ export class ChartsService {
             legend: 'none',
             pieHole: 0.55,
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            vAxis:{
+              title: '(EU*EU)/Hz'
+            },
+            hAxis:{
+              title:'Hz'
+            }
           }
         });
 
@@ -260,7 +266,13 @@ export class ChartsService {
             legend: 'none',
             pieHole: 0.55,
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            vAxis:{
+              title: '(EU*EU)/Hz'
+            },
+            hAxis:{
+              title:'Hz'
+            }
           }
         });
 
@@ -274,7 +286,10 @@ export class ChartsService {
             legend: 'none',
             pieHole: 0.55,
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            vAxis:{
+              title: '%'
+            }
           }
         });
 
@@ -288,7 +303,10 @@ export class ChartsService {
             legend: 'none',
             pieHole: 0.55,
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            vAxis:{
+              title: 'BPM'
+            }
           }
         });
 
@@ -303,7 +321,10 @@ export class ChartsService {
             legend: 'none',
             pieHole: 0.55,
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            vAxis:{
+              title:'Numero Movimenti'
+            }
           }
         });
         return this._charts;
