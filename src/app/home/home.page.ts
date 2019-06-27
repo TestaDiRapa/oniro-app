@@ -42,7 +42,7 @@ export class HomePage implements OnInit {
     private user: UserService
   ) {
   }
-//at the beginning this method shows a fun fact, set the right date and send data, if they are stored
+  //at the beginning this method shows a fun fact, set the right date and send data, if they are stored
   ngOnInit() {
     this.facts.facts.subscribe(text => {
       this.fact = text;
@@ -56,31 +56,31 @@ export class HomePage implements OnInit {
       });
     });
   }
-/**
- * Update the fun fact and the date
- */
+  /**
+   * Update the fun fact and the date
+   */
   ionViewWillEnter() {
     this.facts.newFact();
     this.currentDate = new Date();
   }
 
-/**This method set a button to indicate that the patient has had dinner late in night.
- * 
- * @param togValue {boolean} the value of the toggle button.
- */
+  /**This method set a button to indicate that the patient has had dinner late in night.
+   * 
+   * @param togValue {boolean} the value of the toggle button.
+   */
   onToggleCena(togValue: boolean) {
     this.isCena = togValue;
   }
-/** This method set a button to indicate that the patient has done sport.
- * 
- * @param togValue {boolean} the value of the toggle button.
- */
+  /** This method set a button to indicate that the patient has done sport.
+   *
+   * @param togValue {boolean} the value of the toggle button.
+   */
   onToggleSport(togValue: boolean) {
     this.isSport = togValue;
   }
-/**This method open the modal to indicate what kind of drink the patient has drunk
- * 
- */
+  /**
+   * This method open the modal to indicate what kind of drink the patient has drunk
+   */
   openModal(selectedBevanda: string) {
     this.bevanda = selectedBevanda;
     this.modalCtrl.create({
@@ -97,9 +97,9 @@ export class HomePage implements OnInit {
       }
     });
   }
-/**
- * This method send habits to the server and start monitoring the patient's sleep.
- */
+  /**
+   * This method send habits to the server and start monitoring the patient's sleep.
+   */
   onStartMonitoring() {
     const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
     this.controllerService.onCreateLoadingCtrl();

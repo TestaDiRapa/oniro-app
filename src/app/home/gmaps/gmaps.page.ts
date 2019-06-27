@@ -168,7 +168,8 @@ export class GmapsPage implements OnInit {
     });
   }
 
-  /** This method allows a patient to send a 'request to become patient' to the doctor.
+  /**
+   * This method allows a patient to send a 'request to become patient' to the doctor.
    *
    * @param idDoc the doctor identifier to whom the patient make the request
    */
