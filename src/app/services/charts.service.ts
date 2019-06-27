@@ -287,7 +287,7 @@ export class ChartsService {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-            vAxis:{
+            vAxis: {
               title: '%'
             }
           }
@@ -323,7 +323,7 @@ export class ChartsService {
             width: 'auto',
             height: 'auto',
             vAxis:{
-              title:'Numero Movimenti'
+              title: 'Numero Movimenti'
             }
           }
         });
