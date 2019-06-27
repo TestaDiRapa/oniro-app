@@ -45,9 +45,7 @@ export class ContactsPage implements OnInit {
     this.userService.getMyDoctor().then(success => {
       success.subscribe(res => {
         this.controlService.onDismissLoaderCtrl();
-        console.log('lunghezza ',res['message'].length);
         for (let i = 0; i < res['message'].length; i++) {
-          console.log(res['message'][i]);
           if (res['message'][i]['type'] === 'subscribed') {
             this.contacts.push(res['message'][i]);
           }
