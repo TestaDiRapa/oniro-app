@@ -8,7 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { AuthenticationService, Person } from './services/authentication/authentication.service';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
-import { UselessService } from './services/useless.service';
+import { FunFactService } from './services/funfact.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private background: BackgroundMode,
-    private facts: UselessService,
+    private facts: FunFactService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,

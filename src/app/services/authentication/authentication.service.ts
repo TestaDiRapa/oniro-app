@@ -70,8 +70,8 @@ export class AuthenticationService {
         });
     }
 
-    /**Get the response by the server for login relating to the data entered
-     * 
+    /**Get the response by the server for relating login based on the data entered
+     *
      * @param username the username used for login
      * @param password the password used for login
      * @param isUser true=patient, false=doctor
@@ -96,7 +96,7 @@ export class AuthenticationService {
 
     /**Register a patient or a doctor
      *
-     * @param user the user could be a 'Medico' or a 'Paziente 
+     * @param user the user could be a 'Medico' or a 'Paziente
      * @param isUser true=patient, false=doctor
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
      */
@@ -125,7 +125,7 @@ export class AuthenticationService {
     }
 
     /** Get the isAuthenticated value
-     * @returns {boolean} 
+     * @returns {boolean}
      */
     getAuthentication() {
         return this.isAuthenticated;
@@ -140,8 +140,8 @@ export class AuthenticationService {
     private setUserIdentity(name: string, surname: string) {
         this.userIdentity.next(
             {
-                name: name,
-                surname: surname
+                name,
+                surname
             }
         );
     }
@@ -162,7 +162,7 @@ export class AuthenticationService {
 
     /** Get the token of user, if the token is not set then you logout otherwise check if the token still has validity,
      *  if it is false you logout otherwise you set a new token
-     * @returns {Promise<Token>} 
+     * @returns {Promise<Token>}
      */
     get token() {
         return this.retrieveAuthToken().then(token => {
@@ -237,8 +237,8 @@ export class AuthenticationService {
         });
     }
 
-    /** Set the validation iterval of token
-     * 
+    /** Set the validation interval of token
+     *
      * @param token the new token
      * @param interval the interval of validation
      */
@@ -248,8 +248,8 @@ export class AuthenticationService {
         this.serialize();
     }
 
-    /**Refresh the token and set a new validation iterval
-     * 
+    /**Refresh the token and set a new validation interval
+     *
      * @param token the token thah is refreshed
      * @param interval the interval of validation
      */
@@ -258,7 +258,7 @@ export class AuthenticationService {
         this.serialize();
     }
 
-    /** Get the user type
+    /** Get the patient type
      * @returns {boolean} the type of user
      */
     getUserType() {
@@ -274,9 +274,9 @@ export class AuthenticationService {
         });
     }
 
-    /** Get the doc type
+    /** Get the doctor type
      * @returns {boolean} the type of doctor
-     * 
+     *
      */
 
     getDocType() {
@@ -292,10 +292,10 @@ export class AuthenticationService {
         });
     }
 
-     /** Get the user 
-     * @returns {Medico | Paziente} all information about the user
-     * 
-     */
+     /** Get the user
+      * @returns {Medico | Paziente} all information about the user
+      *
+      */
 
     getUser() {
         if (!this.loggedUser) {
@@ -311,6 +311,7 @@ export class AuthenticationService {
     }
 
     /** Set the user
+     * @param user it can be 'Paziente' or 'Medico'
      */
 
     setUser(user: Paziente | Medico) {
