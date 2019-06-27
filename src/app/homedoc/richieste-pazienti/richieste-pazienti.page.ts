@@ -35,7 +35,6 @@ export class RichiestePazientiPage implements OnInit {
     this.controllerService.onCreateLoadingCtrl();
     this.docService.getPatientRequests().then(succes => {
       succes.subscribe(resData => {
-        console.log(resData);
         for (let i = 0; i < resData['results'].length; i++) {
           if (resData['results'][i].type === 'registered') {
             resData['results'].splice(i, 1);

@@ -18,7 +18,7 @@ import { ControllerService } from 'src/app/services/controllerService.service';
 
 
 export class ContactsPage implements OnInit {
-  public contacts: any;
+  public contacts: any[] = [];
 
   constructor(
     private userService: UserService,
@@ -28,8 +28,7 @@ export class ContactsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.menuCtrl.toggle();
-    this.getContact();
+    this.menuCtrl.close();
   }
 
   ionViewWillEnter() {
@@ -41,11 +40,18 @@ export class ContactsPage implements OnInit {
    * patient and update the "contacts" list every time this page is created.
    */
   private getContact() {
+    this.contacts = [];
     this.controlService.onCreateLoadingCtrl();
     this.userService.getMyDoctor().then(success => {
       success.subscribe(res => {
-        this.contacts = res.message;
         this.controlService.onDismissLoaderCtrl();
+        console.log('lunghezza ',res['message'].length);
+        for (let i = 0; i < res['message'].length; i++) {
+          console.log(res['message'][i]);
+          if (res['message'][i]['type'] === 'subscribed') {
+            this.contacts.push(res['message'][i]);
+          }
+        }
       });
     });
     this.controlService.onDismissLoaderCtrl();
