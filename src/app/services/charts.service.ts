@@ -1,4 +1,4 @@
-/** This method allows to retrive information from the server about data recorded during the night
+/** This service allows to retrive information from the server about data recorded during the night
  * in order to draw charts those are shown to the patient and the doctor
  *
  */

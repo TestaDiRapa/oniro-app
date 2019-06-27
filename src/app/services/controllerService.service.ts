@@ -1,5 +1,5 @@
 /*
- *This service is used to use the 'Loader' and controll it
+ *This service is used to use the 'Loader' and control it
  */
 import { Injectable } from '@angular/core';
 import { LoadingController, AlertController } from '@ionic/angular';
