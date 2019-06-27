@@ -3,7 +3,7 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from 'src/app/services/bluetooth/bluetooth.service';
 import { Router } from '@angular/router';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { SelectDevicePage } from './select-device/select-device.page';
 import { DataStoringService } from 'src/app/services/bluetooth/data-storage/data-storing.service';
 import { interval, Subscription } from 'rxjs';
@@ -26,6 +26,7 @@ export class RecordPage implements OnInit {
     private bluetooth: BluetoothSerial,
     private bluetoothService: BluetoothService,
     private dataMngr: DataStoringService,
+    private loadingCtrl: LoadingController,
     private modal: ModalController,
     private router: Router
   ) { }
@@ -69,6 +70,10 @@ export class RecordPage implements OnInit {
     );
   }
 
+  ionViewWillLeave() {
+    this.loadingCtrl.dismiss();
+  }
+
   private connectRoutine() {
     this.bluetoothService.device
       .then(value => {
@@ -79,8 +84,12 @@ export class RecordPage implements OnInit {
         }
       })
       .then(data => {
+        this.loadingCtrl.create({
+          message: 'Mi connetto al dispositivo...'
+        }).then(loading => {loading.present()});
         this.bluetooth.connect(data.address).subscribe(
           () => {
+            this.loadingCtrl.dismiss();
             this.bluetooth.subscribe('\n').subscribe(
               success => {
                 if (success) {
