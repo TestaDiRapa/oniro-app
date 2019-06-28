@@ -5,9 +5,11 @@
 */
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/userService.service';
-import { MenuController } from '@ionic/angular';
+import { MenuController, AlertController } from '@ionic/angular';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { ControllerService } from 'src/app/services/controllerService.service';
+import { Network } from '@ionic-native/network/ngx';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,10 +23,14 @@ export class ContactsPage implements OnInit {
   public contacts: any[] = [];
 
   constructor(
-    private userService: UserService,
-    private menuCtrl: MenuController,
+    private alertCtrl: AlertController,
+    private call: CallNumber,
     private controlService: ControllerService,
-    private call: CallNumber) {
+    private menuCtrl: MenuController,
+    private network: Network,
+    private router: Router,
+    private userService: UserService,
+  ) {
   }
 
   ngOnInit() {
@@ -32,7 +38,18 @@ export class ContactsPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.getContact();
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/home']); }
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      this.getContact();
+    }
   }
 
   /**
