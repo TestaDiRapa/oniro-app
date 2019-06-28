@@ -27,8 +27,9 @@ export class BluetoothService {
   }
 
   /**
-   * Check if the application is already paired with a device or if has a device stored in 
-   * memory and returns it
+   * Check if the application is already paired with a device or if has a device stored in
+   * memory and returns it.
+   * 
    * @returns {Promise<BluetoothDevice>} a promise containing the device
    */
   get device() {
@@ -52,6 +53,7 @@ export class BluetoothService {
 
   /**
    * This method receive the name and the address of a Bluetooth device and stores it in memory
+   *
    * @param name the device name
    * @param address the device address
    */

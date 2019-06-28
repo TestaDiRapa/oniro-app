@@ -26,7 +26,8 @@ export class UserService {
     private http: HttpClient,
   ) { }
 
-  /** Get the information about doctors that are linked to a patient.
+  /**
+   * Get the information about doctors that are linked to a patient.
    *
    * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
    */
@@ -43,7 +44,8 @@ export class UserService {
     });
   }
 
-  /** Put on the server the information about user's attribute.
+  /**
+   * Put on the server the information about user's habits.
    *
    * @param abitudine the habit to send to the doctor.
    * @returns {Promise<Observable<Respons>>} a message from the server about the request, if it's correct or not.
@@ -62,8 +64,10 @@ export class UserService {
         });
     });
   }
-  /**Update the information about user's profile on the server.
-   * 
+
+  /**
+   * Update the information about user's profile on the server.
+   *
    * @param formData the updated data ready to be sent to the server.
    * @returns {Promise<Observable<Respons>>} a message from the server with the information, or a message error.
    */
@@ -81,8 +85,10 @@ export class UserService {
         });
     }));
   }
-  /** Send a request to the specified doctor
-   * 
+
+  /**
+   * Send a subscription request to the specified doctor
+   *
    * @param idDoc the identifier of the doc to whom the patient wants to send the request.
    * @returns {Promise<Observable<Respons>>} a message from the server with the information, or a message error.
    */
@@ -101,8 +107,10 @@ export class UserService {
         });
     });
   }
-  /** Send data to a specific doctor. 
-   * 
+
+  /**
+   * Send the alert message to a specific doctor.
+   *
    * @param doctorId the id of the doctor to whom the patient wants to send data.
    * @param dateID the record identifier of the data that the patient wants to send.
    * @returns {Promise<Observable<Respons>>} a message from the server with the information, or a message error.

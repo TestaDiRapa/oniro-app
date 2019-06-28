@@ -47,13 +47,20 @@ export class AuthenticationService {
         private storage: Storage
     ) { }
 
-    // Set the loggedUser a null to avoid the autologin
+    /**
+     * This method allows to set the logged used to null and to remove him from the 
+     * storage in orfer to avoid the autologin.
+     */
     logout() {
         this.loggedUser = null;
         this.storage.remove('logged_user');
     }
 
-    // This method allows to perform the autologin if the loggedUser is set
+    /**
+     * The method checks if the user has already logged in.
+     *
+     * @returns {Promise<boolean>}
+     */
     autologin() {
         if (!this.loggedUser) {
             return this.loadUser().then<boolean>(user => {
@@ -64,13 +71,15 @@ export class AuthenticationService {
                 }
             });
         }
-        console.log('EXISTS', this.loggedUser);
         return new Promise<boolean>((resolve) => {
             resolve(true);
         });
     }
 
-    /**Get the response by the server for relating login based on the data entered
+    /**
+     * 
+     * This method allows to retrieve the user on the REST Server. The server's response can be successfull
+     * if the user exists and it returns some user's information, or 'error' if the user doesn't exist.
      *
      * @param username the username used for login
      * @param password the password used for login
@@ -94,9 +103,11 @@ export class AuthenticationService {
         return this.http.get<Respons>(path, { params });
     }
 
-    /**Register a patient or a doctor
+    /**
+     * This method allows to put a new user on the database server, after the user submit the form
+     * on the register page.
      *
-     * @param user the user could be a 'Medico' or a 'Paziente
+     * @param user the user could be a 'Medico' or a 'Paziente'
      * @param isUser true=patient, false=doctor
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
      */
@@ -119,24 +130,29 @@ export class AuthenticationService {
             });
     }
 
-    // Save the loggeduser value in the storage
+    /**
+     * To save the logged user correctly he is serialized as a JSON object.
+     * The user is saved on the storage.
+     */
     private serialize() {
         this.storage.set('logged_user', JSON.stringify(this.loggedUser));
     }
 
-    /** Get the isAuthenticated value
+    /**
+     * Get the isAuthenticated value
+     * 
      * @returns {boolean}
      */
     getAuthentication() {
         return this.isAuthenticated;
     }
 
-    /** Set the name and surname of user
+    /** 
+     * Set the name and surname of user
      *
      * @param name the name of user
      * @param surname the surname of user
      */
-
     private setUserIdentity(name: string, surname: string) {
         this.userIdentity.next(
             {
@@ -146,45 +162,50 @@ export class AuthenticationService {
         );
     }
 
-    /** Get the user name and surname
+    /**
+     * Get the user name and surname
+     *
      * @returns {Observable<Person>} return the user
      */
     get user() {
         return this.userIdentity.asObservable();
     }
 
-    /** Get the user type
+    /**
+     * Get the user type
+     *
      * @returns {Observable<boolean>} return the type of user
      */
     get type() {
         return this.userType.asObservable();
     }
 
-    /** Get the token of user, if the token is not set then you logout otherwise check if the token still has validity,
-     *  if it is false you logout otherwise you set a new token
+    /**
+     * Get the token of user. If the token is not set then the user is logged out,
+     * otherwise the method checks if the token still has validity.
+     * If the token is null, the method checks the validity of the refresh token.
+     * If the refresh token is not valid (null or expired), the user is logged out, otherwise a 
+     * new token is set.
+     *
      * @returns {Promise<Token>}
      */
     get token() {
         return this.retrieveAuthToken().then(token => {
             if (token === null) {
-                console.log('AUTH NULL');
                 this.logout();
                 this.router.navigate(['/']);
             }
+            // checks if the token is expired
             if (token.expirationDate <= new Date()) {
-                console.log('AUTH EXPIRED');
                 return this.retrieveRefToken().then(refToken => {
                     if (refToken === null) {
-                        console.log('REF NULL');
                         this.logout();
                         this.router.navigate(['/']);
                     }
                     if (refToken.expirationDate <= new Date()) {
-                        console.log('REF EXPIRED');
                         this.logout();
                         this.router.navigate(['/']);
                     } else {
-                        console.log('REF OK');
                         return this.http.get<Respons>(
                             `http://${environment.serverIp}/refresh`,
                             {
@@ -193,23 +214,23 @@ export class AuthenticationService {
                                 })
                             }
                         ).toPromise().then(response => {
-                            console.log(response);
                             this.setAuthToken(response.access_token, response.access_token_exp);
-                            console.log('OLD TOKEN', token);
-                            console.log('NEW TOKEN', response.access_token);
                             return response.access_token;
                         });
                     }
-
                 });
-            } else {
-                console.log('AUTH OK');
+            } else { // the token is not expired
                 return token.token;
             }
         });
     }
 
-    // If loggedUser is true, refresh the token of user
+    /**
+     * This method chesk if the user is logged, so it return the refresh Token; 
+     * otherwise a new refresh token is returned.
+     *
+     * @returns {Promise<Token>} Return a Promise of the token.
+     */
     private retrieveRefToken() {
         if (!this.loggedUser) {
             return this.loadUser().then<Token>(user => {
@@ -223,7 +244,12 @@ export class AuthenticationService {
         });
     }
 
-    // If loggedUser is true, retrieve the token
+    /**
+     * This method chesk if the user is logged, so it return the authentication Token; 
+     * otherwise a new authentication token is returned.
+     *
+     * @returns {Promise<Token>} Return a Promise of the token.
+     */    
     private retrieveAuthToken() {
         if (!this.loggedUser) {
             return this.loadUser().then<Token>(user => {
@@ -237,18 +263,19 @@ export class AuthenticationService {
         });
     }
 
-    /** Set the validation interval of token
+    /**
+     * Set the validation interval of token
      *
      * @param token the new token
      * @param interval the interval of validation
      */
     setAuthToken(token: string, interval: number) {
-
         this.loggedUser.accessToken = new Token(token, new Date(interval * 1000));
         this.serialize();
     }
 
-    /**Refresh the token and set a new validation interval
+    /**
+     * Refresh the token and set a new validation interval
      *
      * @param token the token thah is refreshed
      * @param interval the interval of validation
@@ -258,7 +285,9 @@ export class AuthenticationService {
         this.serialize();
     }
 
-    /** Get the patient type
+    /**
+     * Get the patient type
+     *
      * @returns {boolean} the type of user
      */
     getUserType() {
@@ -274,11 +303,12 @@ export class AuthenticationService {
         });
     }
 
-    /** Get the doctor type
+    /** 
+     * Get the doctor type
+     * 
      * @returns {boolean} the type of doctor
      *
      */
-
     getDocType() {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
@@ -292,11 +322,11 @@ export class AuthenticationService {
         });
     }
 
-     /** Get the user
-      * @returns {Medico | Paziente} all information about the user
-      *
-      */
-
+    /**
+     * Get the user
+     *
+     * @returns {Medico | Paziente} all information about the user
+     */
     getUser() {
         if (!this.loggedUser) {
             return this.loadUser().then(user => {
@@ -310,24 +340,26 @@ export class AuthenticationService {
         });
     }
 
-    /** Set the user
+    /**
+     * Set the user
+     *
      * @param user it can be 'Paziente' or 'Medico'
      */
-
     setUser(user: Paziente | Medico) {
         this.loggedUser.user = user;
         this.setUserIdentity(user.name, user.surname);
         this.serialize();
     }
 
-    /** This method load all the information of user
+    /**
+     * This method load all the information of the user from the storage
+     *
      * @returns {Promise<any>} all the information about user if logged_user is set
      */
     private loadUser() {
         return this.storage.get('logged_user').then(JSONstring => {
             if (JSONstring) {
                 const tmp = JSON.parse(JSONstring);
-                console.log(tmp);
 
                 let tmpUser;
 
@@ -354,7 +386,6 @@ export class AuthenticationService {
                         tmp.user.image
                     );
                 }
-
                 const loggedUser = new LoggedUser();
                 loggedUser.isUser = tmp.isUser;
                 loggedUser.accessToken = new Token(tmp.accessToken.token, new Date(tmp.accessToken.expirationDate));
@@ -363,11 +394,9 @@ export class AuthenticationService {
                 this.loggedUser = loggedUser;
                 this.setUserIdentity(this.loggedUser.user.name, this.loggedUser.user.surname);
                 this.userType.next(this.loggedUser.isUser);
-                console.log('LOADED', this.loggedUser);
                 return loggedUser;
             } else {
                 this.loggedUser = new LoggedUser();
-                console.log('UNLOADED', this.loggedUser);
                 return null;
             }
         });
