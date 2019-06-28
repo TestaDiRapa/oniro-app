@@ -1,7 +1,4 @@
 # Oniro
-Let's start throwing blood
-
-
 ## Cloning instructions
 1. create a new blank ionic project `ionic start tmp blank`
 2. remove the src folder from the newly created project
