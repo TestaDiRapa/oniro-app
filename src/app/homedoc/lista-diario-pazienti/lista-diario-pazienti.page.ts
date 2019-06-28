@@ -41,13 +41,6 @@ export class ListaDiarioPazientiPage implements OnInit {
     this.findPatients();
   }
 
-  /**
-   * This method is called every time the page is loaded.
-   * It allows to visualize all the subscribed patients.
-   */
-  ionViewWillEnter() {
-    this.findPatients();
-  }
 
   /**
    * This method allows to find all the subscripted patients, thanks to DoctorService.
