@@ -1,6 +1,5 @@
 /** This service allows to retrieve information from the server about data recorded during the night
- * in order to draw charts those are shown to the patient and the doctor
- *
+ * in order to draw charts that are shown to the patient and to the doctor.
  */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -37,16 +36,16 @@ export interface ApneaEvent {
   type: string;
 }
 export interface Chart {
-    title: string;
+  title: string;
+  type: string;
+  data: Array<Array<string | number | {}>>;
+  roles: Array<{
     type: string;
-    data: Array<Array<string | number | {}>>;
-    roles: Array<{
-      type: string;
-      role: string;
-      index?: number;
-    }>;
-    columnNames?: Array<string>;
-    options?: {};
+    role: string;
+    index?: number;
+  }>;
+  columnNames?: Array<string>;
+  options?: {};
 }
 @Injectable({
   providedIn: 'root'
@@ -64,12 +63,12 @@ export class ChartsService {
     sleep_duration: 0,
     avg_hr: 0,
     avg_spo2: 0,
-    hr_spectra: {frequencies: [], spectral_density: []},
+    hr_spectra: { frequencies: [], spectral_density: [] },
     plot_apnea_events: [],
     plot_hr: [],
     plot_movements: [],
     plot_spo2: [],
-    spo2_spectra: {frequencies: [], spectral_density: []},
+    spo2_spectra: { frequencies: [], spectral_density: [] },
     total_movements: 0,
     habit: new Abitudini(
       new Bevanda('', 0),
@@ -88,32 +87,32 @@ export class ChartsService {
   _sport = new BehaviorSubject<string>('');
   private currentDateToPrint: string;
   aggregateData: Array<Array<string | number | {}>> = [];
-// tslint:disable-next-line: variable-name
+  // tslint:disable-next-line: variable-name
   _charts: Chart[] = [];
 
   constructor(
     private auth: AuthenticationService,
     private http: HttpClient
-  ) {}
+  ) { }
 
-/**This method sets the cf.
- *
- * @param cf the cf to set.
- */
+  /**This method sets the cf.
+   *
+   * @param cf the cf to set.
+   */
   set cf(cf: string) {
     this.currentCf = cf;
   }
-/**This method retrieve the cf.
- *
- * @returns {string} the cf.
- */
+  /**This method retrieve the cf.
+   *
+   * @returns {string} the cf.
+   */
   get cf() {
     return this.currentCf;
   }
-/**This method retrieve aggregate data.
- *
- * @returns {Observable<Aggregate>} which represents  aggregate data.
- */
+  /**This method retrieve aggregate data.
+   *
+   * @returns {Observable<Aggregate>} which represents  aggregate data.
+   */
   get aggregate() {
     return this._aggregate.asObservable();
   }
@@ -124,10 +123,10 @@ export class ChartsService {
   set dataId(id: string) {
     this.currentId = id;
   }
-/**This method retrieves the identifier.
- *
- * @returns {string} which represents the identifier.
- */
+  /**This method retrieves the identifier.
+   *
+   * @returns {string} which represents the identifier.
+   */
   get dataId() {
     return this.currentId;
   }
@@ -166,26 +165,26 @@ export class ChartsService {
   set currentDate(date: string) {
     this.currentDateToPrint = date;
   }
-/** This method retrives information about the date to print.
- *
- * @returns {string} the current date.
- */
+  /** This method retrives information about the date to print.
+   *
+   * @returns {string} the current date.
+   */
   get currentDate() {
     return this.currentDateToPrint;
   }
-/** This method retrives information about data stored in the server.
- * @returns {Promise<Object>} data with the specified id and cf.
- */
+  /** This method retrives information about data stored in the server.
+   * @returns {Promise<Object>} data with the specified id and cf.
+   */
   get data() {
     let url: string;
     if (this.currentCf) {
       url = `http://${environment.serverIp}/user/my_recordings?id=${
         this.currentId
-      }&cf=${this.currentCf}`;
+        }&cf=${this.currentCf}`;
     } else {
       url = `http://${environment.serverIp}/user/my_recordings?id=${
         this.currentId
-      }`;
+        }`;
     }
 
     return this.auth.token.then(token => {
@@ -198,12 +197,12 @@ export class ChartsService {
         .toPromise();
     });
   }
-/** This method prepare all charts and habits of patient.
-*
-* @returns {Promise<Object>} set all informtations about charts.
-*/
+  /** This method prepare all charts and habits of patient.
+  *
+  * @returns {Promise<Object>} set all informtations about charts.
+  */
   get charts() {
-  return this.data.then(response => {
+    return this.data.then(response => {
       if (response['status'] === 'ok') {
 
         this.receivedData = {
@@ -247,11 +246,11 @@ export class ChartsService {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-            vAxis:{
+            vAxis: {
               title: '(EU*EU)/Hz'
             },
-            hAxis:{
-              title:'Hz'
+            hAxis: {
+              title: 'Hz'
             }
           }
         });
@@ -267,11 +266,11 @@ export class ChartsService {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-            vAxis:{
+            vAxis: {
               title: '(EU*EU)/Hz'
             },
-            hAxis:{
-              title:'Hz'
+            hAxis: {
+              title: 'Hz'
             }
           }
         });
@@ -304,7 +303,7 @@ export class ChartsService {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-            vAxis:{
+            vAxis: {
               title: 'BPM'
             }
           }
@@ -322,7 +321,7 @@ export class ChartsService {
             pieHole: 0.55,
             width: 'auto',
             height: 'auto',
-            vAxis:{
+            vAxis: {
               title: 'Numero Movimenti'
             }
           }
@@ -349,9 +348,9 @@ export class ChartsService {
       this._sport.next('No');
     }
   }
-/** Prepare the chart relative to 'spectra' using two parameters
-   * @param spectra it is the specified spectra that you want to graph
-   */
+  /** Prepare the chart relative to 'spectra' using two parameters
+     * @param spectra it is the specified spectra that you want to graph
+     */
   prepareLineChart(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[spectra]['frequencies'].length; x++) {
@@ -361,9 +360,9 @@ export class ChartsService {
       ]);
     }
   }
- /** Prepare the chart relative to 'spectra' using one parameter
-   * @param spectra it is the specified spectra that you want to graph
-   */
+  /** Prepare the chart relative to 'spectra' using one parameter
+    * @param spectra it is the specified spectra that you want to graph
+    */
   prepareLineChartPlot(spectra: string) {
     this.aggregateData = [];
     for (let x = 0; x < this.receivedData[spectra].length; x++) {

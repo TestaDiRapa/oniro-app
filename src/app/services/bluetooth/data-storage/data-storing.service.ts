@@ -88,8 +88,8 @@ export class DataStoringService {
     /**
      * The method checks if the device is connected to the Internet. If it's not, then it will 
      * store the sleep data in memory, otherwise it sends them to the server
-     * @param terminate an optional parameter, true only when has to send the last packet of
-     * the recording
+     * 
+     * @param terminate an optional parameter, true only when has to send the last packet of the recording
      */
     sendData(terminate = false) {
         if (this.network.type !== this.network.Connection.NONE) {
@@ -103,6 +103,7 @@ export class DataStoringService {
      * This method sends all the packet in the list to the server. If the response is successful,
      * then the sent packet are removed from the list. In addition, if the terminate parameter is true,
      * the method asks the server to elaboorate the data.
+     *
      * @param terminate a boolean parameter
      */
     private sendToServer(terminate: boolean) {
