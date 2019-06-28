@@ -13,6 +13,7 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { ControllerService } from 'src/app/services/controllerService.service';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-settings',
@@ -37,14 +38,15 @@ export class SettingsPage implements OnInit {
   private DESTINATION_TYPE: number;
 
   constructor(
-    private userService: UserService,
-    private authService: AuthenticationService,
-    private menuCtrl: MenuController,
-    private controllerService: ControllerService,
     private alertCtrl: AlertController,
+    private authService: AuthenticationService,
     private camera: Camera,
+    private controllerService: ControllerService,
+    private file: File,
+    private menuCtrl: MenuController,
+    private network: Network,
     private platform: Platform,
-    private file: File
+    private userService: UserService,
   ) { }
 
   /**
@@ -133,58 +135,25 @@ export class SettingsPage implements OnInit {
    * This method is called every time a user wants to modify his age.
    */
   onAgeModify() {
-    this.alertCtrl.create({
-      header: 'Vuoi cambiare la tua età?',
-      inputs: [
-        {
-          name: 'eta',
-          type: 'number',
-          placeholder: '__',
-        }],
-      buttons: [
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: (inputs: { eta: number }) => {
-            const eta = inputs.eta.toString().trim();
-            if (eta.length > 0) {
-              const key = ['age'];
-              const value = [eta];
-              this.onSubmit(key, value, 'age');
-            }
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => { }
-        }]
-    }).then(alert => alert.present());
-  }
-
-  /**
-   * This method is called every time a user wants to modify his phone number.
-   */
-  onPhoneModify() {
-    this.authService.getUser().then(user => {
+    if (this.networkCheck()) {
       this.alertCtrl.create({
-        header: 'Vuoi cambiare il tuo numero di cellulare?',
+        header: 'Vuoi cambiare la tua età?',
         inputs: [
           {
-            name: 'telefono',
-            type: 'tel',
-            placeholder: user.phone_number,
+            name: 'eta',
+            type: 'number',
+            placeholder: '__',
           }],
         buttons: [
           {
             text: 'OK',
             role: 'confirm',
-            handler: (inputs: { telefono: string }) => {
-              const phone = inputs.telefono.trim();
-              if (phone.length > 0) {
-                const key = ['phone_number'];
-                const value = [phone];
-                this.onSubmit(key, value, 'phone');
+            handler: (inputs: { eta: number }) => {
+              const eta = inputs.eta.toString().trim();
+              if (eta.length > 0) {
+                const key = ['age'];
+                const value = [eta];
+                this.onSubmit(key, value, 'age');
               }
             }
           },
@@ -194,111 +163,152 @@ export class SettingsPage implements OnInit {
             handler: () => { }
           }]
       }).then(alert => alert.present());
-    });
+    }
+  }
+
+  /**
+   * This method is called every time a user wants to modify his phone number.
+   */
+  onPhoneModify() {
+    if (this.networkCheck()) {
+      this.authService.getUser().then(user => {
+        this.alertCtrl.create({
+          header: 'Vuoi cambiare il tuo numero di cellulare?',
+          inputs: [
+            {
+              name: 'telefono',
+              type: 'tel',
+              placeholder: user.phone_number,
+            }],
+          buttons: [
+            {
+              text: 'OK',
+              role: 'confirm',
+              handler: (inputs: { telefono: string }) => {
+                const phone = inputs.telefono.trim();
+                if (phone.length > 0) {
+                  const key = ['phone_number'];
+                  const value = [phone];
+                  this.onSubmit(key, value, 'phone');
+                }
+              }
+            },
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => { }
+            }]
+        }).then(alert => alert.present());
+      });
+    }
   }
 
   /**
    * This method is called every time a user wants to modify his password.
    */
   onPswModify() {
-    this.alertCtrl.create({
-      header: 'Vuoi cambiare la password?',
-      inputs: [
-        {
-          name: 'oldp',
-          type: 'password',
-          placeholder: 'Old password',
-        },
-        {
-          name: 'newp',
-          type: 'password',
-          placeholder: 'New password',
-        }],
-      buttons: [
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: (inputs: { oldp: string, newp: string }) => {
-            const oldp = inputs.oldp.trim();
-            const newp = inputs.newp.trim();
-            if (newp.length >= 8) {
-              const key = ['old_password', 'new_password'];
-              const value = [oldp, newp];
-              this.onSubmit(key, value, 'psw');
-            } else {
-              this.alertCtrl.create({
-                header: 'Error',
-                message: 'Inserire password corretta: almeno 8 caratteri',
-                buttons: [
-                  {
-                    text: 'OK'
-                  }
-                ]
-              }).then(alert => {
-                alert.present();
-              });
+    if (this.networkCheck()) {
+      this.alertCtrl.create({
+        header: 'Vuoi cambiare la password?',
+        inputs: [
+          {
+            name: 'oldp',
+            type: 'password',
+            placeholder: 'Old password',
+          },
+          {
+            name: 'newp',
+            type: 'password',
+            placeholder: 'New password',
+          }],
+        buttons: [
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: (inputs: { oldp: string, newp: string }) => {
+              const oldp = inputs.oldp.trim();
+              const newp = inputs.newp.trim();
+              if (newp.length >= 8) {
+                const key = ['old_password', 'new_password'];
+                const value = [oldp, newp];
+                this.onSubmit(key, value, 'psw');
+              } else {
+                this.alertCtrl.create({
+                  header: 'Error',
+                  message: 'Inserire password corretta: almeno 8 caratteri',
+                  buttons: [
+                    {
+                      text: 'OK'
+                    }
+                  ]
+                }).then(alert => {
+                  alert.present();
+                });
+              }
             }
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => { }
-        }]
-    }).then(alert => alert.present());
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          }]
+      }).then(alert => alert.present());
+    }
   }
 
   /**
    * This method is called every time a user wants to modify his address.
    */
   onAddrModify() {
-    this.alertCtrl.create({
-      header: 'Vuoi cambiare indirizzo?',
-      inputs: [
-        {
-          name: 'via',
-          type: 'text',
-          placeholder: 'Via: ',
+    if (this.networkCheck()) {
+      this.alertCtrl.create({
+        header: 'Vuoi cambiare indirizzo?',
+        inputs: [
+          {
+            name: 'via',
+            type: 'text',
+            placeholder: 'Via: ',
 
-        },
-        {
-          name: 'civico',
-          type: 'number',
-          placeholder: 'Civico:',
-        },
-        {
-          name: 'citta',
-          type: 'text',
-          placeholder: 'Città: ',
-        },
-        {
-          name: 'provincia',
-          type: 'text',
-          placeholder: 'Provincia: ',
-        }],
-      buttons: [
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: (inputs: { via: string, civico: number, citta: string, provincia: string }) => {
-            const road = inputs.via;
-            const numb = inputs.civico.toString();
-            const city = inputs.citta;
-            const prov = inputs.provincia;
-            if (road.length > 0 && numb.length > 0 && city.length > 0 && prov.length > 0) {
-              const address = road + ' ' + numb + ' ' + city + ' ' + prov;
-              const key = ['address'];
-              const value = [address];
-              this.onSubmit(key, value, 'addr');
+          },
+          {
+            name: 'civico',
+            type: 'number',
+            placeholder: 'Civico:',
+          },
+          {
+            name: 'citta',
+            type: 'text',
+            placeholder: 'Città: ',
+          },
+          {
+            name: 'provincia',
+            type: 'text',
+            placeholder: 'Provincia: ',
+          }],
+        buttons: [
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: (inputs: { via: string, civico: number, citta: string, provincia: string }) => {
+              const road = inputs.via;
+              const numb = inputs.civico.toString();
+              const city = inputs.citta;
+              const prov = inputs.provincia;
+              if (road.length > 0 && numb.length > 0 && city.length > 0 && prov.length > 0) {
+                const address = road + ' ' + numb + ' ' + city + ' ' + prov;
+                const key = ['address'];
+                const value = [address];
+                this.onSubmit(key, value, 'addr');
+              }
             }
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => { }
-        }]
-    }).then(alert => alert.present());
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          }]
+      }).then(alert => alert.present());
+    }
   }
 
   /**
@@ -306,22 +316,24 @@ export class SettingsPage implements OnInit {
    * It allows the user to takes a photo in order to update the profile picture.
    */
   accessCamera() {
-    const options: CameraOptions = {
-      quality: 100,
-      targetHeight: 350,
-      targetWidth: 350,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      destinationType: this.DESTINATION_TYPE,
-      mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation: true
-    };
-    this.camera.getPicture(options).then((imgData) => {
-      this.urlImgage = (window as any).Ionic.WebView.convertFileSrc(imgData);
-      this.uploadPhoto(imgData);
-      this.isEmpty = false;
-    }, (err) => {
-      this.controllerService.createAlertCtrl('Error', err);
-    });
+    if (this.networkCheck()) {
+      const options: CameraOptions = {
+        quality: 100,
+        targetHeight: 350,
+        targetWidth: 350,
+        sourceType: this.camera.PictureSourceType.CAMERA,
+        destinationType: this.DESTINATION_TYPE,
+        mediaType: this.camera.MediaType.PICTURE,
+        correctOrientation: true
+      };
+      this.camera.getPicture(options).then((imgData) => {
+        this.urlImgage = (window as any).Ionic.WebView.convertFileSrc(imgData);
+        this.uploadPhoto(imgData);
+        this.isEmpty = false;
+      }, (err) => {
+        this.controllerService.createAlertCtrl('Error', err);
+      });
+    }
   }
 
   /**
@@ -329,21 +341,23 @@ export class SettingsPage implements OnInit {
    * It allows to choose a new image in the phone gallery, to update the profile picture.
    */
   accessGallery() {
-    const options: CameraOptions = {
-      quality: 100,
-      targetHeight: 350,
-      targetWidth: 350,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      destinationType: this.DESTINATION_TYPE,
-      mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation: true,
-    };
-    this.camera.getPicture(options).then(imgData => {
-      this.uploadPhoto(imgData);
-      this.isEmpty = false;
-    }, (err) => {
-      this.controllerService.createAlertCtrl('Error', err);
-    });
+    if (this.networkCheck()) {
+      const options: CameraOptions = {
+        quality: 100,
+        targetHeight: 350,
+        targetWidth: 350,
+        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+        destinationType: this.DESTINATION_TYPE,
+        mediaType: this.camera.MediaType.PICTURE,
+        correctOrientation: true,
+      };
+      this.camera.getPicture(options).then(imgData => {
+        this.uploadPhoto(imgData);
+        this.isEmpty = false;
+      }, (err) => {
+        this.controllerService.createAlertCtrl('Error', err);
+      });
+    }
   }
 
   /**
@@ -399,6 +413,21 @@ export class SettingsPage implements OnInit {
           });
         });
       });
+    }
+  }
+
+  private networkCheck() {
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione ad internet per modificare le impostazioni',
+        buttons: [{
+          text: 'Ok'
+        }]
+      }).then(alert => { alert.present(); });
+      return false;
+    } else {
+      return true;
     }
   }
 

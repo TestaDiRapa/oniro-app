@@ -20,6 +20,7 @@ import { UserService } from 'src/app/services/userService.service';
 import { ControllerService } from 'src/app/services/controllerService.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Router } from '@angular/router';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-gmaps',
@@ -37,13 +38,14 @@ export class GmapsPage implements OnInit {
   add: string[] = [];
 
   constructor(
-    private menuCtrl: MenuController,
-    private getCoord: GetCoordService,
-    private controllerService: ControllerService,
-    private userService: UserService,
-    private diagnostic: Diagnostic,
     private alertCtrl: AlertController,
-    private router: Router
+    private controllerService: ControllerService,
+    private diagnostic: Diagnostic,
+    private getCoord: GetCoordService,
+    private menuCtrl: MenuController,
+    private network: Network,
+    private router: Router,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -51,33 +53,44 @@ export class GmapsPage implements OnInit {
   }
 
   /**
-   * Each time the page is loaded the map is load.
+   * Each time the page is loaded the map is loaded.
    */
   ionViewWillEnter() {
-    Environment.setBackgroundColor('#07306D');
-    //check if the location is enabled
-    this.diagnostic.isGpsLocationEnabled().then((enabled) => {
-      if (enabled) {
-        this.diagnostic.isLocationEnabled().then((enb) => {
-          if (enb) {
-            this.loadMap(); //show the map
-          }
-        });
-      } else { //show an alert error
-        this.alertCtrl.create({
-          header: 'Errore',
-          message: 'Abilita la localizzazione se vuoi vedere la mappa',
-          buttons: [{
-            text: 'OK',
-            handler: () => {
-              this.router.navigate(['/home']);
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/home']); }
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      Environment.setBackgroundColor('#07306D');
+      //check if the location is enabled
+      this.diagnostic.isGpsLocationEnabled().then((enabled) => {
+        if (enabled) {
+          this.diagnostic.isLocationEnabled().then((enb) => {
+            if (enb) {
+              this.loadMap(); //show the map
             }
-          }]
-        }).then(alert => {
-          alert.present();
-        });
-      }
-    });
+          });
+        } else { //show an alert error
+          this.alertCtrl.create({
+            header: 'Errore',
+            message: 'Abilita la localizzazione se vuoi vedere la mappa',
+            buttons: [{
+              text: 'OK',
+              handler: () => {
+                this.router.navigate(['/home']);
+              }
+            }]
+          }).then(alert => {
+            alert.present();
+          });
+        }
+      });
+    }
   }
 
   /**

@@ -10,9 +10,10 @@ import { AuthenticationService } from '../services/authentication/authentication
 import { Paziente } from '../register/paziente.model';
 import { Medico } from '../register/medico.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MenuController } from '@ionic/angular';
+import { MenuController, AlertController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { ControllerService } from '../services/controllerService.service';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @Component({
@@ -28,15 +29,17 @@ export class LoginPage implements OnInit {
 
 
   constructor(
-    private router: Router,
+    private alertCtrl: AlertController,
     private authService: AuthenticationService,
+    public controllerService: ControllerService,
     private http: HttpClient,
     private menuCtrl: MenuController,
-    public controllerService: ControllerService,
+    private network: Network,
+    private router: Router
   ) { }
 
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   /**
    * This method is called every time he ion-segment value changes.
@@ -64,56 +67,65 @@ export class LoginPage implements OnInit {
    * @param form The current form of the page.
    */
   onSubmit(form: NgForm) {
-    if (!form.valid) {
-      return;
-    }
-    this.menuCtrl.enable(true);
-    if (this.isUser) {
-      this.username = form.value.cf;
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'Nessuna connessione a internet, riprova più tardi',
+        buttons: [{
+          text: 'Ok'
+        }]
+      }).then(alert => { alert.present(); });
     } else {
-      this.username = form.value.albo;
-    }
-    this.password = form.value.password;
-    this.controllerService.onCreateLoadingCtrl();
-    this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
-      if (res.status === 'ok') {
-        const authToken = res.access_token;
-        const authExp = res.access_token_exp;
-        this.authService.setAuthToken(authToken, authExp);
-
-        const refToken = res.refresh_token;
-        const refExp = res.refresh_token_exp;
-        this.authService.setRefreshToken(refToken, refExp);
-
-        this.http.get<any>(`http://${environment.serverIp}/me`, {
-          headers: new HttpHeaders({ Authorization: `Bearer ${authToken}` })
-        }).subscribe(response => {
-          if (response.status === 'ok') {
-            let imagePath = '';
-            if (response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
-              imagePath = response.message['profile_picture'];
-            }
-            this.authService.isAuthenticated = true;
-            if (this.isUser) {
-              this.authService.setUser(new Paziente(response.message['name'], response.message['surname'], null,
-                response.message['phone_number'], response.message['email'], response.message['_id'],
-                response.message['age'], imagePath));
-              this.path = 'home';
-            } else {
-              this.authService.setUser(new Medico(response.message['name'], response.message['surname'], null,
-                response.message['phone_number'], response.message['email'], response.message['_id'],
-                response.message['address'], imagePath));
-              this.path = 'homedoc';
-            }
-            this.controllerService.onDismissLoaderCtrl();
-            this.router.navigateByUrl('/' + this.path);
-          }
-        });
-      } else {
-        this.controllerService.onDismissLoaderCtrl();
-        this.controllerService.createAlertCtrl('', res.message);
+      if (!form.valid) {
+        return;
       }
-    });
-  }
+      this.menuCtrl.enable(true);
+      if (this.isUser) {
+        this.username = form.value.cf;
+      } else {
+        this.username = form.value.albo;
+      }
+      this.password = form.value.password;
+      this.controllerService.onCreateLoadingCtrl();
+      this.authService.login(this.username, this.password, this.isUser).subscribe(res => {
+        if (res.status === 'ok') {
+          const authToken = res.access_token;
+          const authExp = res.access_token_exp;
+          this.authService.setAuthToken(authToken, authExp);
 
+          const refToken = res.refresh_token;
+          const refExp = res.refresh_token_exp;
+          this.authService.setRefreshToken(refToken, refExp);
+
+          this.http.get<any>(`http://${environment.serverIp}/me`, {
+            headers: new HttpHeaders({ Authorization: `Bearer ${authToken}` })
+          }).subscribe(response => {
+            if (response.status === 'ok') {
+              let imagePath = '';
+              if (response.message.hasOwnProperty('profile_picture') && response.message['profile_picture']) {
+                imagePath = response.message['profile_picture'];
+              }
+              this.authService.isAuthenticated = true;
+              if (this.isUser) {
+                this.authService.setUser(new Paziente(response.message['name'], response.message['surname'], null,
+                  response.message['phone_number'], response.message['email'], response.message['_id'],
+                  response.message['age'], imagePath));
+                this.path = 'home';
+              } else {
+                this.authService.setUser(new Medico(response.message['name'], response.message['surname'], null,
+                  response.message['phone_number'], response.message['email'], response.message['_id'],
+                  response.message['address'], imagePath));
+                this.path = 'homedoc';
+              }
+              this.controllerService.onDismissLoaderCtrl();
+              this.router.navigateByUrl('/' + this.path);
+            }
+          });
+        } else {
+          this.controllerService.onDismissLoaderCtrl();
+          this.controllerService.createAlertCtrl('', res.message);
+        }
+      });
+    }
+  }
 }

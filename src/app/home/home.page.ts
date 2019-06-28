@@ -32,9 +32,10 @@ export class HomePage implements OnInit {
   public fact = '';
 
   constructor(
+    private alertCtrl: AlertController,
+    private controllerService: ControllerService,
     private dataMngr: DataStoringService,
     private facts: FunFactService,
-    private controllerService: ControllerService,
     private modalCtrl: ModalController,
     private network: Network,
     private router: Router,
@@ -101,24 +102,34 @@ export class HomePage implements OnInit {
    * This method send habits to the server and start monitoring the patient's sleep.
    */
   onStartMonitoring() {
-    const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
-    this.controllerService.onCreateLoadingCtrl();
-    this.user.putMyHabits(abitudine).then(observable => {
-      observable.subscribe(
-        response => {
-          if (response.status === 'ok') {
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/home']); }
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      const abitudine = new Abitudini(this.caffe, this.drink, this.isSport, this.isCena);
+      this.controllerService.onCreateLoadingCtrl();
+      this.user.putMyHabits(abitudine).then(observable => {
+        observable.subscribe(
+          response => {
+            if (response.status === 'ok') {
+              this.controllerService.onDismissLoaderCtrl();
+              this.router.navigate(['/home/record']);
+            } else {
+              this.controllerService.onDismissLoaderCtrl();
+              this.controllerService.createAlertCtrl('Error', response.message);
+            }
+          },
+          error => {
             this.controllerService.onDismissLoaderCtrl();
-            this.router.navigate(['/home/record']);
-          } else {
-            this.controllerService.onDismissLoaderCtrl();
-            this.controllerService.createAlertCtrl('Error', response.message);
-          }
-        },
-        error => {
-          this.controllerService.onDismissLoaderCtrl();
-          this.controllerService.createAlertCtrl('Error', error.message);
-        });
-    });
+            this.controllerService.createAlertCtrl('Error', error.message);
+          });
+      });
+    }
   }
-
 }

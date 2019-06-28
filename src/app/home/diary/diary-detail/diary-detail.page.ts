@@ -14,6 +14,7 @@ import { Bevanda } from '../../add-abitudini/bevanda.model';
 import 'hammerjs';
 import { ApneaEvent } from 'src/app/services/bluetooth/data-storage/apnea-event.model';
 import { ApneaPopoverComponent } from './apnea-popover/apnea-popover.component';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-diary-detail',
@@ -48,6 +49,7 @@ export class DiaryDetailPage implements OnInit {
     private chartsService: ChartsService,
     private controllerService: ControllerService,
     private modalCtrl: ModalController,
+    private network: Network,
     private popoverCtrl: PopoverController,
     private router: Router,
     private userService: UserService
@@ -61,56 +63,77 @@ export class DiaryDetailPage implements OnInit {
    * It also allows to plot some charts to better evaluate the events occured in the night.
    */
   ionViewWillEnter() {
-    if (!this.chartsService.dataId) {
-      this.router.navigate(['/home/diary']);
-    }
-    this.controllerService.onCreateLoadingCtrl();
-    this.currentDate = this.chartsService.currentDate;
-    this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
-    this.chartsService.caffe.subscribe(data => { this.caffe = data });
-    this.chartsService.cena.subscribe(data => { this.cena = data });
-    this.chartsService.drink.subscribe(data => { this.drink = data });
-    this.chartsService.sport.subscribe(data => { this.sport = data });
-    this.chartsService.charts.then(charts => {
-      this.charts = charts;
-      this.controllerService.onDismissLoaderCtrl();
-      if (this.charts.length === 0) {
-        this.alertCtrl
-          .create({
-            header: 'Error',
-            message: 'Si è verificato un errore',
-            buttons: [
-              {
-                text: 'Ok',
-                handler: () => {
-                  this.router.navigate(['/home/diary']);
-                }
-              }
-            ]
-          })
-          .then(alert => {
-            alert.present();
-          });
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/home']); }
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      if (!this.chartsService.dataId) {
+        this.router.navigate(['/home/diary']);
       }
-    });
-    this.isLoaded = true;
+      this.controllerService.onCreateLoadingCtrl();
+      this.currentDate = this.chartsService.currentDate;
+      this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
+      this.chartsService.caffe.subscribe(data => { this.caffe = data });
+      this.chartsService.cena.subscribe(data => { this.cena = data });
+      this.chartsService.drink.subscribe(data => { this.drink = data });
+      this.chartsService.sport.subscribe(data => { this.sport = data });
+      this.chartsService.charts.then(charts => {
+        this.charts = charts;
+        this.controllerService.onDismissLoaderCtrl();
+        if (this.charts.length === 0) {
+          this.alertCtrl
+            .create({
+              header: 'Error',
+              message: 'Si è verificato un errore',
+              buttons: [
+                {
+                  text: 'Ok',
+                  handler: () => {
+                    this.router.navigate(['/home/diary']);
+                  }
+                }
+              ]
+            })
+            .then(alert => {
+              alert.present();
+            });
+        }
+      });
+      this.isLoaded = true;
+    }
   }
 
   /**
-   * This method is called every time the patient clicks on the "Avvida il medico" button.
+   * This method is called every time the patient clicks on the "Avvisa il medico" button.
    * It allows to show a model in order to chose the doctor to send the request to.
    */
   onChooseDoctor() {
-    this.modalCtrl.create({
-      component: SendModalPage
-    }).then(modal => {
-      modal.present();
-      modal.onDidDismiss().then(result => {
-        if (result.data && result.data.hasOwnProperty('_id')) {
-          this.sendRecToDoctor(result.data._id, this.chartsService.dataId);
-        }
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'Nessuna connessione a internet, riprova più tardi',
+        buttons: [{
+          text: 'Ok'
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      this.modalCtrl.create({
+        component: SendModalPage
+      }).then(modal => {
+        modal.present();
+        modal.onDidDismiss().then(result => {
+          if (result.data && result.data.hasOwnProperty('_id')) {
+            this.sendRecToDoctor(result.data._id, this.chartsService.dataId);
+          }
+        });
       });
-    });
+    }
   }
 
   /**

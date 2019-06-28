@@ -10,8 +10,9 @@ import { SegmentChangeEventDetail } from '@ionic/core';
 import { Paziente } from './paziente.model';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Medico } from './medico.model';
-import { MenuController } from '@ionic/angular';
+import { MenuController, AlertController } from '@ionic/angular';
 import { ControllerService } from '../services/controllerService.service';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-register',
@@ -23,21 +24,23 @@ export class RegisterPage implements OnInit {
   private paziente: Paziente;
   private medico: Medico;
   email: RegExp = new RegExp(
-// tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: max-line-length
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
   cf: RegExp = new RegExp(
-// tslint:disable-next-line: max-line-length
-/^[A-Za-z]{6}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Za-z]{1}$/
+    // tslint:disable-next-line: max-line-length
+    /^[A-Za-z]{6}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Za-z]{1}$/
   );
   constructor(
-    private router: Router,
+    private alertCtrl: AlertController,
     private authService: AuthenticationService,
+    public controllerService: ControllerService,
     private menuCtrl: MenuController,
-    public controllerService: ControllerService
-  ) {}
+    private network: Network,
+    private router: Router,
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   /**
    * This method is called when the form is submitted.
@@ -49,109 +52,119 @@ export class RegisterPage implements OnInit {
    * @param form The submitted form on the page.
    */
   onSubmit(form: NgForm) {
-    if (form.valid) {
-      this.menuCtrl.enable(true);
-      if (this.isUser) {
-        if (this.email.test(form.value['email'])) {
-          if (this.cf.test(form.value['cf'])) {
-          this.paziente = new Paziente(
-            form.value['nome'],
-            form.value['cognome'],
-            form.value['password'],
-            form.value['telefono'],
-            form.value['email'],
-            form.value['cf'],
-            form.value['eta'],
-            ''
-          );
-          this.controllerService.onCreateLoadingCtrl();
-          this.authService
-            .register(this.paziente, this.isUser)
-            .subscribe(resData => {
-              if (resData.status === 'ok') {
-                this.authService.isAuthenticated = true;
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'Nessuna connessione a internet, riprova più tardi',
+        buttons: [{
+          text: 'Ok'
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      if (form.valid) {
+        this.menuCtrl.enable(true);
+        if (this.isUser) {
+          if (this.email.test(form.value['email'])) {
+            if (this.cf.test(form.value['cf'])) {
+              this.paziente = new Paziente(
+                form.value['nome'],
+                form.value['cognome'],
+                form.value['password'],
+                form.value['telefono'],
+                form.value['email'],
+                form.value['cf'],
+                form.value['eta'],
+                ''
+              );
+              this.controllerService.onCreateLoadingCtrl();
+              this.authService
+                .register(this.paziente, this.isUser)
+                .subscribe(resData => {
+                  if (resData.status === 'ok') {
+                    this.authService.isAuthenticated = true;
 
-                const authToken = resData.access_token;
-                const authExp = resData.access_token_exp;
-                this.authService.setAuthToken(authToken, authExp);
+                    const authToken = resData.access_token;
+                    const authExp = resData.access_token_exp;
+                    this.authService.setAuthToken(authToken, authExp);
 
-                const refToken = resData.refresh_token;
-                const refExp = resData.refresh_token_exp;
-                this.authService.setRefreshToken(refToken, refExp);
+                    const refToken = resData.refresh_token;
+                    const refExp = resData.refresh_token_exp;
+                    this.authService.setRefreshToken(refToken, refExp);
 
-                this.authService.setUser(this.paziente);
+                    this.authService.setUser(this.paziente);
 
-                this.controllerService.createAlertCtrl(
-                  'Success',
-                  'Registrazione effettuata con successo!'
-                );
-                this.router.navigateByUrl('/home');
-              } else {
-                this.controllerService.createAlertCtrl(
-                  'Error',
-                  resData.message
-                );
-              }
-            });
+                    this.controllerService.createAlertCtrl(
+                      'Success',
+                      'Registrazione effettuata con successo!'
+                    );
+                    this.router.navigateByUrl('/home');
+                  } else {
+                    this.controllerService.createAlertCtrl(
+                      'Error',
+                      resData.message
+                    );
+                  }
+                });
+            } else {
+              this.controllerService.createAlertCtrl('Errore', 'Codice Fiscale non corretto!');
+            }
           } else {
-            this.controllerService.createAlertCtrl('Errore', 'Codice Fiscale non corretto!');
+            this.controllerService.createAlertCtrl('Errore', 'E-mail non corretta!');
           }
         } else {
-          this.controllerService.createAlertCtrl('Errore', 'E-mail non corretta!');
+          if (this.email.test(form.value['email'])) {
+            const address =
+              form.value['via'] +
+              ' ' +
+              form.value['civico'] +
+              ' ' +
+              form.value['citta'] +
+              ' ' +
+              form.value['provincia'];
+            this.medico = new Medico(
+              form.value['nome'],
+              form.value['cognome'],
+              form.value['password'],
+              form.value['telefono'],
+              form.value['email'],
+              form.value['idalbo'],
+              address,
+              ''
+            );
+
+            this.authService
+              .register(this.medico, this.isUser)
+              .subscribe(resData => {
+                if (resData.status === 'ok') {
+                  this.controllerService.onDismissLoaderCtrl();
+
+                  const authToken = resData.access_token;
+                  const authExp = resData.access_token_exp;
+                  this.authService.setAuthToken(authToken, authExp);
+
+                  const refToken = resData.refresh_token;
+                  const refExp = resData.refresh_token_exp;
+                  this.authService.setRefreshToken(refToken, refExp);
+
+                  this.authService.setUser(this.medico);
+
+                  this.controllerService.createAlertCtrl(
+                    'Success',
+                    'Registrazione effettuata con successo!'
+                  );
+                  this.router.navigateByUrl('/homedoc');
+                } else {
+                  this.controllerService.onDismissLoaderCtrl();
+                  this.controllerService.createAlertCtrl('Error', resData.message);
+                }
+              });
+          } else {
+            this.controllerService.createAlertCtrl('Errore', 'E-mail non valida!');
+          }
         }
       } else {
-        if (this.email.test(form.value['email'])) {
-        const address =
-          form.value['via'] +
-          ' ' +
-          form.value['civico'] +
-          ' ' +
-          form.value['citta'] +
-          ' ' +
-          form.value['provincia'];
-        this.medico = new Medico(
-          form.value['nome'],
-          form.value['cognome'],
-          form.value['password'],
-          form.value['telefono'],
-          form.value['email'],
-          form.value['idalbo'],
-          address,
-          ''
-        );
-
-        this.authService
-          .register(this.medico, this.isUser)
-          .subscribe(resData => {
-            if (resData.status === 'ok') {
-              this.controllerService.onDismissLoaderCtrl();
-
-              const authToken = resData.access_token;
-              const authExp = resData.access_token_exp;
-              this.authService.setAuthToken(authToken, authExp);
-
-              const refToken = resData.refresh_token;
-              const refExp = resData.refresh_token_exp;
-              this.authService.setRefreshToken(refToken, refExp);
-
-              this.authService.setUser(this.medico);
-
-              this.controllerService.createAlertCtrl(
-                'Success',
-                'Registrazione effettuata con successo!'
-              );
-              this.router.navigateByUrl('/homedoc');
-            } else {
-              this.controllerService.onDismissLoaderCtrl();
-              this.controllerService.createAlertCtrl('Error', resData.message);
-            }
-          });
-      } else {
-        this.controllerService.createAlertCtrl('Errore', 'E-mail non valida!');
+        this.controllerService.createAlertCtrl('Error', 'Form non valido!');
       }
-    }
-    } else {
-      this.controllerService.createAlertCtrl('Error', 'Form non valido!');
     }
   }
 
