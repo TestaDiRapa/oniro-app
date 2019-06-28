@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 import 'hammerjs';
 import { ApneaPopoverComponent } from './apnea-popover/apnea-popover.component';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class PatientDetailPage implements OnInit {
     private alertCtrl: AlertController,
     private chartsService: ChartsService,
     private controllerService: ControllerService,
+    private network: Network,
     private popoverCtrl: PopoverController,
     private router: Router
   ) { }
@@ -59,40 +61,51 @@ export class PatientDetailPage implements OnInit {
    * It also allows to plot some charts to better evaluate the events occured in the night.
    */
   ionViewWillEnter() {
-    if (!this.chartsService.dataId) {
-      this.router.navigate(['/homedoc']);
-    }
-    this.cf = this.chartsService.cf;
-    this.date = this.chartsService.dataId.toString().substr(0, 10);
-    this.controllerService.onCreateLoadingCtrl();
-    this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
-    this.chartsService.caffe.subscribe(data => { this.caffe = data });
-    this.chartsService.cena.subscribe(data => { this.cena = data });
-    this.chartsService.drink.subscribe(data => { this.drink = data });
-    this.chartsService.sport.subscribe(data => { this.sport = data });
-    this.chartsService.charts.then(charts => {
-      this.charts = charts;
-      this.controllerService.onDismissLoaderCtrl();
-      if (this.charts.length === 0) {
-        this.alertCtrl
-          .create({
-            header: 'Error',
-            message: 'Si è verificato un errore',
-            buttons: [
-              {
-                text: 'Ok',
-                handler: () => {
-                  this.router.navigate(['/home']);
-                }
-              }
-            ]
-          })
-          .then(alert => {
-            alert.present();
-          });
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/homedoc']); }
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+      if (!this.chartsService.dataId) {
+        this.router.navigate(['/homedoc']);
       }
-    });
-    this.isLoaded = true;
+      this.cf = this.chartsService.cf;
+      this.date = this.chartsService.dataId.toString().substr(0, 10);
+      this.controllerService.onCreateLoadingCtrl();
+      this.chartsService.aggregate.subscribe(data => { this.aggregate = data });
+      this.chartsService.caffe.subscribe(data => { this.caffe = data });
+      this.chartsService.cena.subscribe(data => { this.cena = data });
+      this.chartsService.drink.subscribe(data => { this.drink = data });
+      this.chartsService.sport.subscribe(data => { this.sport = data });
+      this.chartsService.charts.then(charts => {
+        this.charts = charts;
+        this.controllerService.onDismissLoaderCtrl();
+        if (this.charts.length === 0) {
+          this.alertCtrl
+            .create({
+              header: 'Error',
+              message: 'Si è verificato un errore',
+              buttons: [
+                {
+                  text: 'Ok',
+                  handler: () => {
+                    this.router.navigate(['/home']);
+                  }
+                }
+              ]
+            })
+            .then(alert => {
+              alert.present();
+            });
+        }
+      });
+      this.isLoaded = true;
+    }
   }
 
   /**

@@ -3,9 +3,10 @@
  * it is possible to see the diary page of all the patients.
  */
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { DoctorService } from 'src/app/services/doctorService.service';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-lista-diario-pazienti',
@@ -27,8 +28,10 @@ export class ListaDiarioPazientiPage implements OnInit {
   }> = [];
 
   constructor(
+    private alertCtrl: AlertController,
     private doctorService: DoctorService,
     private menuCtrl: MenuController,
+    private network: Network,
     private router: Router
   ) { }
 
@@ -41,6 +44,21 @@ export class ListaDiarioPazientiPage implements OnInit {
     this.findPatients();
   }
 
+  /**
+   * Checks the internet connection
+   */
+  ionViewWillEnter() {
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/homedoc']); }
+        }]
+      }).then(alert => { alert.present(); });
+    }
+  }
 
   /**
    * This method allows to find all the subscripted patients, thanks to DoctorService.

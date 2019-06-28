@@ -9,6 +9,8 @@ import { AuthenticationService, Respons } from 'src/app/services/authentication/
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ChartsService } from 'src/app/services/charts.service';
+import { AlertController } from '@ionic/angular';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @Component({
@@ -23,9 +25,11 @@ export class PatientPage implements OnInit {
 
   constructor(
     private activatedRouter: ActivatedRoute,
+    private alertCtrl: AlertController,
     private authService: AuthenticationService,
-    private http: HttpClient,
     private charts: ChartsService,
+    private http: HttpClient,
+    private network: Network,
     private router: Router
   ) { }
 
@@ -57,6 +61,22 @@ export class PatientPage implements OnInit {
           });
       });
     });
+  }
+
+    /**
+   * Checks the internet connection
+   */
+  ionViewWillEnter() {
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/homedoc']); }
+        }]
+      }).then(alert => { alert.present(); });
+    }
   }
 
   /**
