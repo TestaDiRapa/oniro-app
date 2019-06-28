@@ -151,7 +151,6 @@ export class GmapsPage implements OnInit {
         // tslint:disable: no-string-literal
         const doctmp = res['payload'];
         for (const doctor of doctmp) {
-          console.log(doctor['doctor']['address']);
           this.addresses.push(doctor['doctor']['address']);
           let tmp = {
             id: doctor['doctor']['_id'],

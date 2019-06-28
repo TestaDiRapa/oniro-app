@@ -78,7 +78,6 @@ export class DiaryPage implements OnInit {
             })
           }
         ).subscribe(res => {
-          console.log(res);
           this.preview = res['payload'];
           this.preview.sort((a: Data, b: Data) => {
             if (a._id < b._id) {
