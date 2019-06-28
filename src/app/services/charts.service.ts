@@ -154,7 +154,7 @@ export class ChartsService {
   }
   /**This method retrieves information if the patient has had a late dinner.
  *
- * @returns {Observable} which represents information about patient's dinner.
+ * @returns {Observable<string>} which represents information about patient's dinner.
  */
   get cena() {
     return this._cena.asObservable();
@@ -310,7 +310,7 @@ export class ChartsService {
           }
         });
 
-        this.prepareLineChartMovements('plot_movements');
+        this.prepareLineChartPlot('plot_movements');
         this._charts.push({
           title: 'Movimenti',
           type: 'LineChart',
@@ -371,14 +371,5 @@ export class ChartsService {
       this.aggregateData.push([time, this.receivedData[spectra][x]]);
     }
   }
-/** Prepare the movements chart
-   *  @param lineChart it specifies which parameter you want to graph
-   */
-  prepareLineChartMovements(lineChart: string) {
-    this.aggregateData = [];
-    for (let x = 0; x < this.receivedData[lineChart].length; x++) {
-      const time = new Date(this.timestamp.getTime() + x * 60 * 60 * 1000);
-      this.aggregateData.push([time, this.receivedData[lineChart][x]]);
-    }
-  }
+
 }
