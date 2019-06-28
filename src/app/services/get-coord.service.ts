@@ -16,7 +16,9 @@ export class GetCoordService {
     private authService: AuthenticationService,
   ) { }
 
-    /** Get the address of the doctor
+    /**
+     * Get the address of the doctor
+     *
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
      */
 

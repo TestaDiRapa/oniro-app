@@ -22,7 +22,8 @@ export class DoctorService {
         private http: HttpClient,
     ) { }
 
-    /** Get the patien request that are linked to a doctor
+    /**
+     * Get the patient's requests that are linked to the doctor
      *
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
      */
@@ -38,12 +39,14 @@ export class DoctorService {
                 });
         });
     }
-    /** Accept the patien request to be able to send messages and allow the doctor to view the diary
+    /**
+     * Accept the patient's subscription requests.
+     * Only subscripted patients can send alert messages to the doctor.
+     * A doctor can see the patient's diary only if he is subscripted to the doctor.
      *
      * @param cf the cf to send to server
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
      */
-
     acceptPatient(cf: string) {
         const path = 'http://' + environment.serverIp + '/doctor/my_patients';
         const body = cf;
@@ -60,7 +63,8 @@ export class DoctorService {
         });
     }
 
-    /** Reject the patien request
+    /** 
+     * Reject the patient's subscription requests
      *
      * @param cf the cf to send to server
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
@@ -81,7 +85,8 @@ export class DoctorService {
         });
     }
 
-    /** Get the patient message
+    /** 
+     * Get the patient's alert messages
      *
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
      */
@@ -98,7 +103,9 @@ export class DoctorService {
         });
     }
 
-    /** Delete the patient message after checking it
+    /**
+     * Delete the patient's alert message after checking it
+     *
      * @param idDate the idDate is the id of message
      * @param cf the cf linked to the patient that sent the message
      * @returns {Promise<Observable<Respons>>} The message from the server with the information, or a message error.
