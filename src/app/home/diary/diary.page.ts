@@ -2,7 +2,7 @@
  * This page represents a summary of all the nights monitored.
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuController, PopoverController } from '@ionic/angular';
+import { MenuController, PopoverController, AlertController } from '@ionic/angular';
 import { GoogleChartComponent } from 'angular-google-charts';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { SendPopoverComponent } from './send-popover/send-popover.component';
 
 import 'hammerjs';
+import { Network } from '@ionic-native/network/ngx';
 
 export interface Data {
   _id: Date;
@@ -39,10 +40,12 @@ export class DiaryPage implements OnInit {
   chart: GoogleChartComponent;
 
   constructor(
+    private alertCtrl: AlertController,
     private authService: AuthenticationService,
     private charts: ChartsService,
     private http: HttpClient,
     private menuCtrl: MenuController,
+    private network: Network,
     private popoverCtrl: PopoverController,
     private router: Router
   ) { }
@@ -66,7 +69,6 @@ export class DiaryPage implements OnInit {
         }]
       }).then(alert => { alert.present(); });
     } else {
-
       this.authService.token.then(token => {
         this.http.get<Respons>(
           this.url,
