@@ -320,7 +320,7 @@ export class SettingsPage implements OnInit {
       this.uploadPhoto(imgData);
       this.isEmpty = false;
     }, (err) => {
-      console.log(err);
+      this.controllerService.createAlertCtrl('Error', err);
     });
   }
 
@@ -342,7 +342,7 @@ export class SettingsPage implements OnInit {
       this.uploadPhoto(imgData);
       this.isEmpty = false;
     }, (err) => {
-      console.log(err);
+      this.controllerService.createAlertCtrl('Error', err);
     });
   }
 
