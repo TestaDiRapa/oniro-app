@@ -56,28 +56,40 @@ export class DiaryPage implements OnInit {
    */
   ionViewWillEnter() {
     this.menuCtrl.close();
-    this.authService.token.then(token => {
-      this.http.get<Respons>(
-        this.url,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + token
-          })
-        }
-      ).subscribe(res => {
-        console.log(res);
-        this.preview = res['payload'];
-        this.preview.sort((a: Data, b: Data) => {
-          if (a._id < b._id) {
-          return 1;
+    if (this.network.type === this.network.Connection.NONE) {
+      this.alertCtrl.create({
+        header: 'Error',
+        message: 'È necessaria una connessione a internet per accedere a questa funzione',
+        buttons: [{
+          text: 'Ok',
+          handler: () => { this.router.navigate(['/home']); }
+        }]
+      }).then(alert => { alert.present(); });
+    } else {
+
+      this.authService.token.then(token => {
+        this.http.get<Respons>(
+          this.url,
+          {
+            headers: new HttpHeaders({
+              Authorization: 'Bearer ' + token
+            })
           }
-          if (a._id === b._id) {
-          return 0;
-          }
-          return -1;
+        ).subscribe(res => {
+          console.log(res);
+          this.preview = res['payload'];
+          this.preview.sort((a: Data, b: Data) => {
+            if (a._id < b._id) {
+              return 1;
+            }
+            if (a._id === b._id) {
+              return 0;
+            }
+            return -1;
+          });
         });
       });
-    });
+    }
   }
 
   /**
